@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "typegen": "supabase gen types typescript --project-id bcvsroiksgzgiqmjzvyn --schema public > types/supabase.ts"
+    "typegen": "npx supabase gen types typescript --project-id bcvsroiksgzgiqmjzvyn --schema public > types/supabase.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
