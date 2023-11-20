@@ -1,16 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import { FlatList, Text, View } from "react-native";
-import "react-native-url-polyfill/auto";
 import tw from "twrnc";
-import { Database } from "./types/supabase";
 
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import "react-native-url-polyfill/auto";
+
+import { PlaidLink, LinkSuccess, LinkExit } from "react-native-plaid-link-sdk";
+import { Database } from "./types/supabase";
 
 const supabaseUrl = "https://bcvsroiksgzgiqmjzvyn.supabase.co";
 const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "";
 const supabase = createClient<Database>(supabaseUrl, supabaseKey);
-import { PlaidLink, LinkSuccess, LinkExit } from "react-native-plaid-link-sdk";
 
 export default function App() {
   const [catNames, setCatNames] =
