@@ -1,6 +1,10 @@
 {
   "files.exclude": {
     "node_modules": true,
-    ".expo": true
-  }
+    ".expo": true,
+    "supabase/.*": true
+  },
+  "deno.enable": false,
+  "deno.lint": true,
+  "deno.unstable": false
 }
