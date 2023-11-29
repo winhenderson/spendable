@@ -1,8 +1,16 @@
-import { plaid } from "../../deps.ts";
+import plaid from "https://esm.sh/plaid?target=deno";
 import {
   SupabaseClient,
   createClient,
-} from "npm:@supabase/supabase-js@^2.38.4";
+} from "https://esm.sh/@supabase/supabase-js@2";
+
+// import { load } from "https://deno.land/std@0.207.0/dotenv/mod.ts";
+// import {
+//   SupabaseClient,
+//   createClient,
+// } from "npm:@supabase/supabase-js@^2.38.4";
+
+// const env = await load();
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -39,10 +47,13 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  // console.log(env["SUPABASE_URL"]);
+  // console.log(env["SUPABASE_ANON_KEY"]);
   try {
     // Create a Supabase client with the Auth context of the logged in user.
     const supabaseClient = createClient(
       // Supabase API URL - env var exported by default.
+
       Deno.env.get("SUPABASE_URL") ?? "",
       // Supabase API ANON KEY - env var exported by default.
       Deno.env.get("SUPABASE_ANON_KEY") ?? "",
@@ -78,7 +89,7 @@ Deno.serve(async (req) => {
 });
 
 // To invoke:
-// curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/' \
+// curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/plaid' \
 //   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
 //   --header 'Content-Type: application/json' \
 //   --data '{"name":"Functions"}'
