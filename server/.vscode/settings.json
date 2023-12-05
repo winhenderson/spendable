@@ -1,9 +1,0 @@
-{
-  "files.exclude": {
-    "supabase/.branches": true,
-    "supabase/.temp": true
-  },
-  "deno.enable": true,
-  "deno.lint": true,
-  "editor.defaultFormatter": "denoland.vscode-deno"
-}
