@@ -1,4 +1,6 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
+import invariant from "tiny-invariant";
+import { PrismaClient } from "@prisma/client";
 
 import {
   Configuration,
@@ -8,13 +10,15 @@ import {
   Products,
 } from "plaid";
 
+const prisma = new PrismaClient();
+
 const plaidClient = new PlaidApi(
   new Configuration({
     basePath: PlaidEnvironments["sandbox"],
     baseOptions: {
       headers: {
-        "PLAID-CLIENT-ID": "6557853b76f49a001b64faf1",
-        "PLAID-SECRET": "e86e4bfd3ebdc7746f30fef8b88e2b",
+        "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
+        "PLAID-SECRET": process.env.PLAID_SECRET,
         "Plaid-Version": "2020-09-14",
       },
     },
@@ -22,8 +26,10 @@ const plaidClient = new PlaidApi(
 );
 
 export async function GET() {
+  const data = await prisma.cats.findMany();
+  invariant(typeof process.env.PLAID_CLIENT_ID === "string");
   const tokenResponse = await plaidClient.linkTokenCreate({
-    user: { client_user_id: "6557853b76f49a001b64faf1" },
+    user: { client_user_id: process.env.PLAID_CLIENT_ID },
     client_name: "Plaid's Tiny Quickstart",
     language: "en",
     products: [Products.Transactions],
@@ -31,5 +37,8 @@ export async function GET() {
     redirect_uri: process.env.PLAID_SANDBOX_REDIRECT_URI,
   });
 
-  return Response.json(tokenResponse.data);
+  return Response.json({
+    token: tokenResponse.data,
+    cat_names: data.map((i) => i.cat_name),
+  });
 }
