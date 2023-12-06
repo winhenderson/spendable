@@ -25,8 +25,8 @@ const plaidClient = new PlaidApi(
   })
 );
 
-export async function GET() {
-  const data = await prisma.cats.findMany();
+export async function POST() {
+  // const data = await prisma.cats.findMany();
   invariant(typeof process.env.PLAID_CLIENT_ID === "string");
   const tokenResponse = await plaidClient.linkTokenCreate({
     user: { client_user_id: process.env.PLAID_CLIENT_ID },
@@ -39,6 +39,6 @@ export async function GET() {
 
   return Response.json({
     token: tokenResponse.data,
-    cat_names: data.map((i) => i.cat_name),
+    // cat_names: data.map((i) => i.cat_name),
   });
 }
