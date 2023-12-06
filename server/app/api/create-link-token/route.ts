@@ -1,6 +1,5 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
 import invariant from "tiny-invariant";
-import { PrismaClient } from "@prisma/client";
 
 import {
   Configuration,
@@ -9,8 +8,6 @@ import {
   PlaidEnvironments,
   Products,
 } from "plaid";
-
-const prisma = new PrismaClient();
 
 const plaidClient = new PlaidApi(
   new Configuration({
@@ -26,11 +23,10 @@ const plaidClient = new PlaidApi(
 );
 
 export async function POST() {
-  // const data = await prisma.cats.findMany();
   invariant(typeof process.env.PLAID_CLIENT_ID === "string");
   const tokenResponse = await plaidClient.linkTokenCreate({
     user: { client_user_id: process.env.PLAID_CLIENT_ID },
-    client_name: "Plaid's Tiny Quickstart",
+    client_name: "Spendable Budgeting",
     language: "en",
     products: [Products.Transactions],
     country_codes: [CountryCode.Us],
@@ -39,6 +35,5 @@ export async function POST() {
 
   return Response.json({
     token: tokenResponse.data,
-    // cat_names: data.map((i) => i.cat_name),
   });
 }

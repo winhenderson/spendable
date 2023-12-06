@@ -5,7 +5,6 @@ export async function createLinkToken(): Promise<
   LinkTokenCreateResponse["link_token"]
 > {
   invariant(typeof process.env.EXPO_PUBLIC_API_ENDPOINT === "string");
-  console.log("is the problem here?!!");
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/create-link-token`,
     { method: "POST" }
@@ -15,7 +14,6 @@ export async function createLinkToken(): Promise<
 }
 
 export async function publicTokenExchange(publicToken: string) {
-  console.log("in the public exchange");
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/public-token-exchange`,
     {
@@ -24,5 +22,4 @@ export async function publicTokenExchange(publicToken: string) {
       body: JSON.stringify({ public_token: publicToken }),
     }
   );
-  console.log({ res });
 }
