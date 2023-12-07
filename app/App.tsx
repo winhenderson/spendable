@@ -1,15 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, Text, View } from "react-native";
+import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native";
 import tw from "twrnc";
 
 import { useCallback, useEffect, useState } from "react";
 import "react-native-url-polyfill/auto";
 
 import { PlaidLink, LinkSuccess, LinkExit } from "react-native-plaid-link-sdk";
-import { createLinkToken, publicTokenExchange } from "./lib";
+import { createLinkToken, publicTokenExchange, transactionsSync } from "./lib";
+import { Transaction } from "plaid";
 
 export default function App() {
   const [linkToken, setLinkToken] = useState<string>();
+  const [transactions, setTransactions] = useState<Array<Transaction>>([]);
 
   const createNewLinkToken = useCallback(async () => {
     const token = await createLinkToken();
@@ -33,7 +35,6 @@ export default function App() {
     >
       <StatusBar style="dark" />
       <PlaidLink
-        onPress={() => console.log("in here")}
         tokenConfig={{
           token: linkToken,
           noLoadingState: false,
@@ -44,11 +45,49 @@ export default function App() {
         onExit={(exit: LinkExit) => console.log(exit)}
       >
         <Text
-          style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl`}
+          style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
         >
           Add Account
         </Text>
       </PlaidLink>
+      <Pressable
+        onPress={async () => {
+          const data = await transactionsSync();
+          setTransactions(data);
+        }}
+      >
+        <Text
+          style={tw`bg-yellow-600 text-white font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
+        >
+          Get Transactions
+        </Text>
+      </Pressable>
+      {transactions.length ? (
+        <View>
+          <Text
+            style={tw`font-bold text-lg mt-4 text-gray-300 uppercase text-center`}
+          >
+            Total Spent:
+          </Text>
+          <Text style={tw`text-white font-extrabold text-4xl`}>
+            $
+            {Number(
+              transactions
+                .map((i) => i.amount)
+                .reduce((total, amount) => total + amount)
+                .toFixed(2)
+            ) * -1}
+          </Text>
+        </View>
+      ) : (
+        ""
+      )}
+      {/* <FlatList
+        data={transactions}
+        renderItem={({ item }) => (
+          <Text style={tw`text-white`}>{item.name}</Text>
+        )}
+      /> */}
     </SafeAreaView>
   );
 }

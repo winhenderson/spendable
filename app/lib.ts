@@ -1,4 +1,8 @@
-import { LinkTokenCreateResponse } from "plaid";
+import {
+  LinkTokenCreateResponse,
+  Transaction,
+  TransactionsSyncResponse,
+} from "plaid";
 import invariant from "tiny-invariant";
 
 export async function createLinkToken(): Promise<
@@ -22,4 +26,12 @@ export async function publicTokenExchange(publicToken: string) {
       body: JSON.stringify({ public_token: publicToken }),
     }
   );
+}
+
+export async function transactionsSync(): Promise<Array<Transaction>> {
+  const res = await fetch(
+    `${process.env.EXPO_PUBLIC_API_ENDPOINT}/transactions-sync`
+  );
+  const json = await res.json();
+  return json;
 }
