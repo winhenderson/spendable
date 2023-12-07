@@ -33,6 +33,24 @@ export async function GET() {
     });
 
     const transactions = res.data.added;
+
+    await prisma.transactions.createMany({
+      data: transactions.map((transaction) => {
+        return {
+          transaction_id: transaction.transaction_id,
+          account_id: transaction.account_id,
+          transaction_date: transaction.date,
+          amount: transaction.amount,
+          currency: transaction.iso_currency_code,
+          category: transaction.personal_finance_category?.detailed,
+          merchant_name: transaction.merchant_name,
+          pending: transaction.pending,
+          logo_url: transaction.logo_url,
+          name: transaction.name,
+          website: transaction.website,
+        };
+      }),
+    });
     allTransactions = [...allTransactions, ...transactions];
   }
 
