@@ -28,10 +28,17 @@ export async function publicTokenExchange(publicToken: string) {
   );
 }
 
-export async function transactionsSync(): Promise<Array<Transaction>> {
+export async function transactionsSync(): Promise<Array<SimpleTransaction>> {
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/transactions-sync`
   );
   const json = await res.json();
   return json;
 }
+
+export type SimpleTransaction = {
+  id: string;
+  date: string;
+  amount: number;
+  name: string;
+};

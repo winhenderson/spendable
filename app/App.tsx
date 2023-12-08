@@ -6,12 +6,18 @@ import { useCallback, useEffect, useState } from "react";
 import "react-native-url-polyfill/auto";
 
 import { PlaidLink, LinkSuccess, LinkExit } from "react-native-plaid-link-sdk";
-import { createLinkToken, publicTokenExchange, transactionsSync } from "./lib";
-import { Transaction } from "plaid";
+import {
+  SimpleTransaction,
+  createLinkToken,
+  publicTokenExchange,
+  transactionsSync,
+} from "./lib";
 
 export default function App() {
   const [linkToken, setLinkToken] = useState<string>();
-  const [transactions, setTransactions] = useState<Array<Transaction>>([]);
+  const [transactions, setTransactions] = useState<Array<SimpleTransaction>>(
+    []
+  );
 
   const createNewLinkToken = useCallback(async () => {
     const token = await createLinkToken();

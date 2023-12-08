@@ -1,5 +1,5 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 import { Configuration, PlaidApi, PlaidEnvironments, Transaction } from "plaid";
 
@@ -21,7 +21,8 @@ const plaidClient = new PlaidApi(
 export async function GET() {
   const items = await prisma.items.findMany();
 
-  let allTransactions: Transaction[] = [];
+  let dbTransactions = await prisma.transactions.findMany();
+  let allTransactions = [...dbTransactions.map((t) => convertDbTransaction(t))];
 
   for (const item of items) {
     if (!item?.plaid_access_token) {
@@ -30,29 +31,73 @@ export async function GET() {
 
     const res = await plaidClient.transactionsSync({
       access_token: item.plaid_access_token,
+      cursor: item.cursor ?? undefined,
     });
 
-    const transactions = res.data.added;
+    const plaidTransactions = res.data.added;
+    const transactions = plaidTransactions.map((transaction) =>
+      convertPlaidTransaction(transaction)
+    );
 
-    await prisma.transactions.createMany({
-      data: transactions.map((transaction) => {
-        return {
-          transaction_id: transaction.transaction_id,
-          account_id: transaction.account_id,
-          transaction_date: transaction.date,
-          amount: transaction.amount,
-          currency: transaction.iso_currency_code,
-          category: transaction.personal_finance_category?.detailed,
-          merchant_name: transaction.merchant_name,
-          pending: transaction.pending,
-          logo_url: transaction.logo_url,
-          name: transaction.name,
-          website: transaction.website,
-        };
-      }),
+    prisma.items.update({
+      data: { cursor: res.data.next_cursor },
+      where: { id: item.id },
     });
-    allTransactions = [...allTransactions, ...transactions];
+
+    prisma.transactions.createMany({
+      data: plaidTransactions.map((t) => createDbTransaction(t)),
+    });
+
+    allTransactions = allTransactions.concat(transactions);
   }
 
   return Response.json(allTransactions);
 }
+
+function createDbTransaction(
+  plaidTransaction: Transaction
+): Prisma.$transactionsPayload["scalars"] {
+  return {
+    id: BigInt(true),
+    created_at: new Date(),
+    account_id: plaidTransaction.account_id,
+    transaction_date: plaidTransaction.date,
+    amount: new Prisma.Decimal(plaidTransaction.amount),
+    currency: plaidTransaction.iso_currency_code,
+    category: plaidTransaction.personal_finance_category?.detailed ?? null,
+    merchant_name: plaidTransaction.merchant_name ?? null,
+    pending: plaidTransaction.pending,
+    logo_url: plaidTransaction.logo_url ?? null,
+    name: plaidTransaction.name,
+    website: plaidTransaction.website ?? null,
+  };
+}
+
+function convertDbTransaction(
+  dbTransaction: Prisma.$transactionsPayload["scalars"]
+): SimpleTransaction {
+  return {
+    id: dbTransaction.id.toString(),
+    date: dbTransaction.transaction_date,
+    amount: Number(dbTransaction.amount),
+    name: dbTransaction.merchant_name || dbTransaction.name,
+  };
+}
+
+function convertPlaidTransaction(
+  plaidTransaction: Transaction
+): SimpleTransaction {
+  return {
+    id: plaidTransaction.transaction_id,
+    date: plaidTransaction.date,
+    amount: plaidTransaction.amount,
+    name: plaidTransaction.merchant_name || plaidTransaction.name,
+  };
+}
+
+type SimpleTransaction = {
+  id: string;
+  date: string;
+  amount: number;
+  name: string;
+};
