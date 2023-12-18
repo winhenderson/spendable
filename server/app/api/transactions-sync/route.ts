@@ -29,22 +29,29 @@ export async function GET() {
       return Response.error();
     }
 
-    const res = await plaidClient.transactionsSync({
-      access_token: item.plaid_access_token,
-      cursor: item.cursor ?? undefined,
-    });
+    let has_more = true;
+    const plaidTransactions: Transaction[] = [];
+    let nextCursor = item.cursor;
+    while (has_more) {
+      const res = await plaidClient.transactionsSync({
+        access_token: item.plaid_access_token,
+        cursor: nextCursor ?? undefined,
+      });
+      has_more = res.data.has_more;
+      plaidTransactions.push(...res.data.added);
+      nextCursor = res.data.next_cursor;
+    }
 
-    const plaidTransactions = res.data.added;
     const transactions = plaidTransactions.map((transaction) =>
       convertPlaidTransaction(transaction)
     );
 
-    prisma.items.update({
-      data: { cursor: res.data.next_cursor },
+    await prisma.items.update({
+      data: { cursor: nextCursor },
       where: { id: item.id },
     });
 
-    prisma.transactions.createMany({
+    await prisma.transactions.createMany({
       data: plaidTransactions.map((t) => createDbTransaction(t)),
     });
 
@@ -56,10 +63,8 @@ export async function GET() {
 
 function createDbTransaction(
   plaidTransaction: Transaction
-): Prisma.$transactionsPayload["scalars"] {
+): Omit<Prisma.$transactionsPayload["scalars"], "id" | "created_at"> {
   return {
-    id: BigInt(true),
-    created_at: new Date(),
     account_id: plaidTransaction.account_id,
     transaction_date: plaidTransaction.date,
     amount: new Prisma.Decimal(plaidTransaction.amount),

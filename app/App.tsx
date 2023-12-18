@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  Text,
+  View,
+} from "react-native";
 import tw from "twrnc";
 
 import { useCallback, useEffect, useState } from "react";
@@ -12,6 +19,17 @@ import {
   publicTokenExchange,
   transactionsSync,
 } from "./lib";
+
+import Passage from "@passageidentity/passage-react-native";
+
+import { Authsignal } from "react-native-authsignal";
+
+const authsignal = new Authsignal({
+  tenantID: "a6788c94-3130-4c4b-ab10-6156374c45ea",
+  baseURL: "https://api.authsignal.com/v1",
+});
+
+const passage = new Passage("bB8gXw5C8hvlXleJV4ev5rjt");
 
 export default function App() {
   const [linkToken, setLinkToken] = useState<string>();
@@ -94,6 +112,52 @@ export default function App() {
           <Text style={tw`text-white`}>{item.name}</Text>
         )}
       /> */}
+      <Button
+        title="login"
+        onPress={async () => {
+          // try {
+          // Register user
+          // console.log("here?", await passage.getAppInfo());
+
+          console.log("here 1");
+          const { authToken } = await passage.registerWithPasskey(
+            "winhenderson@gmail.com"
+          );
+          console.log("here 2");
+
+          // Retrieve new user info
+          const user = await passage.getCurrentUser();
+          console.log(user);
+          // } catch (error) {
+          //   if (
+          //     error instanceof PassageError &&
+          //     error.code === PassageErrorCode.UserCancelled
+          //   ) {
+          //     // User cancelled native passkey prompt
+          //   } else {
+          //     // Optional: Passkey registration failed, try email or SMS registration instead.
+          //   }
+          // }
+        }}
+        // onPress={async () => {
+        //   const res = await fetch(
+        //     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/auth-signal`
+        //   );
+        //   const json = await res.json();
+        //   const { data: resultToken, error } = await authsignal.passkey.signUp({
+        //     token: json.token,
+        //     userName: "usr_123",
+        //   });
+
+        //   console.log({ resultToken, error });
+        //   if (error) {
+        //     console.log(error);
+        //   } else if (resultToken) {
+        //     console.log("the token!:", resultToken);
+        //     // Pass this short-lived result token to your backend to validate that passkey registration succeeded
+        //   }
+        // }}
+      />
     </SafeAreaView>
   );
 }
