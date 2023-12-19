@@ -1,9 +1,7 @@
-import {
-  LinkTokenCreateResponse,
-  Transaction,
-  TransactionsSyncResponse,
-} from "plaid";
+import { LinkTokenCreateResponse } from "plaid";
 import invariant from "tiny-invariant";
+import { createClient } from "@supabase/supabase-js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function createLinkToken(): Promise<
   LinkTokenCreateResponse["link_token"]
@@ -36,9 +34,32 @@ export async function transactionsSync(): Promise<Array<SimpleTransaction>> {
   return json;
 }
 
+export async function findUserByEmail(email: string): Promise<{
+  email: string;
+}> {
+  const res = await fetch(
+    `${process.env.EXPO_PUBLIC_API_ENDPOINT}/find-user-by-email`,
+    { method: "POST", body: JSON.stringify({ email }) }
+  );
+  const json = await res.json();
+  return json;
+}
+
 export type SimpleTransaction = {
   id: string;
   date: string;
   amount: number;
   name: string;
 };
+
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "";
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});

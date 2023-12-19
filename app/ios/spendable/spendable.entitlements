@@ -4,7 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:homework.howtocomputer.link</string>
+		<string>webcredentials:homework.howtocomputer.link?mode=developer</string>
+		<string>applinks:homework.howtocomputer.link?mode=developer</string>
 	</array>
 </dict>
 </plist>

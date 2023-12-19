@@ -1,5 +1,4 @@
 PODS:
-  - Authsignal (0.2.0)
   - boost (1.76.0)
   - DoubleConversion (1.1.6)
   - EXApplication (5.3.1):
@@ -97,11 +96,6 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.6)
   - hermes-engine/Pre-built (0.72.6)
   - libevent (2.1.12)
-  - Passage (1.4.0):
-    - SwiftKeychainWrapper
-  - passage-react-native (0.4.1):
-    - Passage (= 1.4.0)
-    - React-Core
   - Plaid (5.0.0)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -403,9 +397,6 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
-  - react-native-authsignal (0.3.2):
-    - Authsignal (= 0.2.0)
-    - React-Core
   - react-native-plaid-link-sdk (11.0.3):
     - Plaid (~> 5.0.0)
     - React-Core
@@ -525,11 +516,12 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
+  - RNCAsyncStorage (1.21.0):
+    - React-Core
   - RNScreens (3.22.1):
     - React-Core
     - React-RCTImage
   - SocketRocket (0.6.1)
-  - SwiftKeychainWrapper (4.0.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -555,7 +547,6 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
-  - "passage-react-native (from `../node_modules/@passageidentity/passage-react-native`)"
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -572,7 +563,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-authsignal (from `../node_modules/react-native-authsignal`)
   - react-native-plaid-link-sdk (from `../node_modules/react-native-plaid-link-sdk`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -592,18 +582,16 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
-    - Authsignal
     - fmt
     - libevent
-    - Passage
     - Plaid
     - SocketRocket
-    - SwiftKeychainWrapper
 
 EXTERNAL SOURCES:
   boost:
@@ -649,8 +637,6 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2023-08-07-RNv0.72.4-813b2def12bc9df02654b3e3653ae4a68d0572e0
-  passage-react-native:
-    :path: "../node_modules/@passageidentity/passage-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -681,8 +667,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-authsignal:
-    :path: "../node_modules/react-native-authsignal"
   react-native-plaid-link-sdk:
     :path: "../node_modules/react-native-plaid-link-sdk"
   react-native-safe-area-context:
@@ -721,13 +705,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Authsignal: 7ee10b064ad347e66c54b4fa72e8a1f936b9f273
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   EXApplication: 042aa2e3f05258a16962ea1a9914bf288db9c9a1
@@ -751,8 +736,6 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 8057e75cfc1437b178ac86c8654b24e7fead7f60
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  Passage: 4b543698ee5cfac577d9fce473f75587315269e5
-  passage-react-native: 8379af1e8087e27caf02c7e0886e0ed03326ef35
   Plaid: c5da02bbacd3065116e52d2e0405c2718e34917e
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 28469809442eb4eb5528462705f7d852948c8a74
@@ -769,7 +752,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
-  react-native-authsignal: 47ddb0d24a7bc243b2326ee0b87235917219d18a
   react-native-plaid-link-sdk: 54173417f7fa05746b19435dc500f7b90d9efe3a
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   React-NativeModulesApple: 02e35e9a51e10c6422f04f5e4076a7c02243fff2
@@ -789,9 +771,9 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
+  RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
 
 PODFILE CHECKSUM: be16e2006bb657737bf544b50c48190b22f2d710

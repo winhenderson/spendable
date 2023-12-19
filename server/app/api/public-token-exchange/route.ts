@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   await prisma.items.create({
     data: {
       plaid_access_token: res.data.access_token,
-      plaid_item_id: res.data.item_id,
+      id: res.data.item_id,
     },
   });
 
