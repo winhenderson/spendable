@@ -9,8 +9,13 @@ import {
   supabase,
   transactionsSync,
 } from "../lib";
+import { Session } from "@supabase/supabase-js";
 
-export default function Home() {
+type Props = {
+  session: Session;
+};
+
+const Home: React.FC<Props> = ({ session }) => {
   const [linkToken, setLinkToken] = useState<string>();
   const [transactions, setTransactions] = useState<Array<SimpleTransaction>>(
     []
@@ -41,7 +46,7 @@ export default function Home() {
           noLoadingState: false,
         }}
         onSuccess={(success: LinkSuccess) => {
-          publicTokenExchange(success.publicToken);
+          publicTokenExchange(success.publicToken, session.user.id);
         }}
         onExit={(exit: LinkExit) => console.log(exit)}
       >
@@ -86,4 +91,6 @@ export default function Home() {
       )}
     </SafeAreaView>
   );
-}
+};
+
+export default Home;

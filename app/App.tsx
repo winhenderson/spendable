@@ -30,7 +30,7 @@ export default function App() {
   return (
     <NavigationContainer>
       {session && session.user ? (
-        <Home />
+        <Home session={session} />
       ) : authScreenShown === "login" ? (
         <Login switchScreen={setAuthScreenShown} />
       ) : (

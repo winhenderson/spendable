@@ -19,8 +19,6 @@ const Signup: React.FC<Props> = ({ switchScreen }) => {
   const [password, setPassword] = useState("");
 
   async function signup() {
-    console.log({ email, password });
-
     if (email && password) {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -36,7 +34,6 @@ const Signup: React.FC<Props> = ({ switchScreen }) => {
       }
 
       if (data) {
-        // console.log({ data });
         signUp(email, data.user.id);
       }
     }

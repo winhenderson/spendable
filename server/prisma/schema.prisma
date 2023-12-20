@@ -285,10 +285,12 @@ model auth_users {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model items {
-  created_at         DateTime @default(now()) @db.Timestamptz(6)
-  plaid_access_token String   @unique
-  id                 String   @id @unique(map: "items_plaid_item_id_key")
+  created_at         DateTime     @default(now()) @db.Timestamptz(6)
+  plaid_access_token String       @unique
+  id                 String       @id @unique(map: "items_plaid_item_id_key")
+  user_id            String       @db.Uuid
   cursor             String?
+  users              public_users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -315,6 +317,7 @@ model public_users {
   id      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   auth_id String?     @db.Uuid
   email   String?
+  items   items[]
   users   auth_users? @relation(fields: [auth_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("users")

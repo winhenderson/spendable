@@ -19,7 +19,15 @@ const plaidClient = new PlaidApi(
 );
 
 export async function GET() {
-  const items = await prisma.items.findMany();
+  const user = await prisma.public_users.findFirst({
+    where: { auth_id: "body.id" },
+  });
+
+  if (!user) {
+    throw new Error("invalid credentials");
+  }
+
+  const items = await prisma.items.findMany({ where: { user_id: user.id } });
 
   let dbTransactions = await prisma.transactions.findMany();
   let allTransactions = [...dbTransactions.map((t) => convertDbTransaction(t))];

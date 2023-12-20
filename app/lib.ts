@@ -15,7 +15,10 @@ export async function createLinkToken(): Promise<
   return json.token.link_token;
 }
 
-export async function publicTokenExchange(publicToken: string) {
+export async function publicTokenExchange(
+  publicToken: string,
+  sessionId: string
+) {
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/public-token-exchange`,
     {
