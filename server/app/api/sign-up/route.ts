@@ -5,9 +5,13 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const res = await prisma.users.findFirst({
-    where: { email: body.email },
+
+  await prisma.public_users.create({
+    data: {
+      email: body.email,
+      auth_id: body.id,
+    },
   });
 
-  return Response.json({ email: res?.email ?? "" });
+  return Response.json(true);
 }

@@ -45,6 +45,13 @@ export async function findUserByEmail(email: string): Promise<{
   return json;
 }
 
+export async function signUp(email: string, id: string) {
+  const res = await fetch(`${process.env.EXPO_PUBLIC_API_ENDPOINT}/sign-up`, {
+    method: "POST",
+    body: JSON.stringify({ email, id }),
+  });
+}
+
 export type SimpleTransaction = {
   id: string;
   date: string;

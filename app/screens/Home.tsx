@@ -6,6 +6,7 @@ import {
   SimpleTransaction,
   createLinkToken,
   publicTokenExchange,
+  supabase,
   transactionsSync,
 } from "../lib";
 
@@ -54,6 +55,7 @@ export default function Home() {
         onPress={async () => {
           const data = await transactionsSync();
           setTransactions(data);
+          supabase.auth.signOut();
         }}
       >
         <Text

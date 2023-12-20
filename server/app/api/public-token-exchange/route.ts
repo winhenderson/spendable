@@ -26,6 +26,8 @@ export async function POST(request: Request) {
     public_token: body.public_token,
   });
 
+  //TODO: also send the auth id from session.id in the res ^^
+  // query for the user id that corresponds to the session id and use that usir id in the create vv
   await prisma.items.create({
     data: {
       plaid_access_token: res.data.access_token,

@@ -8,24 +8,36 @@ import {
   View,
 } from "react-native";
 import tw from "twrnc";
-import { supabase } from "../lib";
+import { signUp, supabase } from "../lib";
 
 type Props = {
   switchScreen(value: "login" | "signup"): void;
 };
 
-const Login: React.FC<Props> = ({ switchScreen }) => {
+const Signup: React.FC<Props> = ({ switchScreen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function login() {
+  async function signup() {
+    console.log({ email, password });
+
     if (email && password) {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email.toLowerCase(),
+      const { data, error } = await supabase.auth.signUp({
+        email,
         password,
       });
+
       if (error) {
         Alert.alert(error.message);
+      }
+
+      if (!data.user) {
+        return;
+      }
+
+      if (data) {
+        // console.log({ data });
+        signUp(email, data.user.id);
       }
     }
   }
@@ -37,7 +49,7 @@ const Login: React.FC<Props> = ({ switchScreen }) => {
       <Text
         style={tw`mb-10 text-white text-3xl w-2/3 text-center tracking-wide font-bold `}
       >
-        Log In
+        Sign Up
       </Text>
 
       <View style={tw`w-1/2`}>
@@ -66,19 +78,19 @@ const Login: React.FC<Props> = ({ switchScreen }) => {
         />
       </View>
 
-      <Pressable onPress={login}>
+      <Pressable onPress={signup}>
         <Text
           style={tw`bg-sky-500 text-white text-lg font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
         >
-          Log In
+          Sign Up
         </Text>
       </Pressable>
 
-      <Pressable onPress={() => switchScreen("signup")}>
-        <Text>Don't have an account? Sign up!</Text>
+      <Pressable onPress={() => switchScreen("login")}>
+        <Text>Already have an account? Log in!</Text>
       </Pressable>
     </SafeAreaView>
   );
 };
 
-export default Login;
+export default Signup;
