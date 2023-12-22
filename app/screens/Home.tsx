@@ -8,14 +8,18 @@ import {
   publicTokenExchange,
   supabase,
   transactionsSync,
+  updateAmount,
 } from "../lib";
 import { Session } from "@supabase/supabase-js";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 type Props = {
   session: Session;
 };
 
 const Home: React.FC<Props> = ({ session }) => {
+  const [amount, setAmount] = useState("");
   const [linkToken, setLinkToken] = useState<string>();
   const [transactions, setTransactions] = useState<Array<SimpleTransaction>>(
     []
@@ -39,8 +43,25 @@ const Home: React.FC<Props> = ({ session }) => {
 
   return (
     <SafeAreaView
-      style={tw`bg-teal-800 items-center justify-center flex grow p-1`}
+      style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
     >
+      <Input
+        type="number"
+        placeholder="2000"
+        onChange={setAmount}
+        value={amount}
+      >
+        Spendable Amount
+      </Input>
+
+      <Button
+        onPress={() => updateAmount(Number(amount), session.user.id)}
+        color="purple-800"
+        style="text-sm"
+      >
+        Update Amount
+      </Button>
+
       <PlaidLink
         tokenConfig={{
           token: linkToken,
@@ -57,19 +78,19 @@ const Home: React.FC<Props> = ({ session }) => {
           Add Account
         </Text>
       </PlaidLink>
-      <Pressable
+
+      <Button
         onPress={async () => {
           const data = await transactionsSync(session.user.id);
           setTransactions(data);
           supabase.auth.signOut();
         }}
+        color="indigo-900"
+        style="text-sm"
       >
-        <Text
-          style={tw`bg-yellow-600 text-white font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
-        >
-          Get Transactions
-        </Text>
-      </Pressable>
+        Get Transactions
+      </Button>
+
       {transactions.length ? (
         <View>
           <Text
@@ -91,17 +112,15 @@ const Home: React.FC<Props> = ({ session }) => {
         ""
       )}
 
-      <Pressable
+      <Button
         onPress={() => {
           supabase.auth.signOut();
         }}
+        color="red-700"
+        style="text-sm"
       >
-        <Text
-          style={tw`bg-red-600 text-white font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
-        >
-          Sign Out
-        </Text>
-      </Pressable>
+        Sign Out
+      </Button>
     </SafeAreaView>
   );
 };

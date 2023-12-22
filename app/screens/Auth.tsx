@@ -53,12 +53,13 @@ const Auth: React.FC = () => {
         {screenShown === "login" ? "Log In" : "Sign Up"}
       </Text>
 
-      <Input type="email" value={email} onChange={setEmail}>
+      <Input type="email" value={email} onChange={setEmail} placeholder="Email">
         Email
       </Input>
 
       <Input
         type="password"
+        placeholder="Password"
         value={password}
         onChange={setPassword}
         newPassword={screenShown === "signup"}

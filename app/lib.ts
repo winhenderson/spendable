@@ -61,6 +61,16 @@ export async function signUp(email: string, id: string) {
   });
 }
 
+export async function updateAmount(newAmount: number, userId: string) {
+  const res = await fetch(
+    `${process.env.EXPO_PUBLIC_API_ENDPOINT}/update-amount`,
+    {
+      method: "POST",
+      body: JSON.stringify({ newAmount, userId }),
+    }
+  );
+}
+
 export type SimpleTransaction = {
   id: string;
   date: string;

@@ -6,13 +6,14 @@ type Props = {
   onPress(): void;
   children: ReactNode;
   color: string;
+  style?: string;
 };
 
-const Button: React.FC<Props> = ({ onPress, children, color }) => {
+const Button: React.FC<Props> = ({ onPress, children, color, style = "" }) => {
   return (
     <Pressable onPress={onPress}>
       <Text
-        style={tw`bg-${color} text-white text-lg font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50`}
+        style={tw`bg-${color} text-white text-lg font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 ${style}`}
       >
         {children}
       </Text>

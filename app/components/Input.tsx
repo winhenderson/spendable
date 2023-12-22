@@ -1,12 +1,13 @@
-import React, { ReactNode } from "react";
+import React, { HTMLInputTypeAttribute, ReactNode } from "react";
 import { View, Text, TextInput } from "react-native";
 import tw from "twrnc";
 
 type Props = {
-  type: "email" | "password";
+  type: HTMLInputTypeAttribute;
   onChange(text: string): void;
   value: string;
   newPassword?: boolean;
+  placeholder: string;
   children: ReactNode;
 };
 
@@ -15,6 +16,7 @@ const Input: React.FC<Props> = ({
   onChange,
   value,
   newPassword = false,
+  placeholder,
   children,
 }) => {
   return (
@@ -26,7 +28,7 @@ const Input: React.FC<Props> = ({
       </Text>
       <TextInput
         autoCapitalize="none"
-        placeholder={type === "email" ? "Email" : "Password"}
+        placeholder={placeholder}
         style={tw`bg-teal-900 p-4 rounded-full text-white`}
         onChangeText={onChange}
         value={value}

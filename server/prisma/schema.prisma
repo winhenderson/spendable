@@ -317,8 +317,9 @@ model public_users {
   id      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   auth_id String?     @db.Uuid
   email   String?
+  amount  Decimal?    @db.Decimal
   items   items[]
-  users   auth_users? @relation(fields: [auth_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users   auth_users? @relation(fields: [auth_id], references: [id], onDelete: Cascade)
 
   @@map("users")
   @@schema("public")
