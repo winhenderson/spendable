@@ -1,14 +1,9 @@
 import { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  SafeAreaView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import tw from "twrnc";
 import { signUp, supabase } from "../lib";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 type Props = {
   switchScreen(value: "login" | "signup"): void;
@@ -41,7 +36,7 @@ const Signup: React.FC<Props> = ({ switchScreen }) => {
 
   return (
     <SafeAreaView
-      style={tw`bg-teal-800 flex flex-col items-center justify-center grow-1`}
+      style={tw`bg-teal-800 flex flex-col items-center justify-center grow-1 gap-4`}
     >
       <Text
         style={tw`mb-10 text-white text-3xl w-2/3 text-center tracking-wide font-bold `}
@@ -49,43 +44,29 @@ const Signup: React.FC<Props> = ({ switchScreen }) => {
         Sign Up
       </Text>
 
-      <View style={tw`w-1/2`}>
-        <Text style={tw`text-white/85 uppercase font-semibold text-lg`}>
-          Email:
-        </Text>
-        <TextInput
-          placeholder="Email"
-          style={tw`bg-teal-900 p-4 rounded-full text-white`}
-          onChangeText={setEmail}
-          value={email}
-          textContentType="emailAddress"
-        />
-      </View>
+      <Input type="email" value={email} onChange={setEmail}>
+        Email
+      </Input>
 
-      <View style={tw`w-1/2 `}>
-        <Text style={tw`text-white/85 uppercase font-semibold text-lg`}>
-          Password:
-        </Text>
-        <TextInput
-          placeholder="Password"
-          style={tw`bg-teal-900 p-4 rounded-full text-white`}
-          onChangeText={setPassword}
-          value={password}
-          textContentType="password"
-        />
-      </View>
-
-      <Pressable onPress={signup}>
-        <Text
-          style={tw`bg-sky-500 text-white text-lg font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
-        >
+      <Input
+        type="password"
+        value={password}
+        onChange={setPassword}
+        newPassword={true}
+      >
+        Password
+      </Input>
+      <View style={tw`flex items-center gap-1`}>
+        <Button onPress={signup} color="sky-500">
           Sign Up
-        </Text>
-      </Pressable>
+        </Button>
 
-      <Pressable onPress={() => switchScreen("login")}>
-        <Text>Already have an account? Log in!</Text>
-      </Pressable>
+        <Text style={tw`text-white/75 text-base font-bold uppercase`}>Or</Text>
+
+        <Button onPress={() => switchScreen("login")} color="orange-600/75">
+          Log In
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

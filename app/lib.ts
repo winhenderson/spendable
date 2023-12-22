@@ -45,7 +45,10 @@ export async function findUserByEmail(email: string): Promise<{
 }> {
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/find-user-by-email`,
-    { method: "POST", body: JSON.stringify({ email }) }
+    {
+      method: "POST",
+      body: JSON.stringify({ email: String(email).toLowerCase() }),
+    }
   );
   const json = await res.json();
   return json;

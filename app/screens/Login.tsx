@@ -1,14 +1,9 @@
 import { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  SafeAreaView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Alert, Pressable, SafeAreaView, Text } from "react-native";
 import tw from "twrnc";
 import { supabase } from "../lib";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 type Props = {
   switchScreen(value: "login" | "signup"): void;
@@ -40,43 +35,25 @@ const Login: React.FC<Props> = ({ switchScreen }) => {
         Log In
       </Text>
 
-      <View style={tw`w-1/2`}>
-        <Text style={tw`text-white/85 uppercase font-semibold text-lg`}>
-          Email:
-        </Text>
-        <TextInput
-          placeholder="Email"
-          style={tw`bg-teal-900 p-4 rounded-full text-white`}
-          onChangeText={setEmail}
-          value={email}
-          textContentType="emailAddress"
-        />
-      </View>
+      <Input type="email" value={email} onChange={setEmail}>
+        Email
+      </Input>
 
-      <View style={tw`w-1/2 `}>
-        <Text style={tw`text-white/85 uppercase font-semibold text-lg`}>
-          Password:
-        </Text>
-        <TextInput
-          placeholder="Password"
-          style={tw`bg-teal-900 p-4 rounded-full text-white`}
-          onChangeText={setPassword}
-          value={password}
-          textContentType="password"
-        />
-      </View>
+      <Input type="password" value={password} onChange={setPassword}>
+        Password
+      </Input>
 
-      <Pressable onPress={login}>
-        <Text
-          style={tw`bg-sky-500 text-white text-lg font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
-        >
-          Log In
-        </Text>
-      </Pressable>
+      <Button onPress={login} color="sky-500">
+        Log In
+      </Button>
 
-      <Pressable onPress={() => switchScreen("signup")}>
-        <Text>Don't have an account? Sign up!</Text>
-      </Pressable>
+      <Text style={tw`text-white/75 text-base  font-bold uppercase my-1`}>
+        Or
+      </Text>
+
+      <Button onPress={() => switchScreen("signup")} color="orange-600/75">
+        Sign Up
+      </Button>
     </SafeAreaView>
   );
 };
