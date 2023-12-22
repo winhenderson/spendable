@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 
   await prisma.public_users.create({
     data: {
-      email: body.email,
+      email: String(body.email).toLowerCase(),
       auth_id: body.id,
     },
   });

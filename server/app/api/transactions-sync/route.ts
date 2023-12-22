@@ -18,9 +18,10 @@ const plaidClient = new PlaidApi(
   })
 );
 
-export async function GET() {
+export async function POST(req: Request) {
+  const body = await req.json();
   const user = await prisma.public_users.findFirst({
-    where: { auth_id: "body.id" },
+    where: { auth_id: body.id },
   });
 
   if (!user) {

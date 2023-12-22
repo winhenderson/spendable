@@ -36,6 +36,7 @@ const Home: React.FC<Props> = ({ session }) => {
   if (!linkToken) {
     return;
   }
+
   return (
     <SafeAreaView
       style={tw`bg-teal-800 items-center justify-center flex grow p-1`}
@@ -58,7 +59,7 @@ const Home: React.FC<Props> = ({ session }) => {
       </PlaidLink>
       <Pressable
         onPress={async () => {
-          const data = await transactionsSync();
+          const data = await transactionsSync(session.user.id);
           setTransactions(data);
           supabase.auth.signOut();
         }}
@@ -89,6 +90,18 @@ const Home: React.FC<Props> = ({ session }) => {
       ) : (
         ""
       )}
+
+      <Pressable
+        onPress={() => {
+          supabase.auth.signOut();
+        }}
+      >
+        <Text
+          style={tw`bg-red-600 text-white font-bold uppercase p-4 overflow-hidden rounded-2xl text-center w-50 mt-4`}
+        >
+          Sign Out
+        </Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

@@ -3,6 +3,9 @@
     "app/.expo": true,
     "server/.branches": true,
     "server/.temp": true,
-    "app/node_modules/": true
+    "app/node_modules/": true,
+    "server/node_modules/": true,
+    "**/*.d.ts": true,
+    "server/.next/": true
   }
 }

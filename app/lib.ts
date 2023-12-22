@@ -29,9 +29,12 @@ export async function publicTokenExchange(
   );
 }
 
-export async function transactionsSync(): Promise<Array<SimpleTransaction>> {
+export async function transactionsSync(
+  user_id: string
+): Promise<Array<SimpleTransaction>> {
   const res = await fetch(
-    `${process.env.EXPO_PUBLIC_API_ENDPOINT}/transactions-sync`
+    `${process.env.EXPO_PUBLIC_API_ENDPOINT}/transactions-sync`,
+    { method: "POST", body: JSON.stringify({ id: user_id }) }
   );
   const json = await res.json();
   return json;
