@@ -1,21 +1,15 @@
 import "react-native-url-polyfill/auto";
-import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./screens/Home";
 import { useEffect, useState } from "react";
-import Login from "./screens/Login";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "./lib";
-import Signup from "./screens/Signup";
+import Auth from "./screens/Auth";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [authScreenShown, setAuthScreenShown] = useState<"login" | "signup">(
-    "signup"
-  );
-
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -29,13 +23,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {session && session.user ? (
-        <Home session={session} />
-      ) : authScreenShown === "login" ? (
-        <Login switchScreen={setAuthScreenShown} />
-      ) : (
-        <Signup switchScreen={setAuthScreenShown} />
-      )}
+      {session && session.user ? <Home session={session} /> : <Auth />}
     </NavigationContainer>
   );
 }

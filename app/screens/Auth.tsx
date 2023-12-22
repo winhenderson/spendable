@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import { Alert, Pressable, SafeAreaView, Text, View } from "react-native";
 import tw from "twrnc";
 import { signUp, supabase } from "../lib";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
-type Props = {
-  switchScreen(value: "login" | "signup"): void;
-};
-
-const Signup: React.FC<Props> = ({ switchScreen }) => {
+const Auth: React.FC = () => {
+  const [screenShown, setScreenShown] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  async function login() {
+    if (email && password) {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.toLowerCase(),
+        password,
+      });
+      if (error) {
+        Alert.alert(error.message);
+      }
+    }
+  }
 
   async function signup() {
     if (email && password) {
@@ -41,7 +50,7 @@ const Signup: React.FC<Props> = ({ switchScreen }) => {
       <Text
         style={tw`mb-10 text-white text-3xl w-2/3 text-center tracking-wide font-bold `}
       >
-        Sign Up
+        {screenShown === "login" ? "Log In" : "Sign Up"}
       </Text>
 
       <Input type="email" value={email} onChange={setEmail}>
@@ -52,23 +61,32 @@ const Signup: React.FC<Props> = ({ switchScreen }) => {
         type="password"
         value={password}
         onChange={setPassword}
-        newPassword={true}
+        newPassword={screenShown === "signup"}
       >
         Password
       </Input>
+
       <View style={tw`flex items-center gap-1`}>
-        <Button onPress={signup} color="sky-500">
-          Sign Up
+        <Button
+          onPress={screenShown === "login" ? login : signup}
+          color="sky-500"
+        >
+          {screenShown === "login" ? "Log In" : "Sign Up"}
         </Button>
 
-        <Text style={tw`text-white/75 text-base font-bold uppercase`}>Or</Text>
+        <Text style={tw`text-white/75 text-base  font-bold uppercase`}>Or</Text>
 
-        <Button onPress={() => switchScreen("login")} color="orange-600/75">
-          Log In
+        <Button
+          onPress={() =>
+            setScreenShown(screenShown === "login" ? "signup" : "login")
+          }
+          color="orange-600/75"
+        >
+          {screenShown === "signup" ? "Log In" : "Sign Up"}
         </Button>
       </View>
     </SafeAreaView>
   );
 };
 
-export default Signup;
+export default Auth;
