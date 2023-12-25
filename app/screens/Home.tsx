@@ -50,7 +50,7 @@ const Home: React.FC<Props> = ({ session }) => {
       // TODO: fix this race condition? i think the database isn't updating as fast as the useEffect is getting called after a signup
       setTimeout(() => {
         getUserFromSession();
-      }, 4000);
+      }, 2000);
     }
   }, [user]);
 
@@ -59,11 +59,25 @@ const Home: React.FC<Props> = ({ session }) => {
     return;
   }
 
-  return (
+  return user ? (
     <SafeAreaView
       style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
     >
-      {user && <Balance spent={12} spendable={user.amount} />}
+      {user && transactions.length ? (
+        <Balance
+          spent={
+            Number(
+              transactions
+                .map((i) => i.amount)
+                .reduce((total, amount) => total + amount)
+                .toFixed(2)
+            ) * -1
+          }
+          spendable={user.amount}
+        />
+      ) : (
+        ""
+      )}
       <Input
         type="number"
         placeholder="2000"
@@ -74,7 +88,10 @@ const Home: React.FC<Props> = ({ session }) => {
       </Input>
 
       <Button
-        onPress={() => updateAmount(Number(amount), session.user.id)}
+        onPress={() => {
+          updateAmount(Number(amount), session.user.id);
+          setUser({ ...user, amount: Number(amount) });
+        }}
         color="purple-800"
         style="text-sm"
       >
@@ -111,7 +128,7 @@ const Home: React.FC<Props> = ({ session }) => {
         Get Transactions
       </Button>
 
-      {transactions.length ? (
+      {/* {transactions.length ? (
         <View>
           <Text
             style={tw`font-bold text-lg mt-4 text-gray-300 uppercase text-center`}
@@ -130,7 +147,7 @@ const Home: React.FC<Props> = ({ session }) => {
         </View>
       ) : (
         ""
-      )}
+      )} */}
 
       <Button
         onPress={() => {
@@ -142,6 +159,8 @@ const Home: React.FC<Props> = ({ session }) => {
         Sign Out
       </Button>
     </SafeAreaView>
+  ) : (
+    <Text>"Loading"</Text>
   );
 };
 
