@@ -4,7 +4,9 @@ import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
 import {
   SimpleTransaction,
+  User,
   createLinkToken,
+  getUserById,
   publicTokenExchange,
   supabase,
   transactionsSync,
@@ -13,13 +15,15 @@ import {
 import { Session } from "@supabase/supabase-js";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import Balance from "../components/Balance";
 
 type Props = {
   session: Session;
 };
 
 const Home: React.FC<Props> = ({ session }) => {
-  const [amount, setAmount] = useState("");
+  const [user, setUser] = useState<User>();
+  const [amount, setAmount] = useState(user?.amount ? String(user.amount) : "");
   const [linkToken, setLinkToken] = useState<string>();
   const [transactions, setTransactions] = useState<Array<SimpleTransaction>>(
     []
@@ -36,6 +40,20 @@ const Home: React.FC<Props> = ({ session }) => {
     }
   }, [linkToken]);
 
+  const getUserFromSession = useCallback(async () => {
+    const response = await getUserById(session.user.id);
+    setUser(response);
+  }, [setUser, session]);
+
+  useEffect(() => {
+    if (!user) {
+      // TODO: fix this race condition? i think the database isn't updating as fast as the useEffect is getting called after a signup
+      setTimeout(() => {
+        getUserFromSession();
+      }, 4000);
+    }
+  }, [user]);
+
   // TODO: make this better
   if (!linkToken) {
     return;
@@ -45,6 +63,7 @@ const Home: React.FC<Props> = ({ session }) => {
     <SafeAreaView
       style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
     >
+      {user && <Balance spent={12} spendable={user.amount} />}
       <Input
         type="number"
         placeholder="2000"
@@ -67,8 +86,10 @@ const Home: React.FC<Props> = ({ session }) => {
           token: linkToken,
           noLoadingState: false,
         }}
-        onSuccess={(success: LinkSuccess) => {
+        onSuccess={async (success: LinkSuccess) => {
           publicTokenExchange(success.publicToken, session.user.id);
+          const data = await transactionsSync(session.user.id);
+          setTransactions(data);
         }}
         onExit={(exit: LinkExit) => console.log(exit)}
       >
@@ -83,7 +104,6 @@ const Home: React.FC<Props> = ({ session }) => {
         onPress={async () => {
           const data = await transactionsSync(session.user.id);
           setTransactions(data);
-          supabase.auth.signOut();
         }}
         color="indigo-900"
         style="text-sm"
