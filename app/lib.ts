@@ -40,11 +40,14 @@ export async function transactionsSync(
   return json;
 }
 
-export async function signUp(email: string, id: string) {
+export async function signUp(email: string, id: string): Promise<User> {
   const res = await fetch(`${process.env.EXPO_PUBLIC_API_ENDPOINT}/sign-up`, {
     method: "POST",
     body: JSON.stringify({ email, id }),
   });
+
+  const json = await res.json();
+  return json;
 }
 
 export async function updateAmount(newAmount: number, userId: string) {
@@ -78,6 +81,7 @@ export type User = {
   id: string;
   email: string;
   amount: number;
+  transactions: SimpleTransaction[];
 };
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";

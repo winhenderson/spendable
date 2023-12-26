@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   //   where: { email: body.email },
   // });
 
-  await prisma.public_users.create({
+  const user = await prisma.public_users.create({
     data: {
       email: body.email,
       auth_id: body.id,
@@ -18,5 +18,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return Response.json(true);
+  return Response.json({ id: user.id, email: user.email, amount: user.amount });
 }

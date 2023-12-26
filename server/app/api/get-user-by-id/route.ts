@@ -6,13 +6,45 @@ const prisma = new PrismaClient();
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const user = await prisma.public_users.findFirst({
+  const dbResult = await prisma.public_users.findFirst({
+    select: {
+      id: true,
+      amount: true,
+      email: true,
+      items: {
+        select: {
+          transactions: {
+            select: {
+              id: true,
+              created_at: true,
+              amount: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
     where: { auth_id: body.id },
   });
+
+  if (!dbResult) {
+    throw new Error("bad request");
+  }
+
+  const user = {
+    transactions: dbResult.items.map((i) =>
+      i.transactions.map((t) => {
+        return { id: t.id, date: t.created_at, amount: t.amount, name: t.name };
+      })
+    ),
+    id: dbResult.id,
+    amount: dbResult.amount,
+    email: dbResult.amount,
+  };
 
   if (!user) {
     throw new Error("Invalid credentials");
   }
 
-  return Response.json({ email: user.email, amount: user.amount, id: user.id });
+  return Response.json(user);
 }

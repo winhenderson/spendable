@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Alert, Pressable, SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import tw from "twrnc";
-import { signUp, supabase } from "../lib";
+import { User, signUp, supabase } from "../lib";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
-const Auth: React.FC = () => {
+type Props = {
+  onSignupSuccess(user: User): unknown;
+};
+
+const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
   const [screenShown, setScreenShown] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +42,8 @@ const Auth: React.FC = () => {
       }
 
       if (data) {
-        signUp(email, data.user.id);
+        const user = await signUp(email, data.user.id);
+        onSignupSuccess(user);
       }
     }
   }

@@ -20,13 +20,6 @@ const plaidClient = new PlaidApi(
 
 export async function POST(req: Request) {
   const body = await req.json();
-  // const user = await prisma.public_users.findFirst({
-  //   where: { auth_id: body.id },
-  // });
-
-  // if (!user) {
-  //   throw new Error("invalid credentials");
-  // }
 
   const items = await prisma.items.findMany({
     where: { user_id: body.user_id },
@@ -63,7 +56,7 @@ export async function POST(req: Request) {
     });
 
     await prisma.transactions.createMany({
-      data: plaidTransactions.map((t) => createDbTransaction(t)),
+      data: plaidTransactions.map((t) => createDbTransaction(t, item.id)),
     });
 
     allTransactions = allTransactions.concat(transactions);
@@ -73,9 +66,11 @@ export async function POST(req: Request) {
 }
 
 function createDbTransaction(
-  plaidTransaction: Transaction
+  plaidTransaction: Transaction,
+  item_id: string
 ): Omit<Prisma.$transactionsPayload["scalars"], "id" | "created_at"> {
   return {
+    item_id: item_id,
     account_id: plaidTransaction.account_id,
     transaction_date: plaidTransaction.date,
     amount: new Prisma.Decimal(plaidTransaction.amount),

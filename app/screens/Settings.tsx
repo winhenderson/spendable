@@ -1,26 +1,44 @@
-import React, { useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView, Text } from "react-native";
 import Button from "../components/Button";
 import tw from "twrnc";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import {
+  createLinkToken,
   publicTokenExchange,
-  SimpleTransaction,
   supabase,
   transactionsSync,
   updateAmount,
-  User,
 } from "../lib";
 import Input from "../components/Input";
+import UserContext from "../UserContext";
 
-type Props = {
-  user: User;
-  linkToken: string;
-  // setTransactions(transactions: Array<SimpleTransaction>): void;
-};
+const Settings: React.FC = () => {
+  const [user, setUser] = useContext(UserContext);
 
-const Settings: React.FC<Props> = ({ user, linkToken }) => {
-  const [amount, setAmount] = useState(user?.amount ? String(user.amount) : "");
+  const [amount, setAmount] = useState(String(user.amount));
+  const [linkToken, setLinkToken] = useState<string>();
+
+  const createNewLinkToken = useCallback(async () => {
+    const token = await createLinkToken();
+    setLinkToken(token);
+  }, [setLinkToken]);
+
+  useEffect(() => {
+    if (linkToken === undefined) {
+      createNewLinkToken();
+    }
+  }, [linkToken]);
+
+  if (!linkToken) {
+    return (
+      <SafeAreaView
+        style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
+      >
+        <Text>Loading</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -37,7 +55,7 @@ const Settings: React.FC<Props> = ({ user, linkToken }) => {
       <Button
         onPress={() => {
           updateAmount(Number(amount), user.id);
-          // setUser({ ...user, amount: Number(amount) });
+          setUser({ ...user, amount: Number(amount) });
         }}
         color="purple-800"
         style="text-sm"
@@ -51,10 +69,9 @@ const Settings: React.FC<Props> = ({ user, linkToken }) => {
           noLoadingState: false,
         }}
         onSuccess={async (success: LinkSuccess) => {
-          publicTokenExchange(success.publicToken, user.id);
-          // TODO: Somehow load new transactions after a account is added
-          // const data = await transactionsSync(user.id);
-          // setTransactions(data);
+          await publicTokenExchange(success.publicToken, user.id);
+          const data = await transactionsSync(user.id);
+          setUser({ ...user, transactions: data });
         }}
         onExit={(exit: LinkExit) => console.log(exit)}
       >
@@ -64,38 +81,6 @@ const Settings: React.FC<Props> = ({ user, linkToken }) => {
           Add Account
         </Text>
       </PlaidLink>
-
-      {/* <Button
-        onPress={async () => {
-          const data = await transactionsSync(user.id);
-          setTransactions(data);
-        }}
-        color="indigo-900"
-        style="text-sm"
-      >
-        Get Transactions
-      </Button> */}
-
-      {/* {transactions.length ? (
-        <View>
-          <Text
-            style={tw`font-bold text-lg mt-4 text-gray-300 uppercase text-center`}
-          >
-            Total Spent:
-          </Text>
-          <Text style={tw`text-white font-extrabold text-4xl`}>
-            $
-            {Number(
-              transactions
-                .map((i) => i.amount)
-                .reduce((total, amount) => total + amount)
-                .toFixed(2)
-            ) * -1}
-          </Text>
-        </View>
-      ) : (
-        ""
-      )} */}
 
       <Button
         onPress={() => {
