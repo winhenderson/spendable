@@ -6,16 +6,16 @@ const prisma = new PrismaClient();
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const user = await prisma.public_users.findFirst({
-    where: { auth_id: body.user_id },
-  });
+  // const user = await prisma.public_users.findFirst({
+  //   where: { auth_id: body.user_id },
+  // });
 
-  if (!user) {
-    throw new Error("invalid credentials");
-  }
+  // if (!user) {
+  //   throw new Error("invalid credentials");
+  // }
 
   await prisma.public_users.update({
-    where: { id: user.id },
+    where: { id: body.userId },
     data: { amount: body.newAmount },
   });
 

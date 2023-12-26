@@ -18,87 +18,99 @@ import Input from "../components/Input";
 import Balance from "../components/Balance";
 
 type Props = {
-  session: Session;
+  // session: Session;
+  user: User;
+  // transactions: Array<SimpleTransaction>;
 };
 
-const Home: React.FC<Props> = ({ session }) => {
-  const [user, setUser] = useState<User>();
-  const [amount, setAmount] = useState(user?.amount ? String(user.amount) : "");
-  const [linkToken, setLinkToken] = useState<string>();
-  const [transactions, setTransactions] = useState<Array<SimpleTransaction>>(
-    []
-  );
+const Home: React.FC<Props> = ({ user }) => {
+  console.log({ user });
+  const [transactions, setTransactions] = useState<SimpleTransaction[]>([]);
 
-  const createNewLinkToken = useCallback(async () => {
-    const token = await createLinkToken();
-    setLinkToken(token);
-  }, [setLinkToken]);
+  const getTransactions = useCallback(async () => {
+    const data = await transactionsSync(user.id);
+    setTransactions(data);
+  }, [user, setTransactions]);
 
   useEffect(() => {
-    if (linkToken === undefined) {
-      createNewLinkToken();
-    }
-  }, [linkToken]);
-
-  const getUserFromSession = useCallback(async () => {
-    const response = await getUserById(session.user.id);
-    setUser(response);
-  }, [setUser, session]);
-
-  useEffect(() => {
-    if (!user) {
-      // TODO: fix this race condition? i think the database isn't updating as fast as the useEffect is getting called after a signup
-      setTimeout(() => {
-        getUserFromSession();
-      }, 2000);
-    }
+    getTransactions();
   }, [user]);
 
-  // TODO: make this better
-  if (!linkToken) {
-    return;
-  }
+  // const [user, setUser] = useState<User>();
+  // const [amount, setAmount] = useState(user?.amount ? String(user.amount) : "");
+  // // const [linkToken, setLinkToken] = useState<string>();
 
-  return user ? (
+  // const createNewLinkToken = useCallback(async () => {
+  //   const token = await createLinkToken();
+  //   setLinkToken(token);
+  // }, [setLinkToken]);
+
+  // useEffect(() => {
+  //   if (linkToken === undefined) {
+  //     createNewLinkToken();
+  //   }
+  // }, [linkToken]);
+
+  // const getUserFromSession = useCallback(async () => {
+  //   const response = await getUserById(session.user.id);
+  //   setUser(response);
+  // }, [setUser, session]);
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     // TODO: fix this race condition? i think the database isn't updating as fast as the useEffect is getting called after a signup
+  //     setTimeout(() => {
+  //       getUserFromSession();
+  //     }, 2000);
+  //   }
+  // }, [user]);
+
+  // TODO: make this better
+  // if (!linkToken) {
+  //   return;
+  // }
+
+  return (
     <SafeAreaView
       style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
     >
-      {user && transactions.length ? (
-        <Balance
-          spent={
-            Number(
-              transactions
-                .map((i) => i.amount)
-                .reduce((total, amount) => total + amount)
-                .toFixed(2)
-            ) * -1
-          }
-          spendable={user.amount}
-        />
-      ) : (
-        ""
-      )}
-      <Input
-        type="number"
-        placeholder="2000"
-        onChange={setAmount}
-        value={amount}
-      >
-        Spendable Amount
-      </Input>
+      <Balance
+        spent={
+          Number(
+            transactions
+              .map((i) => i.amount)
+              .reduce((total, amount) => total + amount, 0)
+              .toFixed(2)
+          ) * -1
+        }
+        spendable={user.amount}
+      />
+    </SafeAreaView>
+  );
+  //     ) : (
+  //       ""
+  //     )}
+  //     <Input
+  //       type="number"
+  //       placeholder="2000"
+  //       onChange={setAmount}
+  //       value={amount}
+  //     >
+  //       Spendable Amount
+  //     </Input>
 
-      <Button
-        onPress={() => {
-          updateAmount(Number(amount), session.user.id);
-          setUser({ ...user, amount: Number(amount) });
-        }}
-        color="purple-800"
-        style="text-sm"
-      >
-        Update Amount
-      </Button>
+  //     <Button
+  //       onPress={() => {
+  //         updateAmount(Number(amount), user.id);
+  //         // setUser({ ...user, amount: Number(amount) });
+  //       }}
+  //       color="purple-800"
+  //       style="text-sm"
+  //     >
+  //       Update Amount
+  //     </Button>
 
-      <PlaidLink
+  /* <PlaidLink
         tokenConfig={{
           token: linkToken,
           noLoadingState: false,
@@ -116,19 +128,19 @@ const Home: React.FC<Props> = ({ session }) => {
           Add Account
         </Text>
       </PlaidLink>
-
-      <Button
+ */
+  /* <Button
         onPress={async () => {
-          const data = await transactionsSync(session.user.id);
+          const data = await transactionsSync(user.id);
           setTransactions(data);
         }}
         color="indigo-900"
         style="text-sm"
       >
         Get Transactions
-      </Button>
+      </Button> */
 
-      {/* {transactions.length ? (
+  /* {transactions.length ? (
         <View>
           <Text
             style={tw`font-bold text-lg mt-4 text-gray-300 uppercase text-center`}
@@ -147,9 +159,9 @@ const Home: React.FC<Props> = ({ session }) => {
         </View>
       ) : (
         ""
-      )} */}
+      )} */
 
-      <Button
+  /* <Button
         onPress={() => {
           supabase.auth.signOut();
         }}
@@ -157,11 +169,8 @@ const Home: React.FC<Props> = ({ session }) => {
         style="text-sm"
       >
         Sign Out
-      </Button>
-    </SafeAreaView>
-  ) : (
-    <Text>"Loading"</Text>
-  );
+      </Button> */
+  // <Text>"Loading"</Text>
 };
 
 export default Home;

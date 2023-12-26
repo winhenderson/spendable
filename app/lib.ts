@@ -34,7 +34,7 @@ export async function transactionsSync(
 ): Promise<Array<SimpleTransaction>> {
   const res = await fetch(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/transactions-sync`,
-    { method: "POST", body: JSON.stringify({ id: user_id }) }
+    { method: "POST", body: JSON.stringify({ user_id }) }
   );
   const json = await res.json();
   return json;

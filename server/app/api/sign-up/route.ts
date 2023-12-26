@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     data: {
       email: body.email,
       auth_id: body.id,
+      amount: 250,
     },
   });
 
