@@ -11,6 +11,7 @@ import Settings from "./screens/Settings";
 import { Text } from "react-native";
 import UserContext from "./UserContext";
 import Loading from "./components/Loading";
+import tw from "twrnc";
 
 const Tab = createBottomTabNavigator();
 
@@ -51,16 +52,29 @@ export default function App() {
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
+              color = focused ? "white" : "gray";
               switch (route.name) {
                 case "Home":
-                  return <HomeIcon color="white" />;
+                  return <HomeIcon color={color} style={tw`my-2`} />;
                 case "Settings":
-                  return <SettingsIcon color="white" />;
+                  return <SettingsIcon color={color} style={tw`my-2`} />;
               }
             },
-            tabBarShowLabel: false,
             headerShown: false,
-            tabBarStyle: { backgroundColor: "#042f2e" },
+            tabBarLabel: ({ focused, children }) => (
+              <Text
+                style={tw`${
+                  focused ? "text-white" : "text-gray-400"
+                } font-bold uppercase text-[0.6rem]`}
+              >
+                {children}
+              </Text>
+            ),
+            tabBarStyle: {
+              backgroundColor: "#042f2e",
+              borderTopWidth: 0,
+              height: 80,
+            },
           })}
         >
           <Tab.Screen name="Home" component={Home} />

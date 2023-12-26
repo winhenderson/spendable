@@ -3,9 +3,18 @@ import { SafeAreaView } from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
 import UserContext from "../UserContext";
+import TransactionsList from "../components/TransactionsList";
 
 const Home: React.FC = () => {
   const [user] = useContext(UserContext);
+  const month = new Date().getMonth();
+  const year = new Date().getFullYear();
+
+  const monthTransactions = user.transactions.filter(
+    (transaction) =>
+      transaction.date.split("-")[1] === String(month + 1) &&
+      transaction.date.split("-")[0] === String(year)
+  );
 
   return (
     <SafeAreaView
@@ -14,7 +23,7 @@ const Home: React.FC = () => {
       <Balance
         spent={
           Number(
-            user.transactions
+            monthTransactions
               .map((i) => i.amount)
               .reduce((total, amount) => total + amount, 0)
               .toFixed(2)
@@ -22,6 +31,7 @@ const Home: React.FC = () => {
         }
         spendable={user.amount}
       />
+      <TransactionsList transactions={monthTransactions} />
     </SafeAreaView>
   );
 };
