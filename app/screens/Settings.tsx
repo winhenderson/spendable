@@ -12,6 +12,7 @@ import {
 } from "../lib";
 import Input from "../components/Input";
 import UserContext from "../UserContext";
+import Loading from "../components/Loading";
 
 const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
@@ -19,10 +20,10 @@ const Settings: React.FC = () => {
   const [amount, setAmount] = useState(String(user.amount));
   const [linkToken, setLinkToken] = useState<string>();
 
-  const createNewLinkToken = useCallback(async () => {
+  async function createNewLinkToken() {
     const token = await createLinkToken();
     setLinkToken(token);
-  }, [setLinkToken]);
+  }
 
   useEffect(() => {
     if (linkToken === undefined) {
@@ -31,13 +32,7 @@ const Settings: React.FC = () => {
   }, [linkToken]);
 
   if (!linkToken) {
-    return (
-      <SafeAreaView
-        style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
-      >
-        <Text>Loading</Text>
-      </SafeAreaView>
-    );
+    return <Loading />;
   }
 
   return (

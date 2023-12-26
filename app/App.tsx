@@ -10,6 +10,7 @@ import { HomeIcon, SettingsIcon } from "lucide-react-native";
 import Settings from "./screens/Settings";
 import { Text } from "react-native";
 import UserContext from "./UserContext";
+import Loading from "./components/Loading";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,6 +19,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
+    // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       getUserFromSession(data.session);
@@ -40,7 +42,7 @@ export default function App() {
     return <Auth onSignupSuccess={setUser} />;
   }
   if (!user) {
-    return <Text>Laoding</Text>;
+    return <Loading />;
   }
 
   return (
