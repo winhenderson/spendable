@@ -11,7 +11,8 @@ type Props = {
 const TransactionsList: React.FC<Props> = ({ transactions }) => {
   return (
     <FlatList
-      style={tw`flex w-full px-4`}
+      style={tw`flex w-full px-4 `}
+      contentContainerStyle={tw`gap-1`}
       data={transactions}
       renderItem={(transaction) => (
         <Transaction transaction={transaction.item} />

@@ -12,6 +12,7 @@ import { Text } from "react-native";
 import UserContext from "./UserContext";
 import Loading from "./components/Loading";
 import tw from "twrnc";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,45 +43,48 @@ export default function App() {
   if (!session) {
     return <Auth onSignupSuccess={setUser} />;
   }
+
   if (!user) {
     return <Loading />;
   }
 
   return (
-    <UserContext.Provider value={[user, setUser]}>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              color = focused ? "white" : "gray";
-              switch (route.name) {
-                case "Home":
-                  return <HomeIcon color={color} style={tw`my-2`} />;
-                case "Settings":
-                  return <SettingsIcon color={color} style={tw`my-2`} />;
-              }
-            },
-            headerShown: false,
-            tabBarLabel: ({ focused, children }) => (
-              <Text
-                style={tw`${
-                  focused ? "text-white" : "text-gray-400"
-                } font-bold uppercase text-[0.6rem]`}
-              >
-                {children}
-              </Text>
-            ),
-            tabBarStyle: {
-              backgroundColor: "#042f2e",
-              borderTopWidth: 0,
-              height: 80,
-            },
-          })}
-        >
-          <Tab.Screen name="Home" component={Home} />
-          <Tab.Screen name="Settings" component={Settings} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </UserContext.Provider>
+    <SafeAreaView style={tw`h-full`}>
+      <UserContext.Provider value={[user, setUser]}>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                color = focused ? "white" : "gray";
+                switch (route.name) {
+                  case "Home":
+                    return <HomeIcon color={color} style={tw`my-2`} />;
+                  case "Settings":
+                    return <SettingsIcon color={color} style={tw`my-2`} />;
+                }
+              },
+              headerShown: false,
+              tabBarLabel: ({ focused, children }) => (
+                <Text
+                  style={tw`${
+                    focused ? "text-white" : "text-gray-400"
+                  } font-bold uppercase text-[0.6rem] pb-1`}
+                >
+                  {children}
+                </Text>
+              ),
+              tabBarStyle: {
+                backgroundColor: "#042f2e",
+                borderTopWidth: 0,
+                paddingTop: 5,
+              },
+            })}
+          >
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Settings" component={Settings} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </UserContext.Provider>
+    </SafeAreaView>
   );
 }

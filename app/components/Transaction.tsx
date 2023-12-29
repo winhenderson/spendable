@@ -7,7 +7,7 @@ type Props = { transaction: SimpleTransaction };
 
 const Transaction: React.FC<Props> = ({ transaction }) => {
   return (
-    <View style={tw`flex flex-row h-8 items-center`}>
+    <View style={tw`flex flex-row items-center`}>
       <Text style={tw`w-1/5`}>{transaction.amount}</Text>
       <Text style={tw`w-3/5`}>{transaction.name}</Text>
       <Text style={tw``}>{transaction.date}</Text>
