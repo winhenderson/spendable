@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute, ReactNode } from "react";
+import React, { HTMLInputTypeAttribute, ReactNode, useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import tw from "twrnc";
 
@@ -19,6 +19,8 @@ const Input: React.FC<Props> = ({
   placeholder,
   children,
 }) => {
+  const [focused, setFocused] = useState(false);
+
   return (
     <View style={tw`w-1/2`}>
       <Text
@@ -29,7 +31,9 @@ const Input: React.FC<Props> = ({
       <TextInput
         autoCapitalize="none"
         placeholder={placeholder}
-        style={tw`bg-teal-900 p-4 rounded-full text-white`}
+        style={tw`bg-gray-200 p-4 rounded-full text-teal-950 ${
+          focused ? `border-[0.2] border-teal-500` : ``
+        }`}
         onChangeText={onChange}
         value={value}
         secureTextEntry={type === "password"}
@@ -40,6 +44,8 @@ const Input: React.FC<Props> = ({
             ? "newPassword"
             : "password"
         }
+        onFocus={(e) => setFocused(true)}
+        onBlur={(e) => setFocused(false)}
       />
     </View>
   );

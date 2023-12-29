@@ -6,8 +6,13 @@ import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import { User, getUserById, supabase, transactionsSync } from "./lib";
 import Auth from "./screens/Auth";
-import { HomeIcon, SettingsIcon } from "lucide-react-native";
-import Settings from "./screens/Settings";
+import {
+  HomeIcon,
+  LandmarkIcon,
+  SettingsIcon,
+  UserIcon,
+} from "lucide-react-native";
+import Settings from "./screens/Account";
 import { Text } from "react-native";
 import UserContext from "./UserContext";
 import Loading from "./components/Loading";
@@ -55,33 +60,51 @@ export default function App() {
           <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
-                color = focused ? "white" : "gray";
+                color = focused ? "teal-500" : "teal-900/50";
+                const stroke = focused ? 2.5 : 1.75;
                 switch (route.name) {
+                  case "Banks":
+                    return (
+                      <LandmarkIcon
+                        style={tw`my-2 text-${color}`}
+                        strokeWidth={stroke}
+                      />
+                    );
                   case "Home":
-                    return <HomeIcon color={color} style={tw`my-2`} />;
-                  case "Settings":
-                    return <SettingsIcon color={color} style={tw`my-2`} />;
+                    return (
+                      <HomeIcon
+                        style={tw`my-2 text-${color}`}
+                        strokeWidth={stroke}
+                      />
+                    );
+                  case "Account":
+                    return (
+                      <UserIcon
+                        style={tw`my-2 text-${color}`}
+                        strokeWidth={stroke}
+                      />
+                    );
                 }
               },
               headerShown: false,
               tabBarLabel: ({ focused, children }) => (
                 <Text
                   style={tw`${
-                    focused ? "text-white" : "text-gray-400"
+                    focused ? "text-teal-500" : "text-teal-900/50"
                   } font-bold uppercase text-[0.6rem] pb-1`}
                 >
                   {children}
                 </Text>
               ),
               tabBarStyle: {
-                backgroundColor: "#042f2e",
-                borderTopWidth: 0,
+                backgroundColor: "#fefefe",
                 paddingTop: 5,
               },
             })}
           >
+            <Tab.Screen name="Banks" component={Home} />
             <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Settings" component={Settings} />
+            <Tab.Screen name="Account" component={Settings} />
           </Tab.Navigator>
         </NavigationContainer>
       </UserContext.Provider>

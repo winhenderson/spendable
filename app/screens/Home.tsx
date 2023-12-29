@@ -18,7 +18,7 @@ const Home: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
+      style={tw`bg-white items-center justify-center flex grow p-1 gap-2`}
     >
       <Balance
         spent={
