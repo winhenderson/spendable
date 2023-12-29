@@ -20,6 +20,9 @@ const plaidClient = new PlaidApi(
 
 export async function POST(req: Request) {
   const body = await req.json();
+  if (!body.user_id) {
+    throw new Error("no user_id in request body of transactions-sync");
+  }
 
   const items = await prisma.items.findMany({
     where: { user_id: body.user_id },

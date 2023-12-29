@@ -13,6 +13,7 @@ import UserContext from "./UserContext";
 import Loading from "./components/Loading";
 import tw from "twrnc";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Banks from "./screens/Banks";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +22,6 @@ export default function App() {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    console.log("in the useEffect");
     // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
@@ -29,6 +29,7 @@ export default function App() {
     });
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      getUserFromSession(session);
     });
   }, []);
 
@@ -98,7 +99,7 @@ export default function App() {
               },
             })}
           >
-            <Tab.Screen name="Banks" component={Home} />
+            <Tab.Screen name="Banks" component={Banks} />
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Account" component={Settings} />
           </Tab.Navigator>

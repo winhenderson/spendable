@@ -5,6 +5,9 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   const body = await request.json();
+  if (body.id === undefined) {
+    throw new Error("no id in request body of get-user-by-id");
+  }
 
   const dbResult = await prisma.public_users.findFirst({
     select: {
