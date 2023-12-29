@@ -88,6 +88,8 @@ export type User = {
   transactions: SimpleTransaction[];
 };
 
+export type ColorScheme = "light" | "dark";
+
 export type BankTitle = { name: string; officialName: string | null };
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";

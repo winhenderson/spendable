@@ -21,7 +21,7 @@ const Balance: React.FC<Props> = ({ spent, spendable }) => {
       </View>
 
       <View
-        style={tw`w-50 h-50 bg-teal-700/50 rounded-lg shadow-lg flex flex-col justify-end shadow-teal-950`}
+        style={tw`w-50 h-50 bg-teal-700/50 rounded-lg shadow-lg flex flex-col justify-end shadow-teal-950 dark:bg-green-300`}
       >
         <View
           style={tw`h-[${

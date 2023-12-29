@@ -1,15 +1,13 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView, Pressable, Text, Switch } from "react-native";
+import { Pressable, SafeAreaView } from "react-native";
 import Button from "../components/Button";
-import tw, { useAppColorScheme } from "twrnc";
+import tw from "twrnc";
 import { supabase, updateAmount } from "../lib";
 import Input from "../components/Input";
 import UserContext from "../UserContext";
-import ColorSchemeContext from "../ColorSchemeContext";
 
-const Settings: React.FC = () => {
+export const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
-  const [colorScheme, setColorScheme] = useContext(ColorSchemeContext);
 
   const [amount, setAmount] = useState(String(user.amount));
 
@@ -17,12 +15,9 @@ const Settings: React.FC = () => {
     <SafeAreaView
       style={tw`bg-white items-center justify-center flex grow p-1 gap-2`}
     >
-      <Switch
-        onValueChange={(value) => {
-          setColorScheme(value ? "dark" : "light");
-        }}
-        value={colorScheme === "dark"}
-      />
+      <Pressable onPress={toggleColorScheme}>
+        <Text style={tw`text-black dark:text-white`}>Switch Color Scheme</Text>
+      </Pressable>
       <Input
         type="number"
         placeholder="2000"
@@ -54,5 +49,3 @@ const Settings: React.FC = () => {
     </SafeAreaView>
   );
 };
-
-export default Settings;
