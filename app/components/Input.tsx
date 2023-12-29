@@ -24,7 +24,7 @@ const Input: React.FC<Props> = ({
   return (
     <View style={tw`w-1/2`}>
       <Text
-        style={tw`ml-1 mb-[1/2] text-white/85 uppercase font-bold text-base tracking-wide`}
+        style={tw`ml-1 mb-[1/2] text-teal-900/80 uppercase font-bold text-base tracking-wide`}
       >
         {children}
       </Text>

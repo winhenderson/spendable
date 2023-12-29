@@ -41,6 +41,11 @@ export async function POST(req: Request) {
         access_token: item.plaid_access_token,
         cursor: nextCursor ?? undefined,
       });
+
+      console.log("in here", {
+        more: res.data.added.length,
+        has_more: res.data.has_more,
+      });
       has_more = res.data.has_more;
       plaidTransactions.push(...res.data.added);
       nextCursor = res.data.next_cursor;

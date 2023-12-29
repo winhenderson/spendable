@@ -2,6 +2,7 @@ import { LinkTokenCreateResponse } from "plaid";
 import invariant from "tiny-invariant";
 import { createClient } from "@supabase/supabase-js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useSWR from "swr";
 
 export async function createLinkToken(): Promise<
   LinkTokenCreateResponse["link_token"]
@@ -36,6 +37,7 @@ export async function transactionsSync(
     `${process.env.EXPO_PUBLIC_API_ENDPOINT}/transactions-sync`,
     { method: "POST", body: JSON.stringify({ user_id }) }
   );
+
   const json = await res.json();
   return json;
 }

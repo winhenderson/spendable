@@ -6,12 +6,7 @@ import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import { User, getUserById, supabase, transactionsSync } from "./lib";
 import Auth from "./screens/Auth";
-import {
-  HomeIcon,
-  LandmarkIcon,
-  SettingsIcon,
-  UserIcon,
-} from "lucide-react-native";
+import { HomeIcon, LandmarkIcon, UserIcon } from "lucide-react-native";
 import Settings from "./screens/Account";
 import { Text } from "react-native";
 import UserContext from "./UserContext";
@@ -26,6 +21,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
+    console.log("in the useEffect");
     // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
@@ -33,13 +29,13 @@ export default function App() {
     });
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      getUserFromSession(session);
     });
   }, []);
 
   async function getUserFromSession(session: Session | null) {
     if (session) {
       const user = await getUserById(session.user.id);
+      console.log("getting transactions");
       const transactions = await transactionsSync(user.id);
       setUser({ ...user, transactions });
     }
@@ -61,7 +57,7 @@ export default function App() {
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 color = focused ? "teal-500" : "teal-900/50";
-                const stroke = focused ? 2.5 : 1.75;
+                const stroke = focused ? 2.5 : 1.8;
                 switch (route.name) {
                   case "Banks":
                     return (
