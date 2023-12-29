@@ -14,7 +14,6 @@ import Loading from "./components/Loading";
 import tw, { useAppColorScheme, useDeviceContext } from "twrnc";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Banks from "./screens/Banks";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import ColorSchemeContext from "./ColorSchemeContext";
 
 const Tab = createBottomTabNavigator();
@@ -63,7 +62,7 @@ export default function App() {
   return (
     <SafeAreaView style={tw`h-full`}>
       <ColorSchemeContext.Provider
-        value={[colorScheme ?? "light", setColorScheme]}
+        value={[colorScheme ?? "dark", setColorScheme]}
       >
         <UserContext.Provider value={[user, setUser]}>
           <NavigationContainer>
@@ -71,27 +70,29 @@ export default function App() {
               initialRouteName="Account"
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
-                  color = focused ? "teal-500" : "teal-900/50";
+                  color = focused
+                    ? "text-teal-500 dark:text-teal-600"
+                    : "text-teal-900/50 dark:text-zinc-500/75";
                   const stroke = focused ? 2.5 : 1.8;
                   switch (route.name) {
                     case "Banks":
                       return (
                         <LandmarkIcon
-                          style={tw`my-2 text-${color}`}
+                          style={tw`my-2 ${color}`}
                           strokeWidth={stroke}
                         />
                       );
                     case "Home":
                       return (
                         <HomeIcon
-                          style={tw`my-2 text-${color}`}
+                          style={tw`my-2 ${color}`}
                           strokeWidth={stroke}
                         />
                       );
                     case "Account":
                       return (
                         <UserIcon
-                          style={tw`my-2 text-${color}`}
+                          style={tw`my-2 ${color}`}
                           strokeWidth={stroke}
                         />
                       );
@@ -101,16 +102,19 @@ export default function App() {
                 tabBarLabel: ({ focused, children }) => (
                   <Text
                     style={tw`${
-                      focused ? "text-teal-500" : "text-teal-900/50"
+                      focused
+                        ? "text-teal-500 dark:text-teal-600"
+                        : "text-teal-900/50 dark:text-zinc-500/75"
                     } font-bold uppercase text-[0.6rem] pb-1`}
                   >
                     {children}
                   </Text>
                 ),
-                tabBarStyle: {
-                  backgroundColor: "#fefefe",
-                  paddingTop: 5,
-                },
+                // tabBarStyle: {
+                //   backgroundColor: tw`"#fefefe"`,
+                //   paddingTop: 5,
+                // },
+                tabBarStyle: tw`bg-white pt-2 dark:bg-zinc-800`,
               })}
             >
               <Tab.Screen name="Banks" component={Banks} />

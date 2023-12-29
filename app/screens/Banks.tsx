@@ -41,12 +41,14 @@ const Banks: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={tw`bg-white dark:bg-slate-900 items-center justify-center flex grow p-1 gap-2`}
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow p-1 gap-2`}
     >
       <FlatList
         data={banks}
         renderItem={(bank) => (
-          <Text style={tw`text-teal-950`}>{bank.item.name}</Text>
+          <Text style={tw`text-teal-950 dark:text-teal-200`}>
+            {bank.item.name}
+          </Text>
         )}
       />
 
