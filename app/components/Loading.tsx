@@ -6,10 +6,10 @@ import { spin } from "../animation";
 const Loading: React.FC = () => {
   return (
     <SafeAreaView
-      style={tw`bg-teal-800 items-center justify-center flex grow p-1 gap-2`}
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow p-1 gap-2`}
     >
       <Animated.View style={{ transform: [{ rotate: spin }] }}>
-        <Loader2 size={40} color={"white"} />
+        <Loader2 size={40} color={"lightgray"} />
       </Animated.View>
     </SafeAreaView>
   );

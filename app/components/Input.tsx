@@ -24,13 +24,14 @@ const Input: React.FC<Props> = ({
   return (
     <View style={tw`w-1/2`}>
       <Text
-        style={tw`ml-1 mb-[1/2] text-teal-900/80 dark:text-teal-500/70 uppercase font-bold text-base tracking-wide`}
+        style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
       >
         {children}
       </Text>
       <TextInput
         autoCapitalize="none"
         placeholder={placeholder}
+        placeholderTextColor={"gray"}
         style={tw`bg-gray-200 dark:bg-zinc-800 p-4 rounded-full text-teal-950 dark:text-zinc-200 ${
           focused ? `border-[0.2] border-teal-500` : ``
         }`}

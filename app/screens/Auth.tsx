@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import { Alert, Pressable, SafeAreaView, Text, View } from "react-native";
 import tw from "twrnc";
 import { User, signUp, supabase } from "../lib";
 import Input from "../components/Input";
@@ -50,10 +50,15 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
 
   return (
     <SafeAreaView
-      style={tw`bg-teal-800 flex flex-col items-center justify-center grow-1 gap-4`}
+      style={tw`bg-white dark:bg-zinc-900 flex flex-col items-center justify-center grow-1 gap-4`}
     >
       <Text
-        style={tw`mb-10 text-white text-3xl w-2/3 text-center tracking-wide font-bold `}
+        style={tw`text-4xl font-bold uppercase text-teal-600 dark:text-teal-500 mb-10`}
+      >
+        Spendable
+      </Text>
+      <Text
+        style={tw`mb-10 text-3xl w-2/3 text-center tracking-wide font-bold dark:text-teal-500`}
       >
         {screenShown === "login" ? "Log In" : "Sign Up"}
       </Text>
@@ -80,16 +85,19 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
           {screenShown === "login" ? "Log In" : "Sign Up"}
         </Button>
 
-        <Text style={tw`text-white/75 text-base  font-bold uppercase`}>Or</Text>
-
-        <Button
+        <Pressable
+          style={tw`mt-2 flex flex-row items-center`}
           onPress={() =>
             setScreenShown(screenShown === "login" ? "signup" : "login")
           }
-          color="orange-600/75"
         >
-          {screenShown === "signup" ? "Log In" : "Sign Up"}
-        </Button>
+          <Text style={tw`uppercase  text-base text-zinc-500`}>Or – </Text>
+          <Text
+            style={tw`underline text-base text-teal-900 font-bold tracking-wide dark:text-teal-600`}
+          >
+            {screenShown === "signup" ? "Log In" : "Create Account"}
+          </Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

@@ -19,11 +19,8 @@ import ColorSchemeContext from "./ColorSchemeContext";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  // 1️⃣  opt OUT of listening to DEVICE color scheme events
   useDeviceContext(tw, { withDeviceColorScheme: false });
 
-  // 2️⃣  use the `useAppColorScheme` hook to get a reference to the current color
-  // scheme, with some functions to modify it (triggering re-renders) when you need to
   const [colorScheme, toggleColorScheme, setColorScheme] =
     useAppColorScheme(tw);
 
@@ -31,7 +28,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    // supabase.auth.signOut();
+    supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       getUserFromSession(data.session);
@@ -110,10 +107,6 @@ export default function App() {
                     {children}
                   </Text>
                 ),
-                // tabBarStyle: {
-                //   backgroundColor: tw`"#fefefe"`,
-                //   paddingTop: 5,
-                // },
                 tabBarStyle: tw`bg-white pt-2 dark:bg-zinc-800`,
               })}
             >

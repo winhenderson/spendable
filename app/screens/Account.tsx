@@ -22,6 +22,7 @@ const Settings: React.FC = () => {
           setColorScheme(value ? "dark" : "light");
         }}
         value={colorScheme === "dark"}
+        trackColor={{ false: "#042f2e", true: "#0d9488" }}
       />
       <Input
         type="number"
