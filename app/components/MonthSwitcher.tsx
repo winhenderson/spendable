@@ -8,13 +8,22 @@ type Props = {
   year: number;
   setMonth(newMonth: number): unknown;
   setYear(newYear: number): unknown;
+  firstTransaction: { month: number; year: number };
 };
 
-const MonthSwitcher: React.FC<Props> = ({ month, year, setMonth, setYear }) => {
+const MonthSwitcher: React.FC<Props> = ({
+  month,
+  year,
+  setMonth,
+  setYear,
+  firstTransaction,
+}) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
   const monthIsCurrent = month === currentMonth && year === currentYear;
+  const monthIsLast =
+    firstTransaction.month === month && firstTransaction.year === year;
 
   function forwardMonth() {
     if (monthIsCurrent) {
@@ -29,6 +38,9 @@ const MonthSwitcher: React.FC<Props> = ({ month, year, setMonth, setYear }) => {
   }
 
   function backwardMonth() {
+    if (monthIsLast) {
+      return;
+    }
     if (month === 0) {
       setYear(year - 1);
       setMonth(11);
@@ -39,8 +51,14 @@ const MonthSwitcher: React.FC<Props> = ({ month, year, setMonth, setYear }) => {
 
   return (
     <View style={tw`flex flex-row items-center w-1/2 justify-around`}>
-      <Pressable onPress={backwardMonth}>
-        <ChevronLeft style={tw`text-teal-800 dark:text-teal-500`} />
+      <Pressable onPress={monthIsLast ? () => {} : backwardMonth}>
+        <ChevronLeft
+          style={tw`${
+            monthIsLast
+              ? "text-zinc-200 dark:-text-zinc-700"
+              : "text-teal-800 dark:text-teal-500"
+          }`}
+        />
       </Pressable>
       <View style={tw`flex flex-col items-center w-28`}>
         <Text

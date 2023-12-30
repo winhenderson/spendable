@@ -19,6 +19,17 @@ const Home: React.FC = () => {
       Number(transaction.date.split("-")[0]) === year
   );
 
+  const firstTransactionDate = user.transactions.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return Number(dateA) - Number(dateB);
+  })[0].date;
+
+  const firstTransaction = {
+    month: Number(firstTransactionDate.split("-")[1]) - 1,
+    year: Number(firstTransactionDate.split("-")[0]),
+  };
+
   return (
     <SafeAreaView
       style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow p-1 gap-2`}
@@ -28,6 +39,7 @@ const Home: React.FC = () => {
         setYear={setYear}
         month={month}
         setMonth={setMonth}
+        firstTransaction={firstTransaction}
       />
       <Balance
         spent={
