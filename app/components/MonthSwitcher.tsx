@@ -40,19 +40,27 @@ const MonthSwitcher: React.FC<Props> = ({ month, year, setMonth, setYear }) => {
   return (
     <View style={tw`flex flex-row items-center w-1/2 justify-around`}>
       <Pressable onPress={backwardMonth}>
-        <ChevronLeft style={tw`text-teal-800`} />
+        <ChevronLeft style={tw`text-teal-800 dark:text-teal-500`} />
       </Pressable>
       <View style={tw`flex flex-col items-center w-28`}>
-        <Text style={tw`uppercase text-sm font-bold text-teal-800/75`}>
+        <Text
+          style={tw`uppercase text-sm font-bold text-teal-900/65 dark:text-zinc-500`}
+        >
           {year}
         </Text>
-        <Text style={tw`uppercase text-lg font-bold text-teal-700`}>
+        <Text
+          style={tw`uppercase text-lg font-bold text-teal-700 dark:text-teal-500`}
+        >
           {getMonthName(month)}
         </Text>
       </View>
-      <Pressable onPress={forwardMonth}>
+      <Pressable onPress={monthIsCurrent ? () => {} : forwardMonth}>
         <ChevronRight
-          style={tw`${monthIsCurrent ? "text-zinc-200" : "text-teal-800"}`}
+          style={tw`${
+            monthIsCurrent
+              ? "text-zinc-200 dark:text-zinc-700"
+              : "text-teal-800 dark:text-teal-500"
+          }`}
         />
       </Pressable>
     </View>
