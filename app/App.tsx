@@ -64,7 +64,7 @@ export default function App() {
         <UserContext.Provider value={[user, setUser]}>
           <NavigationContainer>
             <Tab.Navigator
-              initialRouteName="Account"
+              initialRouteName="Home"
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                   color = focused
