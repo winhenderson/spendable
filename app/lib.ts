@@ -90,7 +90,11 @@ export type User = {
 
 export type ColorScheme = "light" | "dark";
 
-export type BankTitle = { name: string; officialName: string | null };
+export type BankTitle = {
+  name: string;
+  officialName: string | null;
+  logo: string | null;
+};
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "";

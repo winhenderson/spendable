@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text } from "react-native";
+import { FlatList, SafeAreaView, Text, View, Image } from "react-native";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
 import {
@@ -46,9 +46,12 @@ const Banks: React.FC = () => {
       <FlatList
         data={banks}
         renderItem={(bank) => (
-          <Text style={tw`text-teal-950 dark:text-teal-200`}>
-            {bank.item.name}
-          </Text>
+          <View>
+            {bank.item.logo && <Image source={{ uri: bank.item.logo }} />}
+            <Text style={tw`text-teal-950 dark:text-teal-200`}>
+              {bank.item.name}
+            </Text>
+          </View>
         )}
       />
 

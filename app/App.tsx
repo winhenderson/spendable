@@ -28,7 +28,7 @@ export default function App() {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    supabase.auth.signOut();
+    // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       getUserFromSession(data.session);
