@@ -22,11 +22,8 @@ const Banks: React.FC = () => {
     setLinkToken(token);
   }
 
-  async function getBanks() {
-    setBanks(await accountsGet(user.id));
-  }
   useEffect(() => {
-    getBanks();
+    accountsGet(user.id).then(setBanks);
   }, [user, linkToken]);
 
   useEffect(() => {
@@ -61,7 +58,7 @@ const Banks: React.FC = () => {
           noLoadingState: false,
         }}
         onSuccess={async (success: LinkSuccess) => {
-          await publicTokenExchange(success.publicToken, user.id);
+          await publicTokenExchange(success.publicToken);
           const data = await transactionsSync(user.id);
           setUser({ ...user, transactions: data });
         }}

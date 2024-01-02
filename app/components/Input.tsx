@@ -45,8 +45,8 @@ const Input: React.FC<Props> = ({
             ? "newPassword"
             : "password"
         }
-        onFocus={(e) => setFocused(true)}
-        onBlur={(e) => setFocused(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
     </View>
   );

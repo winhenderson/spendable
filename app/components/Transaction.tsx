@@ -6,7 +6,6 @@ import tw from "twrnc";
 type Props = { transaction: SimpleTransaction };
 
 const Transaction: React.FC<Props> = ({ transaction }) => {
-  const date = new Date(transaction.date);
   return (
     <View style={tw`flex flex-row py-2 items-center w-85 rounded-lg`}>
       <View style={tw`w-7`}>

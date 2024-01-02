@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView, Pressable, Text, Switch } from "react-native";
+import { SafeAreaView, Switch } from "react-native";
 import Button from "../components/Button";
-import tw, { useAppColorScheme } from "twrnc";
+import tw from "twrnc";
 import { supabase, updateAmount } from "../lib";
 import Input from "../components/Input";
 import UserContext from "../UserContext";

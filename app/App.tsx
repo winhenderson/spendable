@@ -21,8 +21,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   useDeviceContext(tw, { withDeviceColorScheme: false });
 
-  const [colorScheme, toggleColorScheme, setColorScheme] =
-    useAppColorScheme(tw);
+  const [colorScheme, , setColorScheme] = useAppColorScheme(tw);
 
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User>();
@@ -66,7 +65,7 @@ export default function App() {
             <Tab.Navigator
               initialRouteName="Home"
               screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
+                tabBarIcon: ({ focused, color }) => {
                   color = focused
                     ? "text-teal-500 dark:text-teal-600"
                     : "text-teal-900/50 dark:text-zinc-500/75";

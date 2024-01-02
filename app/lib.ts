@@ -14,11 +14,8 @@ export async function createLinkToken(): Promise<
   return json.token.link_token;
 }
 
-export async function publicTokenExchange(
-  publicToken: string,
-  sessionId: string
-) {
-  const res = await fetch(`${endpoint}/public-token-exchange`, {
+export async function publicTokenExchange(publicToken: string) {
+  await fetch(`${endpoint}/public-token-exchange`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ public_token: publicToken }),
@@ -58,7 +55,7 @@ export async function signUp(email: string, id: string): Promise<User> {
 }
 
 export async function updateAmount(newAmount: number, userId: string) {
-  const res = await fetch(`${endpoint}/update-amount`, {
+  await fetch(`${endpoint}/update-amount`, {
     method: "POST",
     body: JSON.stringify({ newAmount, userId }),
   });
