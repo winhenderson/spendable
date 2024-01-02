@@ -25,16 +25,14 @@ export async function publicTokenExchange(publicToken: string) {
 export async function transactionsSync(
   user_id: string
 ): Promise<Array<SimpleTransaction>> {
-  const res = await fetch(`${endpoint}/transactions-sync`, {
-    method: "POST",
-    body: JSON.stringify({ user_id }),
-  });
+  const res = await fetch(`${endpoint}/transactions-sync/${user_id}`);
 
   const json = await res.json();
   return json;
 }
 
 export async function accountsGet(user_id: string): Promise<Array<BankTitle>> {
+  // TODO: should this be more secure
   const res = await fetch(`${endpoint}/accounts-get`, {
     method: "POST",
     body: JSON.stringify({ user_id }),
@@ -45,6 +43,7 @@ export async function accountsGet(user_id: string): Promise<Array<BankTitle>> {
 }
 
 export async function signUp(email: string, id: string): Promise<User> {
+  // TODO: add some tests to this file
   const res = await fetch(`${endpoint}/sign-up`, {
     method: "POST",
     body: JSON.stringify({ email, id }),

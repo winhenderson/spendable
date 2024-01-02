@@ -17,6 +17,7 @@ const plaidClient = new PlaidApi(
     },
   })
 );
+// TODO: change name aof the api endpoints to be better and put the user_id in the route like get-transactionsl/[user_id]
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -51,6 +52,7 @@ export async function POST(req: Request) {
       });
       has_more = res.data.has_more;
       plaidTransactions.push(...res.data.added);
+      // also handle the data.modified ones and updateMany them to the transacciont table
       nextCursor = res.data.next_cursor;
     }
 
@@ -82,7 +84,7 @@ function createDbTransaction(
     item_id: item_id,
     account_id: plaidTransaction.account_id,
     transaction_date: plaidTransaction.date,
-    amount: new Prisma.Decimal(plaidTransaction.amount),
+    amount: new Prisma.Decimal(plaidTransaction.amount * -1),
     currency: plaidTransaction.iso_currency_code,
     category: plaidTransaction.personal_finance_category?.detailed ?? null,
     merchant_name: plaidTransaction.merchant_name ?? null,

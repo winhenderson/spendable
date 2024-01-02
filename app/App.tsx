@@ -50,6 +50,7 @@ export default function App() {
   if (!session) {
     return <Auth onSignupSuccess={setUser} />;
   }
+  console.log({ session: session });
 
   if (!user) {
     return <Loading />;
