@@ -25,7 +25,7 @@ const TransactionsList: React.FC<Props> = ({ transactions }) => {
           >
             Merchant
           </Text>
-          <Text style={tw`uppercase font-bold text-xs w-20 text-teal-900`}>
+          <Text style={tw`uppercase font-bold text-xs w-18 text-teal-900`}>
             Date
           </Text>
           <Text style={tw`uppercase font-bold text-xs text-teal-900`}>

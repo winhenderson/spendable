@@ -4,8 +4,6 @@ import { Prisma } from "@prisma/client";
 
 import { Transaction } from "plaid";
 
-// TODO: change name aof the api endpoints to be better and put the user_id in the route like get-transactionsl/[user_id]
-
 export async function GET(
   req: Request,
   { params }: { params: { user_id: string } }

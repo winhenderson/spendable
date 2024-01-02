@@ -49,12 +49,14 @@ const Home: React.FC = () => {
         firstTransaction={firstTransaction}
       />
       <Balance
-        spent={Number(
-          monthTransactions
-            .map((i) => i.amount)
-            .reduce((total, amount) => total + amount, 0)
-            .toFixed(2)
-        )}
+        spent={
+          Number(
+            monthTransactions
+              .map((i) => i.amount)
+              .reduce((total, amount) => total + amount, 0)
+              .toFixed(2)
+          ) * -1
+        }
         spendable={user.amount}
       />
       <TransactionsList transactions={monthTransactions} />
