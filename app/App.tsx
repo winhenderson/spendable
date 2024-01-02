@@ -107,7 +107,7 @@ export default function App() {
                     {children}
                   </Text>
                 ),
-                tabBarStyle: tw`bg-white pt-2 dark:bg-zinc-800`,
+                tabBarStyle: tw`bg-white pt-2 dark:bg-zinc-800 `,
               })}
             >
               <Tab.Screen name="Banks" component={Banks} />

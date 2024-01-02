@@ -65,6 +65,7 @@ export async function POST(req: Request) {
 
     await prisma.transactions.createMany({
       data: plaidTransactions.map((t) => createDbTransaction(t, item.id)),
+      skipDuplicates: true,
     });
 
     allTransactions = allTransactions.concat(transactions);
@@ -89,6 +90,7 @@ function createDbTransaction(
     logo_url: plaidTransaction.logo_url ?? null,
     name: plaidTransaction.name,
     website: plaidTransaction.website ?? null,
+    transaction_id: plaidTransaction.transaction_id,
   };
 }
 
