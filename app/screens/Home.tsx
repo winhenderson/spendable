@@ -5,6 +5,7 @@ import Balance from "../components/Balance";
 import UserContext from "../UserContext";
 import TransactionsList from "../components/TransactionsList";
 import MonthSwitcher from "../components/MonthSwitcher";
+import Loading from "../components/Loading";
 
 const Home: React.FC = () => {
   const [user] = useContext(UserContext);
@@ -13,22 +14,28 @@ const Home: React.FC = () => {
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
 
+  if (!user.transactions) {
+    return <Loading />;
+  }
+
   const monthTransactions = user.transactions.filter(
     (transaction) =>
       Number(transaction.date.split("-")[1]) === month + 1 &&
       Number(transaction.date.split("-")[0]) === year
   );
 
-  const firstTransactionDate = user.transactions.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return Number(dateA) - Number(dateB);
-  })[0].date;
-
-  const firstTransaction = {
-    month: Number(firstTransactionDate.split("-")[1]) - 1,
-    year: Number(firstTransactionDate.split("-")[0]),
-  };
+  let firstTransaction = { month: 0, year: new Date().getFullYear() };
+  if (user.transactions.length) {
+    const firstTransactionDate = user.transactions.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return Number(dateA) - Number(dateB);
+    })[0].date;
+    firstTransaction = {
+      month: Number(firstTransactionDate.split("-")[1]) - 1,
+      year: Number(firstTransactionDate.split("-")[0]),
+    };
+  }
 
   return (
     <SafeAreaView

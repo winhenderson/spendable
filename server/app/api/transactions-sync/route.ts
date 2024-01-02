@@ -100,7 +100,7 @@ function convertDbTransaction(
     date: dbTransaction.transaction_date,
     amount: Number(dbTransaction.amount),
     name: dbTransaction.merchant_name || dbTransaction.name,
-    logo_url: dbTransaction.logo_url,
+    logo_url: dbTransaction.logo_url ?? null,
   };
 }
 

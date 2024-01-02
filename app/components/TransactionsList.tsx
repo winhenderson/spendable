@@ -17,15 +17,24 @@ const TransactionsList: React.FC<Props> = ({ transactions }) => {
 
   return (
     <FlatList
+      ItemSeparatorComponent={() => <View style={tw`h-[1px] bg-zinc-100`} />}
       ListHeaderComponent={
-        <View style={tw`flex flex-row w-full`}>
-          <Text>Merchant</Text>
-          <Text>Date</Text>
-          <Text>Amount</Text>
+        <View style={tw`flex flex-row items-center w-85 justify-start py-2`}>
+          <Text
+            style={tw`uppercase font-bold text-xs text-teal-900 w-1/2 mr-7`}
+          >
+            Merchant
+          </Text>
+          <Text style={tw`uppercase font-bold text-xs w-20 text-teal-900`}>
+            Date
+          </Text>
+          <Text style={tw`uppercase font-bold text-xs text-teal-900`}>
+            Amount
+          </Text>
         </View>
       }
-      style={tw`flex w-full px-4 `}
-      contentContainerStyle={tw`gap-1`}
+      style={tw`flex w-full px-4`}
+      contentContainerStyle={tw`gap-1 flex items-center`}
       data={sorted}
       renderItem={(transaction) => (
         <Transaction transaction={transaction.item} />
