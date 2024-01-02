@@ -24,22 +24,31 @@ export async function publicTokenExchange(publicToken: string) {
 
 export async function transactionsSync(
   user_id: string
-): Promise<Array<SimpleTransaction>> {
-  const res = await fetch(`${endpoint}/transactions-sync/${user_id}`);
+): APIResponse<Array<SimpleTransaction>> {
+  try {
+    const res = await fetch(`${endpoint}/transactions-sync/${user_id}`);
 
-  const json = await res.json();
-  return json;
+    const json = await res.json();
+    return { ok: true, value: json };
+  } catch (error) {
+    console.error(error);
+    return { ok: false, error };
+  }
 }
 
-export async function accountsGet(user_id: string): Promise<Array<BankTitle>> {
+export async function accountsGet(
+  user_id: string
+): APIResponse<Array<BankTitle>> {
   // TODO: should this be more secure
-  const res = await fetch(`${endpoint}/accounts-get`, {
-    method: "POST",
-    body: JSON.stringify({ user_id }),
-  });
+  try {
+    const res = await fetch(`${endpoint}/accounts-get/${user_id}`);
 
-  const json = await res.json();
-  return json;
+    const json = await res.json();
+    return { ok: true, value: json };
+  } catch (error) {
+    console.error(error);
+    return { ok: false, error };
+  }
 }
 
 export async function signUp(email: string, id: string): Promise<User> {
@@ -60,15 +69,21 @@ export async function updateAmount(newAmount: number, userId: string) {
   });
 }
 
-export async function getUserById(id: string): Promise<User> {
-  const res = await fetch(`${endpoint}/get-user-by-id`, {
-    method: "POST",
-    body: JSON.stringify({ id }),
-  });
+export async function getUserById(user_id: string): APIResponse<User> {
+  try {
+    const res = await fetch(`${endpoint}/get-user-by-id/${user_id}`);
 
-  const json = await res.json();
-  return json;
+    const json = await res.json();
+    return { ok: true, value: json };
+  } catch (error) {
+    console.error(error);
+    return { ok: false, error };
+  }
 }
+
+type APIResponse<T> = Promise<
+  { ok: true; value: T } | { ok: false; error: unknown }
+>;
 
 export type SimpleTransaction = {
   id: string;

@@ -23,7 +23,11 @@ const Banks: React.FC = () => {
   }
 
   useEffect(() => {
-    accountsGet(user.id).then(setBanks);
+    accountsGet(user.id).then((res) => {
+      if (res.ok) {
+        setBanks(res.value);
+      }
+    });
   }, [user, linkToken]);
 
   useEffect(() => {
@@ -59,8 +63,10 @@ const Banks: React.FC = () => {
         }}
         onSuccess={async (success: LinkSuccess) => {
           await publicTokenExchange(success.publicToken);
-          const data = await transactionsSync(user.id);
-          setUser({ ...user, transactions: data });
+          const res = await transactionsSync(user.id);
+          if (res.ok) {
+            setUser({ ...user, transactions: res.value });
+          }
         }}
         onExit={(exit: LinkExit) => console.log(exit)}
       >

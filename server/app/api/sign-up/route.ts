@@ -1,7 +1,5 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/helpers";
 
 export async function POST(request: Request) {
   const body = await request.json();

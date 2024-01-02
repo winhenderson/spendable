@@ -1,23 +1,7 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
 import invariant from "tiny-invariant";
-import { PrismaClient } from "@prisma/client";
 
-import { Configuration, PlaidApi, PlaidEnvironments } from "plaid";
-
-const prisma = new PrismaClient();
-
-const plaidClient = new PlaidApi(
-  new Configuration({
-    basePath: PlaidEnvironments["sandbox"],
-    baseOptions: {
-      headers: {
-        "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
-        "PLAID-SECRET": process.env.PLAID_SECRET,
-        "Plaid-Version": "2020-09-14",
-      },
-    },
-  })
-);
+import { plaidClient, prisma } from "@/helpers";
 
 export async function POST(request: Request) {
   const body = await request.json();

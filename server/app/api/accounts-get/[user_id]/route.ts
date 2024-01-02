@@ -1,36 +1,15 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
-import { PrismaClient } from "@prisma/client";
-import {
-  Configuration,
-  CountryCode,
-  InstitutionsGetByIdResponse,
-  PlaidApi,
-  PlaidEnvironments,
-} from "plaid";
+import { plaidClient, prisma } from "@/helpers";
+import { CountryCode, InstitutionsGetByIdResponse } from "plaid";
 
-const prisma = new PrismaClient();
-
-const plaidClient = new PlaidApi(
-  new Configuration({
-    basePath: PlaidEnvironments["sandbox"],
-    baseOptions: {
-      headers: {
-        "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
-        "PLAID-SECRET": process.env.PLAID_SECRET,
-        "Plaid-Version": "2020-09-14",
-      },
-    },
-  })
-);
-
-export async function POST(request: Request) {
-  const body = await request.json();
-  if (!body.user_id) {
-    throw new Error("no user_id in request body of accounts-get");
-  }
+export async function GET(
+  request: Request,
+  { params }: { params: { user_id: string } }
+) {
+  const user_id = params.user_id;
 
   const items = await prisma.items.findMany({
-    where: { user_id: body.user_id },
+    where: { user_id: user_id },
   });
 
   let info: {

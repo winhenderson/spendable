@@ -1,32 +1,19 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
-import { PrismaClient, Prisma } from "@prisma/client";
+import { plaidClient, prisma } from "@/helpers";
+import { Prisma } from "@prisma/client";
 
-import { Configuration, PlaidApi, PlaidEnvironments, Transaction } from "plaid";
+import { Transaction } from "plaid";
 
-const prisma = new PrismaClient();
-
-const plaidClient = new PlaidApi(
-  new Configuration({
-    basePath: PlaidEnvironments["sandbox"],
-    baseOptions: {
-      headers: {
-        "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
-        "PLAID-SECRET": process.env.PLAID_SECRET,
-        "Plaid-Version": "2020-09-14",
-      },
-    },
-  })
-);
 // TODO: change name aof the api endpoints to be better and put the user_id in the route like get-transactionsl/[user_id]
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  if (!body.user_id) {
-    throw new Error("no user_id in request body of transactions-sync");
-  }
+export async function GET(
+  req: Request,
+  { params }: { params: { user_id: string } }
+) {
+  const user_id = params.user_id;
 
   const items = await prisma.items.findMany({
-    where: { user_id: body.user_id },
+    where: { user_id: user_id },
   });
 
   let dbTransactions = await prisma.transactions.findMany();

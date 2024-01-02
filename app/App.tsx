@@ -40,17 +40,21 @@ export default function App() {
 
   async function getUserFromSession(session: Session | null) {
     if (session) {
-      const user = await getUserById(session.user.id);
-      console.log("getting transactions");
-      const transactions = await transactionsSync(user.id);
-      setUser({ ...user, transactions });
+      const userRes = await getUserById(session.user.id);
+      if (!userRes.ok) {
+        return;
+      }
+
+      const res = await transactionsSync(userRes.value.id);
+      if (res.ok) {
+        setUser({ ...userRes.value, transactions: res.value });
+      }
     }
   }
 
   if (!session) {
     return <Auth onSignupSuccess={setUser} />;
   }
-  console.log({ session: session });
 
   if (!user) {
     return <Loading />;

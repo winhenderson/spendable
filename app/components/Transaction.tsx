@@ -24,6 +24,7 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
     </View>
   );
 };
+// TODO: add the default icon thing like a colored circle with a letter?
 
 function createDate(dateString: string) {
   const date = new Date(dateString);

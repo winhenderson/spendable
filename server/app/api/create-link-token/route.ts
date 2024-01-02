@@ -1,26 +1,8 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
 import invariant from "tiny-invariant";
 
-import {
-  Configuration,
-  CountryCode,
-  PlaidApi,
-  PlaidEnvironments,
-  Products,
-} from "plaid";
-
-const plaidClient = new PlaidApi(
-  new Configuration({
-    basePath: PlaidEnvironments["sandbox"],
-    baseOptions: {
-      headers: {
-        "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
-        "PLAID-SECRET": process.env.PLAID_SECRET,
-        "Plaid-Version": "2020-09-14",
-      },
-    },
-  })
-);
+import { CountryCode, Products } from "plaid";
+import { plaidClient } from "@/helpers";
 
 export async function POST() {
   invariant(typeof process.env.PLAID_CLIENT_ID === "string");
