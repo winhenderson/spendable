@@ -100,6 +100,7 @@ function convertDbTransaction(
     date: dbTransaction.transaction_date,
     amount: Number(dbTransaction.amount),
     name: dbTransaction.merchant_name || dbTransaction.name,
+    logo_url: dbTransaction.logo_url,
   };
 }
 
@@ -111,6 +112,7 @@ function convertPlaidTransaction(
     date: plaidTransaction.date,
     amount: plaidTransaction.amount,
     name: plaidTransaction.merchant_name || plaidTransaction.name,
+    logo_url: plaidTransaction.logo_url ?? null,
   };
 }
 
@@ -119,4 +121,5 @@ type SimpleTransaction = {
   date: string;
   amount: number;
   name: string;
+  logo_url: string | null;
 };

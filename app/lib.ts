@@ -79,6 +79,7 @@ export type SimpleTransaction = {
   date: string;
   amount: number;
   name: string;
+  logo_url: string | null;
 };
 
 export type User = {
