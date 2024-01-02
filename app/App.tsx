@@ -72,8 +72,8 @@ export default function App() {
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color }) => {
                   color = focused
-                    ? "text-teal-500 dark:text-teal-600"
-                    : "text-teal-900/50 dark:text-zinc-500/75";
+                    ? "text-teal-500"
+                    : "text-teal-900/50 dark:text-zinc-500/85";
                   const stroke = focused ? 2.5 : 1.8;
                   switch (route.name) {
                     case "Banks":
@@ -104,8 +104,8 @@ export default function App() {
                   <Text
                     style={tw`${
                       focused
-                        ? "text-teal-500 dark:text-teal-600"
-                        : "text-teal-900/50 dark:text-zinc-500/75"
+                        ? "text-teal-500"
+                        : "text-teal-900/50 dark:text-zinc-500/85"
                     } font-bold uppercase text-[0.6rem] pb-1`}
                   >
                     {children}

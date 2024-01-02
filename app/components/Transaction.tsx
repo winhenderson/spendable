@@ -16,13 +16,15 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
           />
         )}
       </View>
-      <Text style={tw`dark:text-teal-50 w-1/2 p-2`}>{transaction.name}</Text>
-      <Text style={tw`dark:text-teal-50 w-18`}>
+      <Text style={tw`dark:text-zinc-50 w-1/2 p-2`}>{transaction.name}</Text>
+      <Text style={tw`dark:text-zinc-50 w-18`}>
         {createDate(transaction.date)}
       </Text>
       <Text
-        style={tw`dark:text-teal-50 w-20 font-semibold ${
-          transaction.amount > 0 ? "text-green-600" : "text-red-600"
+        style={tw`w-20 font-semibold ${
+          transaction.amount > 0
+            ? "text-green-600 dark:text-green-500"
+            : "text-red-600"
         }`}
       >
         {transaction.amount > 0
