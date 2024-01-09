@@ -312,6 +312,7 @@ model transactions {
   item_id          String
   id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   transaction_id   String    @unique
+  ignore           Boolean   @default(false)
   items            items     @relation(fields: [item_id], references: [id], onDelete: Cascade)
 
   @@schema("public")

@@ -51,6 +51,21 @@ export async function accountsGet(
   }
 }
 
+export async function ignore(
+  transaction_id: string,
+  user_id: string
+): Promise<boolean> {
+  const res = await fetch(`${endpoint}/ignore`, {
+    method: "POST",
+    body: JSON.stringify({ transaction_id, user_id }),
+  });
+
+  if (res.status === 404) {
+    return false;
+  }
+  return true;
+}
+
 export async function signUp(email: string, id: string): Promise<User> {
   // TODO: add some tests to this file
   const res = await fetch(`${endpoint}/sign-up`, {
@@ -91,6 +106,7 @@ export type SimpleTransaction = {
   amount: number;
   name: string;
   logo_url: string | null;
+  ignore: boolean;
 };
 
 export type User = {

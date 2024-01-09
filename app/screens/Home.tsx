@@ -40,8 +40,7 @@ const Home: React.FC = () => {
   }
 
   const spent = calculateSpent(
-    // TODO: user.amount is coming through as a string but ts thinks it's a number, why is this working?
-    Number(user.amount),
+    user.amount,
     monthTransactions.map((i) => i.amount)
   );
 

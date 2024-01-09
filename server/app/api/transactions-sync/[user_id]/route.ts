@@ -62,6 +62,7 @@ function createDbTransaction(
   item_id: string
 ): Omit<Prisma.$transactionsPayload["scalars"], "id" | "created_at"> {
   return {
+    ignore: false,
     item_id: item_id,
     account_id: plaidTransaction.account_id,
     transaction_date: plaidTransaction.date,
@@ -86,6 +87,7 @@ function convertDbTransaction(
     amount: Number(dbTransaction.amount),
     name: dbTransaction.merchant_name || dbTransaction.name,
     logo_url: dbTransaction.logo_url ?? null,
+    ignore: dbTransaction.ignore,
   };
 }
 
@@ -98,6 +100,7 @@ function convertPlaidTransaction(
     amount: plaidTransaction.amount,
     name: plaidTransaction.merchant_name || plaidTransaction.name,
     logo_url: plaidTransaction.logo_url ?? null,
+    ignore: false,
   };
 }
 
@@ -107,4 +110,5 @@ type SimpleTransaction = {
   amount: number;
   name: string;
   logo_url: string | null;
+  ignore: boolean;
 };

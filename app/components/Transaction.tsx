@@ -1,13 +1,20 @@
-import React from "react";
-import { SimpleTransaction } from "../lib";
-import { Text, View, Image } from "react-native";
+import React, { useContext } from "react";
+import { SimpleTransaction, ignore, transactionsSync } from "../lib";
+import { Text, View, Image, Button, Alert } from "react-native";
 import tw from "twrnc";
+import UserContext from "../UserContext";
 
 type Props = { transaction: SimpleTransaction };
 
 const Transaction: React.FC<Props> = ({ transaction }) => {
+  const [user, setUser] = useContext(UserContext);
+
   return (
-    <View style={tw`flex flex-row py-2 items-center w-85 rounded-lg`}>
+    <View
+      style={tw`flex flex-row py-2 items-center w-85 rounded-lg ${
+        transaction.ignore ? "bg-red-500" : ""
+      }`}
+    >
       <View style={tw`w-7`}>
         {transaction.logo_url && (
           <Image
@@ -31,6 +38,30 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
           ? `+${transaction.amount.toFixed(2)}`
           : transaction.amount.toFixed(2)}
       </Text>
+      <Button
+        title={"ignore"}
+        onPress={async () => {
+          setUser({
+            ...user,
+            transactions: [
+              ...user.transactions.map((t) => {
+                if (t.id === transaction.id) {
+                  t.ignore = !t.ignore;
+                }
+                return t;
+              }),
+            ],
+          });
+          const success = await ignore(transaction.id, user.id);
+          if (!success) {
+            Alert.alert("Update Failed");
+          }
+          const res = await transactionsSync(user.id);
+          if (res.ok) {
+            setUser({ ...user, transactions: res.value });
+          }
+        }}
+      />
     </View>
   );
 };

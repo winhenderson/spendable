@@ -35,11 +35,16 @@ export async function GET(
   const user = {
     transactions: dbResult.items.map((i) =>
       i.transactions.map((t) => {
-        return { id: t.id, date: t.created_at, amount: t.amount, name: t.name };
+        return {
+          id: t.id,
+          date: t.created_at,
+          amount: Number(t.amount),
+          name: t.name,
+        };
       })
     ),
     id: dbResult.id,
-    amount: dbResult.amount,
+    amount: dbResult.amount ? Number(dbResult.amount) : null,
     email: dbResult.amount,
   };
 
