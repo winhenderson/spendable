@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import React from "react";
 import { View, Text, Pressable } from "react-native";
 import tw from "twrnc";
+import { isCurrentMonth } from "../lib";
 
 type Props = {
   month: number;
@@ -18,10 +19,7 @@ const MonthSwitcher: React.FC<Props> = ({
   setYear,
   firstTransaction,
 }) => {
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
-  const monthIsCurrent = month === currentMonth && year === currentYear;
+  const monthIsCurrent = isCurrentMonth(new Date(year, month));
   const monthIsLast =
     firstTransaction.month === month && firstTransaction.year === year;
 

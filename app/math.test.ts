@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { calculateSpent } from "./math";
+import { calculateSpent, spendableToday } from "./math";
 
-describe("calculateSpent", () => {
+describe("calculateSpent()", () => {
   test("basic cases", () => {
     expect(calculateSpent(2000, [-1000, -500, 20, -5])).toBe(1485);
     expect(calculateSpent(200, [100, -200, -20, -5.35])).toBe(125.35);
@@ -42,5 +42,25 @@ describe("calculateSpent", () => {
     expect(
       calculateSpent(200, [-12, -4.33, -5.4, -6.33, -89.4, -12, -4.33])
     ).toBe(133.79);
+  });
+});
+
+describe("spendableToday()", () => {
+  // TODO: make this testable by controlling time, only works 1/9 now
+  test("basic cases", () => {
+    expect(spendableToday(200, 150)).toBe(2.17);
+  });
+
+  test("negative", () => {
+    expect(spendableToday(200, 250)).toBe(0);
+  });
+
+  test("0 cases", () => {
+    expect(spendableToday(200, 0)).toBe(8.7);
+    expect(spendableToday(200, 200)).toBe(0);
+  });
+
+  test("gained money", () => {
+    expect(spendableToday(200, -100)).toBe(13.04);
   });
 });

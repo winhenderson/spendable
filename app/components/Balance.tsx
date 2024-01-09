@@ -12,6 +12,7 @@ const TOTAL_HEIGHT = 50;
 
 const Balance: React.FC<Props> = ({ spent, spendable }) => {
   const height = calculateHeight(TOTAL_HEIGHT, spendable, spent);
+
   return (
     <View style={tw`flex items-center justify-center`}>
       <View style={tw`absolute z-10 items-center `}>

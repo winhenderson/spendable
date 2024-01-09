@@ -119,3 +119,13 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: false,
   },
 });
+
+export function isCurrentMonth(date: Date): boolean {
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  if (date.getMonth() === currentMonth && date.getFullYear() === currentYear) {
+    return true;
+  }
+  return false;
+}

@@ -41,7 +41,7 @@ function createDate(dateString: string) {
 
   return `${date.toLocaleDateString("en-US", {
     month: "short",
-  })}. ${date.getDate()}`;
+  })} ${date.getDate()}`;
 }
 
 export default Transaction;
