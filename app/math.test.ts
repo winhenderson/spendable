@@ -37,4 +37,10 @@ describe("calculateSpent", () => {
   test("doesn't give weird NaNs", () => {
     expect(calculateSpent(2000, [-6.33])).toBe(6.33);
   });
+
+  test("doesn't give wildly huge numbers", () => {
+    expect(
+      calculateSpent(200, [-12, -4.33, -5.4, -6.33, -89.4, -12, -4.33])
+    ).toBe(133.79);
+  });
 });

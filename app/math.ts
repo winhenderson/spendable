@@ -4,7 +4,7 @@ export function calculateSpent(amount: number, transactions: number[]): number {
     amount
   );
 
-  return Math.round((amount - spendable) * 100) / 100;
+  return roundToHundredth(amount - spendable);
 }
 
 export function calculateHeight(
@@ -13,4 +13,8 @@ export function calculateHeight(
   spent: number
 ): number {
   return Math.min(totalHeight - (1 / (spendable / spent)) * 50, 50);
+}
+
+export function roundToHundredth(x: number): number {
+  return Math.round(x * 100) / 100;
 }
