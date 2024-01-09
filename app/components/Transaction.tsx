@@ -74,11 +74,11 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
             toggleIgnored();
             Alert.alert("Update Failed");
           }
-          // TODO: fix this
-          // const res = await transactionsSync(user.id);
-          // if (res.ok) {
-          //   setUser({ ...user, transactions: res.value });
-          // }
+          // TODO: fix this, when you click it fast it is weird because of timing issues
+          const res = await transactionsSync(user.id);
+          if (res.ok) {
+            setUser({ ...user, transactions: res.value });
+          }
         }}
       >
         {transaction.ignore ? (

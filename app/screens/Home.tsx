@@ -26,6 +26,10 @@ const Home: React.FC = () => {
       Number(transaction.date.split("-")[0]) === year
   );
 
+  const unignoredMonthTransactions = monthTransactions.filter(
+    (transaction) => !transaction.ignore
+  );
+
   let firstTransaction = { month: 0, year: new Date().getFullYear() };
   if (user.transactions.length) {
     const firstTransactionDate = user.transactions.sort((a, b) => {
@@ -41,7 +45,7 @@ const Home: React.FC = () => {
 
   const spent = calculateSpent(
     user.amount,
-    monthTransactions.map((i) => i.amount)
+    unignoredMonthTransactions.map((i) => i.amount)
   );
 
   return (
