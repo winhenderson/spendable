@@ -20,23 +20,40 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
   return (
     <View style={tw`pb-3 pt-2 w-2/3 flex flex-row justify-between`}>
       <View style={tw`w-1/2 flex items-center`}>
-        <Text style={tw`text-2xl font-bold text-teal-950`}>${spendable}</Text>
-        <Text style={tw`uppercase font-semibold text-xs text-zinc-500`}>
+        <Text
+          style={tw`text-2xl font-bold text-teal-950/80 dark:text-zinc-400`}
+        >
+          ${spendable}
+        </Text>
+        <Text
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+        >
           Spendable
         </Text>
-        <Text style={tw`uppercase font-semibold text-xs text-zinc-500`}>
+        <Text
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+        >
           For {monthString}
         </Text>
       </View>
 
       <View style={tw`w-1/2 flex items-center`}>
-        <Text style={tw`text-2xl font-bold text-teal-950`}>
-          ${monthIsCurrent ? spendableToday(spendable, spent) : spent}
+        <Text
+          style={tw`text-2xl font-bold text-teal-950/80 dark:text-zinc-400`}
+        >
+          $
+          {monthIsCurrent
+            ? Math.round(spendableToday(spendable, spent))
+            : Math.round(spent)}
         </Text>
-        <Text style={tw`uppercase font-semibold text-xs text-zinc-500`}>
+        <Text
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+        >
           {monthIsCurrent ? "Maximum" : "Spent In"}
         </Text>
-        <Text style={tw`uppercase font-semibold text-xs text-zinc-500`}>
+        <Text
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+        >
           {monthIsCurrent ? "For Today" : `${monthString} ${year}`}
         </Text>
       </View>

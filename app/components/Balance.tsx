@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import tw from "twrnc";
-import { calculateHeight, roundToHundredth } from "../math";
+import { calculateHeight } from "../math";
 
 type Props = {
   spent: number;
@@ -15,9 +15,10 @@ const Balance: React.FC<Props> = ({ spent, spendable }) => {
 
   return (
     <View style={tw`flex items-center justify-center`}>
-      <View style={tw`absolute z-10 items-center `}>
+      <View style={tw`absolute z-10 items-center`}>
         <Text style={tw`font-bold text-3xl text-white`}>
-          ${roundToHundredth(spendable - spent)}{" "}
+          {spendable - spent < 0 ? "−" : ""}$
+          {Math.round(Math.abs(spendable - spent))}
         </Text>
 
         <Text style={tw`text-white/80 uppercase font-semibold text-sm`}>
