@@ -38,6 +38,7 @@ const Input: React.FC<Props> = ({
         onChangeText={onChange}
         value={value}
         secureTextEntry={type === "password"}
+        keyboardType={type === "email" ? "email-address" : "default"}
         textContentType={
           type === "email"
             ? "emailAddress"

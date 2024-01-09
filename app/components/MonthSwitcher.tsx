@@ -65,7 +65,7 @@ const MonthSwitcher: React.FC<Props> = ({
           {year}
         </Text>
         <Text
-          style={tw`uppercase text-lg font-bold text-teal-700 dark:text-teal-500`}
+          style={tw`uppercase text-lg font-bold text-teal-700 dark:text-teal-500 -mt-1`}
         >
           {getMonthName(month)}
         </Text>

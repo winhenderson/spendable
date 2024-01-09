@@ -21,7 +21,9 @@ const TransactionsList: React.FC<Props> = ({ transactions }) => {
         <View style={tw`h-[1px] bg-zinc-100 dark:bg-zinc-800`} />
       )}
       ListHeaderComponent={
-        <View style={tw`flex flex-row items-center w-85 justify-start py-2`}>
+        <View
+          style={tw`flex flex-row items-center w-85 justify-start py-2 border-b-[0.2px] border-b-zinc-500`}
+        >
           <Text
             style={tw`uppercase font-bold text-xs text-teal-900 dark:text-teal-600 w-1/2 mr-7`}
           >
