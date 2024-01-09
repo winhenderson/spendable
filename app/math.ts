@@ -19,17 +19,17 @@ export function roundToHundredth(x: number): number {
   return Math.round(x * 100) / 100;
 }
 
-export function spendableToday(amount: number, spent: number): number {
+export function spendableToday(
+  amount: number,
+  spent: number,
+  now = new Date()
+): number {
   if (spent >= amount) {
     return 0;
   }
 
-  const today = new Date().getDate();
-  const lastDayOfMonth = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  );
+  const today = now.getDate();
+  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const daysInMonth = lastDayOfMonth.getDate();
 
   const daysLeft = daysInMonth - today + 1;

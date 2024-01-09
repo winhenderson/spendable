@@ -46,21 +46,21 @@ describe("calculateSpent()", () => {
 });
 
 describe("spendableToday()", () => {
-  // TODO: make this testable by controlling time, only works 1/9 now
+  const testDate = new Date(2024, 0, 9);
   test("basic cases", () => {
-    expect(spendableToday(200, 150)).toBe(2.17);
+    expect(spendableToday(200, 150, testDate)).toBe(2.17);
   });
 
   test("negative", () => {
-    expect(spendableToday(200, 250)).toBe(0);
+    expect(spendableToday(200, 250, testDate)).toBe(0);
   });
 
   test("0 cases", () => {
-    expect(spendableToday(200, 0)).toBe(8.7);
-    expect(spendableToday(200, 200)).toBe(0);
+    expect(spendableToday(200, 0, testDate)).toBe(8.7);
+    expect(spendableToday(200, 200, testDate)).toBe(0);
   });
 
   test("gained money", () => {
-    expect(spendableToday(200, -100)).toBe(13.04);
+    expect(spendableToday(200, -100, testDate)).toBe(13.04);
   });
 });

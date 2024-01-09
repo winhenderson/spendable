@@ -9,3 +9,4 @@ maybe make the api requests require some sort of token?
 Tests for the lib file?
 make banks screen look better/have some functionality
 add swipe gestures to change months
+android
