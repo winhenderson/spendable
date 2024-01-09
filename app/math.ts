@@ -1,5 +1,8 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+export function calculateSpent(amount: number, transactions: number[]): number {
+  const spendable = transactions.reduce(
+    (acc, transaction) => (acc += transaction),
+    amount
+  );
 
-// TODO: move some mathy stuff in here and test it all
+  return Math.round((amount - spendable) * 100) / 100;
+}

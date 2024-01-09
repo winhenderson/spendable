@@ -31,10 +31,6 @@ export async function GET(
         cursor: nextCursor ?? undefined,
       });
 
-      console.log("in here", {
-        more: res.data.added.length,
-        has_more: res.data.has_more,
-      });
       has_more = res.data.has_more;
       plaidTransactions.push(...res.data.added);
       // also handle the data.modified ones and updateMany them to the transacciont table

@@ -6,6 +6,7 @@ import UserContext from "../UserContext";
 import TransactionsList from "../components/TransactionsList";
 import MonthSwitcher from "../components/MonthSwitcher";
 import Loading from "../components/Loading";
+import { calculateSpent } from "../math";
 
 const Home: React.FC = () => {
   const [user] = useContext(UserContext);
@@ -49,14 +50,11 @@ const Home: React.FC = () => {
         firstTransaction={firstTransaction}
       />
       <Balance
-        spent={
-          Number(
-            monthTransactions
-              .map((i) => i.amount)
-              .reduce((total, amount) => total + amount, 0)
-              .toFixed(2)
-          ) * -1
-        }
+        spent={calculateSpent(
+          // TODO: this shouldn't work why is ts letting this work?
+          Number(user.amount),
+          monthTransactions.map((i) => i.amount)
+        )}
         spendable={user.amount}
       />
       <TransactionsList transactions={monthTransactions} />
