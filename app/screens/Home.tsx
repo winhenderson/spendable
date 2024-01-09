@@ -51,7 +51,7 @@ const Home: React.FC = () => {
       />
       <Balance
         spent={calculateSpent(
-          // TODO: this shouldn't work why is ts letting this work?
+          // TODO: user.amount is coming through as a string but ts thinks it's a number, why is this working?
           Number(user.amount),
           monthTransactions.map((i) => i.amount)
         )}
