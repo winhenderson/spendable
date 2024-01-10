@@ -22,11 +22,15 @@ export async function publicTokenExchange(publicToken: string) {
   });
 }
 
-export async function transactionsSync(
-  user_id: string
+export async function getMonthTransactions(
+  user_id: string,
+  year: number,
+  month: number
 ): APIResponse<Array<SimpleTransaction>> {
   try {
-    const res = await fetch(`${endpoint}/transactions-sync/${user_id}`);
+    const res = await fetch(
+      `${endpoint}/get-month-transactions/${year}/${month}/${user_id}`
+    );
 
     const json = await res.json();
     return { ok: true, value: json };

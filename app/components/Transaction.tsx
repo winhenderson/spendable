@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { SimpleTransaction, ignore, transactionsSync } from "../lib";
-import { Text, View, Image, Button, Alert, Pressable } from "react-native";
+import { SimpleTransaction, ignore, getMonthTransactions } from "../lib";
+import { Text, View, Image, Alert, Pressable } from "react-native";
 import tw from "twrnc";
 import UserContext from "../UserContext";
-import { Eye, EyeOff, MoreVertical } from "lucide-react-native";
+import { Eye, EyeOff } from "lucide-react-native";
 
 type Props = { transaction: SimpleTransaction };
 
@@ -75,7 +75,8 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
             Alert.alert("Update Failed");
           }
           // TODO: fix this, when you click it fast it is weird because of timing issues
-          const res = await transactionsSync(user.id);
+          const split = transaction.date.split("-").map((i) => Number(i));
+          const res = await getMonthTransactions(user.id, split[0], split[1]);
           if (res.ok) {
             setUser({ ...user, transactions: res.value });
           }

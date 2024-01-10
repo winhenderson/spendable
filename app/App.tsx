@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./screens/Home";
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
-import { User, getUserById, supabase, transactionsSync } from "./lib";
+import { User, getUserById, supabase, getMonthTransactions } from "./lib";
 import Auth from "./screens/Auth";
 import { HomeIcon, LandmarkIcon, UserIcon } from "lucide-react-native";
 import Account from "./screens/Account";
@@ -45,7 +45,12 @@ export default function App() {
         return;
       }
 
-      const res = await transactionsSync(userRes.value.id);
+      const now = new Date();
+      const res = await getMonthTransactions(
+        userRes.value.id,
+        now.getFullYear(),
+        now.getMonth()
+      );
       if (res.ok) {
         setUser({ ...userRes.value, transactions: res.value });
       }

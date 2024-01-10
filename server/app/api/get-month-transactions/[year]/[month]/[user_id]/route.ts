@@ -6,15 +6,41 @@ import { Transaction } from "plaid";
 
 export async function GET(
   req: Request,
-  { params }: { params: { user_id: string } }
+  { params }: { params: { year: string; month: string; user_id: string } }
 ) {
   const user_id = params.user_id;
+  const year = params.year;
+  const month = params.month;
+
+  // const items = await prisma.items.findMany({
+  //   where: { user_id: user_id },
+  //   include: {
+  //     transactions: {
+  //       where: {},
+  //     },
+  //   },
+  // });
+  //   const transactions = await prisma.$queryRaw`select
+  //   *
+  // from
+  //   transactions t
+  //   join items i on t.item_id = i.id
+  // where
+  //   i.user_id = ${user_id}`;
+  const dbTransactions = await prisma.transactions.findMany({
+    where: {
+      transaction_date: { startsWith: `${year}-${month}` },
+      items: {
+        user_id: user_id,
+      },
+    },
+  });
 
   const items = await prisma.items.findMany({
     where: { user_id: user_id },
+    select: { plaid_access_token: true, cursor: true, id: true },
   });
 
-  let dbTransactions = await prisma.transactions.findMany();
   let allTransactions = [...dbTransactions.map((t) => convertDbTransaction(t))];
 
   for (const item of items) {
