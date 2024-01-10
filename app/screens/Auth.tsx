@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Alert, Pressable, SafeAreaView, Text, View } from "react-native";
 import tw from "twrnc";
-import { User, signUp, supabase } from "../lib";
+import { User, getAllTransactions, signUp, supabase } from "../lib";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -44,7 +44,10 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
 
       if (data) {
         const user = await signUp(email, data.user.id);
-        onSignupSuccess(user);
+        if (!user.ok) {
+          return;
+        }
+        onSignupSuccess(user.value);
       }
     }
   }

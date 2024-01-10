@@ -14,11 +14,14 @@ export async function createLinkToken(): Promise<
   return json.token.link_token;
 }
 
-export async function publicTokenExchange(publicToken: string) {
+export async function publicTokenExchange(
+  publicToken: string,
+  user_id: string
+) {
   await fetch(`${endpoint}/public-token-exchange`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ public_token: publicToken }),
+    body: JSON.stringify({ public_token: publicToken, user_id }),
   });
 }
 
@@ -31,6 +34,20 @@ export async function getMonthTransactions(
     const res = await fetch(
       `${endpoint}/get-month-transactions/${year}/${month}/${user_id}`
     );
+
+    const json = await res.json();
+    return { ok: true, value: json };
+  } catch (error) {
+    console.error(error);
+    return { ok: false, error };
+  }
+}
+
+export async function getAllTransactions(
+  user_id: string
+): APIResponse<Array<SimpleTransaction>> {
+  try {
+    const res = await fetch(`${endpoint}/get-all-transactions/${user_id}`);
 
     const json = await res.json();
     return { ok: true, value: json };
@@ -70,7 +87,7 @@ export async function ignore(
   return true;
 }
 
-export async function signUp(email: string, id: string): Promise<User> {
+export async function signUp(email: string, id: string): APIResponse<User> {
   // TODO: add some tests to this file
   const res = await fetch(`${endpoint}/sign-up`, {
     method: "POST",

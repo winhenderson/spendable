@@ -24,7 +24,7 @@ export default function App() {
   const [colorScheme, , setColorScheme] = useAppColorScheme(tw);
 
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
     // supabase.auth.signOut();

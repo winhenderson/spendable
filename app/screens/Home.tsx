@@ -16,6 +16,10 @@ const Home: React.FC = () => {
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
 
+  if (!user) {
+    return <Loading />;
+  }
+
   if (!user.transactions) {
     return <Loading />;
   }

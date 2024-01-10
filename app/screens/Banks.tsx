@@ -8,6 +8,7 @@ import {
   createLinkToken,
   publicTokenExchange,
   getMonthTransactions,
+  getAllTransactions,
 } from "../lib";
 import Loading from "../components/Loading";
 import UserContext from "../UserContext";
@@ -16,6 +17,10 @@ const Banks: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [linkToken, setLinkToken] = useState<string>();
   const [banks, setBanks] = useState<BankTitle[]>([]);
+
+  if (!user) {
+    throw new Error("Not Registered");
+  }
 
   async function createNewLinkToken() {
     const token = await createLinkToken();
@@ -62,8 +67,8 @@ const Banks: React.FC = () => {
           noLoadingState: false,
         }}
         onSuccess={async (success: LinkSuccess) => {
-          await publicTokenExchange(success.publicToken);
-          const res = await getMonthTransactions(user.id);
+          await publicTokenExchange(success.publicToken, user.id);
+          const res = await getAllTransactions(user.id);
           if (res.ok) {
             setUser({ ...user, transactions: res.value });
           }

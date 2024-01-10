@@ -43,9 +43,55 @@ export async function GET(
 
   let allTransactions = [...dbTransactions.map((t) => convertDbTransaction(t))];
 
+  // for (const item of items) {
+  //   if (!item?.plaid_access_token) {
+  //     return Response.error();
+  //   }
+
+  //   let has_more = true;
+  //   const plaidTransactions: Transaction[] = [];
+  //   let nextCursor = item.cursor;
+  //   while (has_more) {
+  //     const res = await plaidClient.transactionsSync({
+  //       access_token: item.plaid_access_token,
+  //       cursor: nextCursor ?? undefined,
+  //     });
+
+  //     has_more = res.data.has_more;
+  //     plaidTransactions.push(...res.data.added);
+  //     // also handle the data.modified ones and updateMany them to the transacciont table
+  //     nextCursor = res.data.next_cursor;
+  //   }
+
+  //   const transactions = plaidTransactions.map((transaction) =>
+  //     convertPlaidTransaction(transaction)
+  //   );
+
+  //   await prisma.items.update({
+  //     data: { cursor: nextCursor },
+  //     where: { id: item.id },
+  //   });
+
+  //   await prisma.transactions.createMany({
+  //     data: plaidTransactions.map((t) => createDbTransaction(t, item.id)),
+  //     skipDuplicates: true,
+  //   });
+
+  //   allTransactions = allTransactions.concat(transactions);
+  // }
+  const newTransactions = await addNewTransactions(items);
+  allTransactions.concat(newTransactions);
+
+  return Response.json(allTransactions);
+}
+
+export async function addNewTransactions(
+  items: Array<Item>
+): Promise<Array<SimpleTransaction>> {
+  let allTransactions: Array<SimpleTransaction> = [];
   for (const item of items) {
     if (!item?.plaid_access_token) {
-      return Response.error();
+      throw new Error("No access token");
     }
 
     let has_more = true;
@@ -80,10 +126,16 @@ export async function GET(
     allTransactions = allTransactions.concat(transactions);
   }
 
-  return Response.json(allTransactions);
+  return allTransactions;
 }
 
-function createDbTransaction(
+type Item = {
+  plaid_access_token: string;
+  cursor: string | null;
+  id: string;
+};
+
+export function createDbTransaction(
   plaidTransaction: Transaction,
   item_id: string
 ): Omit<Prisma.$transactionsPayload["scalars"], "id" | "created_at"> {
@@ -104,7 +156,7 @@ function createDbTransaction(
   };
 }
 
-function convertDbTransaction(
+export function convertDbTransaction(
   dbTransaction: Prisma.$transactionsPayload["scalars"]
 ): SimpleTransaction {
   return {
@@ -117,7 +169,7 @@ function convertDbTransaction(
   };
 }
 
-function convertPlaidTransaction(
+export function convertPlaidTransaction(
   plaidTransaction: Transaction
 ): SimpleTransaction {
   return {

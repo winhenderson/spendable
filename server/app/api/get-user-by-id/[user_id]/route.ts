@@ -45,7 +45,7 @@ export async function GET(
     ),
     id: dbResult.id,
     amount: dbResult.amount ? Number(dbResult.amount) : null,
-    email: dbResult.amount,
+    email: dbResult.email,
   };
 
   if (!user) {

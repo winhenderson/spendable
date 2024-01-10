@@ -1,7 +1,9 @@
 import React from "react";
 import { User } from "./lib";
 
-const UserContext = React.createContext<[User, (user: User) => unknown]>([
+const UserContext = React.createContext<
+  [User | null, (user: User | null) => unknown]
+>([
   {
     id: "",
     email: "",

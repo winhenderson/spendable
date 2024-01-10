@@ -6,12 +6,16 @@ import { supabase, updateAmount } from "../lib";
 import Input from "../components/Input";
 import UserContext from "../UserContext";
 import ColorSchemeContext from "../ColorSchemeContext";
+import Loading from "../components/Loading";
 
 const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [colorScheme, setColorScheme] = useContext(ColorSchemeContext);
 
-  const [amount, setAmount] = useState(String(user.amount));
+  const [amount, setAmount] = useState(String(user?.amount));
+  if (!user) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView
@@ -45,6 +49,7 @@ const Settings: React.FC = () => {
 
       <Button
         onPress={() => {
+          setUser(null);
           supabase.auth.signOut();
         }}
         color="red-700"

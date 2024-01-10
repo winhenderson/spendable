@@ -10,7 +10,15 @@ type Props = { transaction: SimpleTransaction };
 const Transaction: React.FC<Props> = ({ transaction }) => {
   const [user, setUser] = useContext(UserContext);
 
+  if (!user) {
+    throw new Error("No logged in user");
+  }
+
   function toggleIgnored() {
+    if (!user) {
+      throw new Error("No logged in user");
+    }
+
     setUser({
       ...user,
       transactions: [
@@ -76,7 +84,11 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
           }
           // TODO: fix this, when you click it fast it is weird because of timing issues
           const split = transaction.date.split("-").map((i) => Number(i));
-          const res = await getMonthTransactions(user.id, split[0], split[1]);
+          const res = await getMonthTransactions(
+            user.id,
+            split[0],
+            split[1] - 1
+          );
           if (res.ok) {
             setUser({ ...user, transactions: res.value });
           }

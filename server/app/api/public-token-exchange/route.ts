@@ -13,19 +13,19 @@ export async function POST(request: Request) {
 
   //TODO: also send the auth id from session.id in the res ^^
   // query for the user id that corresponds to the session id and use that usir id in the create vv
-  const user = await prisma.public_users.findFirst({
-    where: { auth_id: body.id },
-  });
+  // const user = await prisma.public_users.findFirst({
+  //   where: { auth_id: body.user_id },
+  // });
 
-  if (!user) {
-    throw new Error("invalid credentials");
-  }
+  // if (!user) {
+  //   throw new Error("invalid credentials");
+  // }
 
   await prisma.items.create({
     data: {
       plaid_access_token: res.data.access_token,
       id: res.data.item_id,
-      user_id: user.id,
+      user_id: body.user_id,
     },
   });
 
