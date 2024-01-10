@@ -40,7 +40,7 @@ const TransactionsList: React.FC<Props> = ({ transactions }) => {
         </View>
       }
       style={tw`flex w-full px-4`}
-      contentContainerStyle={tw`gap-1 flex items-center`}
+      contentContainerStyle={tw`gap-1 flex items-center pb-45`}
       data={sorted}
       renderItem={(transaction) => (
         <Transaction transaction={transaction.item} />

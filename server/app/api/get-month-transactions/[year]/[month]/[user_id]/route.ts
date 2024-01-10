@@ -80,9 +80,10 @@ export async function GET(
   //   allTransactions = allTransactions.concat(transactions);
   // }
   const newTransactions = await addNewTransactions(items);
-  allTransactions.concat(newTransactions);
+  allTransactions = allTransactions.concat(newTransactions);
 
-  return Response.json(allTransactions);
+  const res = Response.json(allTransactions);
+  return res;
 }
 
 export async function addNewTransactions(

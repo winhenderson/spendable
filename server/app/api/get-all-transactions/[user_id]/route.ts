@@ -28,7 +28,7 @@ export async function GET(
   let allTransactions = [...dbTransactions.map((t) => convertDbTransaction(t))];
 
   const newTransactions = await addNewTransactions(items);
-  allTransactions.concat(newTransactions);
+  allTransactions = allTransactions.concat(newTransactions);
 
   return Response.json(allTransactions);
 }

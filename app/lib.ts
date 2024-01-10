@@ -35,7 +35,8 @@ export async function getMonthTransactions(
       `${endpoint}/get-month-transactions/${year}/${month}/${user_id}`
     );
 
-    const json = await res.json();
+    const json: Array<SimpleTransaction> = await res.json();
+    // console.log({ json });
     return { ok: true, value: json };
   } catch (error) {
     console.error(error);
@@ -49,7 +50,8 @@ export async function getAllTransactions(
   try {
     const res = await fetch(`${endpoint}/get-all-transactions/${user_id}`);
 
-    const json = await res.json();
+    const json: Array<SimpleTransaction> = await res.json();
+    // console.log({ json });
     return { ok: true, value: json };
   } catch (error) {
     console.error(error);

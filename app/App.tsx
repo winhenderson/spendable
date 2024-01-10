@@ -52,10 +52,19 @@ export default function App() {
         now.getMonth()
       );
       if (res.ok) {
-        setUser({ ...userRes.value, transactions: res.value });
+        setUser(userRes.value);
+        const oldTransactions = userRes.value.transactions.filter(
+          (t) => !res.value.map((i) => i.id).includes(t.id)
+        );
+        setUser({
+          ...userRes.value,
+          transactions: [...oldTransactions, ...res.value],
+        });
       }
+      // setUser(userRes.value);
     }
   }
+  console.log(user?.transactions.length);
 
   if (!session) {
     return <Auth onSignupSuccess={setUser} />;
