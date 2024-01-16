@@ -310,8 +310,7 @@ model transactions {
   website          String?
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
   item_id          String
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  transaction_id   String    @unique
+  id               String    @id
   ignore           Boolean   @default(false)
   items            items     @relation(fields: [item_id], references: [id], onDelete: Cascade)
 
@@ -324,9 +323,23 @@ model public_users {
   email   String?
   amount  Decimal?    @db.Decimal
   items   items[]
+  months  months[]
   users   auth_users? @relation(fields: [auth_id], references: [id], onDelete: Cascade)
 
   @@map("users")
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model months {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime     @default(now()) @db.Timestamptz(6)
+  month      String
+  year       String
+  amount     Decimal?     @db.Decimal
+  user_id    String       @db.Uuid
+  users      public_users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
   @@schema("public")
 }
 

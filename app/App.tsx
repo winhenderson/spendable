@@ -64,7 +64,6 @@ export default function App() {
       // setUser(userRes.value);
     }
   }
-  console.log(user?.transactions.length);
 
   if (!session) {
     return <Auth onSignupSuccess={setUser} />;

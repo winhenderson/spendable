@@ -80,6 +80,7 @@ export async function GET(
   //   allTransactions = allTransactions.concat(transactions);
   // }
   const newTransactions = await addNewTransactions(items);
+  // console.log({ newTransactions });
   allTransactions = allTransactions.concat(newTransactions);
 
   const res = Response.json(allTransactions);
@@ -139,8 +140,9 @@ type Item = {
 export function createDbTransaction(
   plaidTransaction: Transaction,
   item_id: string
-): Omit<Prisma.$transactionsPayload["scalars"], "id" | "created_at"> {
+): Omit<Prisma.$transactionsPayload["scalars"], "created_at"> {
   return {
+    id: plaidTransaction.transaction_id,
     ignore: false,
     item_id: item_id,
     account_id: plaidTransaction.account_id,
@@ -153,7 +155,6 @@ export function createDbTransaction(
     logo_url: plaidTransaction.logo_url ?? null,
     name: plaidTransaction.name,
     website: plaidTransaction.website ?? null,
-    transaction_id: plaidTransaction.transaction_id,
   };
 }
 
@@ -176,7 +177,7 @@ export function convertPlaidTransaction(
   return {
     id: plaidTransaction.transaction_id,
     date: plaidTransaction.date,
-    amount: plaidTransaction.amount,
+    amount: plaidTransaction.amount * -1,
     name: plaidTransaction.merchant_name || plaidTransaction.name,
     logo_url: plaidTransaction.logo_url ?? null,
     ignore: false,
