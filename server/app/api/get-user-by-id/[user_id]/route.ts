@@ -17,7 +17,7 @@ export async function GET(
           transactions: {
             select: {
               id: true,
-              created_at: true,
+              transaction_date: true,
               amount: true,
               name: true,
             },
@@ -38,7 +38,7 @@ export async function GET(
         i.transactions.map((t) => {
           return {
             id: t.id,
-            date: t.created_at,
+            date: t.transaction_date,
             amount: Number(t.amount),
             name: t.name,
           };

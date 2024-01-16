@@ -82,6 +82,7 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
             toggleIgnored();
             Alert.alert("Update Failed");
           }
+
           // TODO: fix this, when you click it fast it is weird because of timing issues
           const split = transaction.date.split("-").map((i) => Number(i));
           const res = await getMonthTransactions(
@@ -90,7 +91,13 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
             split[1] - 1
           );
           if (res.ok) {
-            setUser({ ...user, transactions: res.value });
+            const oldTransactions = user.transactions.filter(
+              (t) => !res.value.map((i) => i.id).includes(t.id)
+            );
+            setUser({
+              ...user,
+              transactions: [...oldTransactions, ...res.value],
+            });
           }
         }}
       >

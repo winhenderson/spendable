@@ -12,21 +12,6 @@ export async function GET(
   const year = params.year;
   const month = params.month;
 
-  // const items = await prisma.items.findMany({
-  //   where: { user_id: user_id },
-  //   include: {
-  //     transactions: {
-  //       where: {},
-  //     },
-  //   },
-  // });
-  //   const transactions = await prisma.$queryRaw`select
-  //   *
-  // from
-  //   transactions t
-  //   join items i on t.item_id = i.id
-  // where
-  //   i.user_id = ${user_id}`;
   const dbTransactions = await prisma.transactions.findMany({
     where: {
       transaction_date: { startsWith: `${year}-${month}` },
@@ -43,44 +28,7 @@ export async function GET(
 
   let allTransactions = [...dbTransactions.map((t) => convertDbTransaction(t))];
 
-  // for (const item of items) {
-  //   if (!item?.plaid_access_token) {
-  //     return Response.error();
-  //   }
-
-  //   let has_more = true;
-  //   const plaidTransactions: Transaction[] = [];
-  //   let nextCursor = item.cursor;
-  //   while (has_more) {
-  //     const res = await plaidClient.transactionsSync({
-  //       access_token: item.plaid_access_token,
-  //       cursor: nextCursor ?? undefined,
-  //     });
-
-  //     has_more = res.data.has_more;
-  //     plaidTransactions.push(...res.data.added);
-  //     // also handle the data.modified ones and updateMany them to the transacciont table
-  //     nextCursor = res.data.next_cursor;
-  //   }
-
-  //   const transactions = plaidTransactions.map((transaction) =>
-  //     convertPlaidTransaction(transaction)
-  //   );
-
-  //   await prisma.items.update({
-  //     data: { cursor: nextCursor },
-  //     where: { id: item.id },
-  //   });
-
-  //   await prisma.transactions.createMany({
-  //     data: plaidTransactions.map((t) => createDbTransaction(t, item.id)),
-  //     skipDuplicates: true,
-  //   });
-
-  //   allTransactions = allTransactions.concat(transactions);
-  // }
   const newTransactions = await addNewTransactions(items);
-  // console.log({ newTransactions });
   allTransactions = allTransactions.concat(newTransactions);
 
   const res = Response.json(allTransactions);

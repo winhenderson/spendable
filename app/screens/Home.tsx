@@ -24,11 +24,12 @@ const Home: React.FC = () => {
     return <Loading />;
   }
 
-  const monthTransactions = user.transactions.filter(
-    (transaction) =>
+  const monthTransactions = user.transactions.filter((transaction) => {
+    return (
       Number(transaction.date.split("-")[1]) === month + 1 &&
       Number(transaction.date.split("-")[0]) === year
-  );
+    );
+  });
 
   const unignoredMonthTransactions = monthTransactions.filter(
     (transaction) => !transaction.ignore

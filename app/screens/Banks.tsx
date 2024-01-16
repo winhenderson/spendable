@@ -7,7 +7,6 @@ import {
   accountsGet,
   createLinkToken,
   publicTokenExchange,
-  getMonthTransactions,
   getAllTransactions,
 } from "../lib";
 import Loading from "../components/Loading";
