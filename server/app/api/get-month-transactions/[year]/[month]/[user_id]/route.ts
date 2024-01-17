@@ -8,6 +8,7 @@ export async function GET(
   req: Request,
   { params }: { params: { year: string; month: string; user_id: string } }
 ) {
+  console.log("in the monthj transactions");
   const user_id = params.user_id;
   const year = params.year;
   const month = params.month;

@@ -89,13 +89,18 @@ export async function ignore(
 
 export async function signUp(email: string, id: string): APIResponse<User> {
   // TODO: add some tests to this file
-  const res = await fetch(`${endpoint}/sign-up`, {
-    method: "POST",
-    body: JSON.stringify({ email, id }),
-  });
+  try {
+    const res = await fetch(`${endpoint}/sign-up`, {
+      method: "POST",
+      body: JSON.stringify({ email, id }),
+    });
 
-  const json = await res.json();
-  return json;
+    const json = await res.json();
+    return json;
+  } catch (error) {
+    console.error("Error in signUp: ", error);
+    return { ok: false, error };
+  }
 }
 
 export async function updateAmount(newAmount: number, userId: string) {

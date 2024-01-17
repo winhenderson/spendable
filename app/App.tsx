@@ -15,6 +15,7 @@ import tw, { useAppColorScheme, useDeviceContext } from "twrnc";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Banks from "./screens/Banks";
 import ColorSchemeContext from "./ColorSchemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +28,7 @@ export default function App() {
   const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
+    // AsyncStorage.clear();
     // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
@@ -40,8 +42,10 @@ export default function App() {
 
   async function getUserFromSession(session: Session | null) {
     if (session) {
+      console.log("in here is ther problem?");
       const userRes = await getUserById(session.user.id);
       if (!userRes.ok) {
+        console.error("in the bad if", userRes.error);
         return;
       }
 

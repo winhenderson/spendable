@@ -6,6 +6,7 @@ export async function GET(
   request: Request,
   { params }: { params: { user_id: string } }
 ) {
+  console.log("getting called here");
   const user_id = params.user_id;
 
   const items = await prisma.items.findMany({

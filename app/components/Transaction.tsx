@@ -4,6 +4,7 @@ import { Text, View, Image, Alert, Pressable } from "react-native";
 import tw from "twrnc";
 import UserContext from "../UserContext";
 import { Eye, EyeOff } from "lucide-react-native";
+import LetterIcon from "./LetterIcon";
 
 type Props = { transaction: SimpleTransaction };
 
@@ -43,12 +44,14 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
       }`}
     >
       <View style={tw`w-7`}>
-        {transaction.logo_url && (
+        {transaction.logo_url ? (
           <Image
             blurRadius={transaction.ignore ? 3 : undefined}
             source={{ uri: transaction.logo_url }}
             style={tw`w-7 h-7 rounded-lg`}
           />
+        ) : (
+          <LetterIcon title={transaction.name} />
         )}
       </View>
       <Text style={tw`dark:text-zinc-50 w-1/2 p-2 ${struckThrough}`}>

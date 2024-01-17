@@ -47,7 +47,9 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
         if (!user.ok) {
           return;
         }
-        onSignupSuccess(user.value);
+        setTimeout(() => {
+          onSignupSuccess(user.value);
+        }, 500);
       }
     }
   }

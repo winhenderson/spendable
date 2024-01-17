@@ -29,7 +29,7 @@ export async function GET(
   });
 
   if (!dbResult) {
-    throw new Error("bad request");
+    throw new Error(`bad request: ${user_id} `);
   }
 
   const user = {
