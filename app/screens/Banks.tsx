@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, View, Image } from "react-native";
+import { FlatList, SafeAreaView, Text, View, Image, Alert } from "react-native";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
 import {
@@ -8,6 +8,7 @@ import {
   createLinkToken,
   publicTokenExchange,
   getAllTransactions,
+  getMonthTransactions,
 } from "../lib";
 import Loading from "../components/Loading";
 import UserContext from "../UserContext";
@@ -67,10 +68,25 @@ const Banks: React.FC = () => {
         }}
         onSuccess={async (success: LinkSuccess) => {
           await publicTokenExchange(success.publicToken, user.id);
-          const res = await getAllTransactions(user.id);
-          if (res.ok) {
-            setUser({ ...user, transactions: res.value });
+          const now = new Date();
+          const res = await getMonthTransactions(
+            user.id,
+            now.getFullYear(),
+            now.getMonth()
+          );
+
+          if (!res.ok) {
+            Alert.alert(
+              "Database error",
+              `failed to fetch transactions for new bank.\nError: ${res.error}`
+            );
+            return;
           }
+
+          setUser({
+            ...user,
+            transactions: [...user.transactions, ...res.value],
+          });
         }}
         onExit={(exit: LinkExit) => console.log(exit)}
       >

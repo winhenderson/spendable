@@ -32,40 +32,42 @@ export default function App() {
     // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
+      console.log("getSession callback");
       getUserFromSession(data.session);
     });
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      console.log("onAuthStateChange callback", session?.user.email);
       getUserFromSession(session);
     });
   }, []);
 
   async function getUserFromSession(session: Session | null) {
     if (session) {
-      console.log("in here is ther problem?");
+      console.log("in getUserFromSession()");
       const userRes = await getUserById(session.user.id);
       if (!userRes.ok) {
         console.error("in the bad if", userRes.error);
         return;
       }
 
-      const now = new Date();
-      const res = await getMonthTransactions(
-        userRes.value.id,
-        now.getFullYear(),
-        now.getMonth()
-      );
-      if (res.ok) {
-        setUser(userRes.value);
-        const oldTransactions = userRes.value.transactions.filter(
-          (t) => !res.value.map((i) => i.id).includes(t.id)
-        );
-        setUser({
-          ...userRes.value,
-          transactions: [...oldTransactions, ...res.value],
-        });
-      }
-      // setUser(userRes.value);
+      setUser(userRes.value);
+      // const now = new Date();
+      // const res = await getMonthTransactions(
+      //   userRes.value.id,
+      //   now.getFullYear(),
+      //   now.getMonth()
+      // );
+      // if (res.ok) {
+      //   setUser(userRes.value);
+      //   const oldTransactions = userRes.value.transactions.filter(
+      //     (t) => !res.value.map((i) => i.id).includes(t.id)
+      //   );
+      //   setUser({
+      //     ...userRes.value,
+      //     transactions: [...oldTransactions, ...res.value],
+      //   });
+      // }
     }
   }
 

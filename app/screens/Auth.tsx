@@ -43,13 +43,12 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
       }
 
       if (data) {
+        console.log("in here");
         const user = await signUp(email, data.user.id);
         if (!user.ok) {
           return;
         }
-        setTimeout(() => {
-          onSignupSuccess(user.value);
-        }, 500);
+        onSignupSuccess(user.value);
       }
     }
   }

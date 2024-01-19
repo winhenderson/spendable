@@ -11,3 +11,18 @@
 [ ]  add swipe gestures to change months
 [ ]  android
 [ ]  share types between server -> app
+
+/ ********
+
+1. Create an account
+2. Add a bank -> fetch current month transactions and put them in the db and state
+3. go back a month -> fetch that month's transactions and add them to the db and the state
+4. Go forward a month -> check the current month for updates/new transactions
+5. Add a new bank -> get all transactions for the current month
+6. Log out + sign in again -> get new transactions for current month
+7. go back a month -> check month for new transactions
+8. Ignore a transaction -> change the db + optimistically update. Somehow fix the little flicker thing from optimistcally updating and the double click problem
+
+It seems like every time the month changes i need to fetch the transactions again from plaid and modify/add to the db and state
+
+*****/

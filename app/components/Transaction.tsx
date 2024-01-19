@@ -87,21 +87,21 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
           }
 
           // TODO: fix this, when you click it fast it is weird because of timing issues
-          const split = transaction.date.split("-").map((i) => Number(i));
-          const res = await getMonthTransactions(
-            user.id,
-            split[0],
-            split[1] - 1
-          );
-          if (res.ok) {
-            const oldTransactions = user.transactions.filter(
-              (t) => !res.value.map((i) => i.id).includes(t.id)
-            );
-            setUser({
-              ...user,
-              transactions: [...oldTransactions, ...res.value],
-            });
-          }
+          // const split = transaction.date.split("-").map((i) => Number(i));
+          // const res = await getMonthTransactions(
+          //   user.id,
+          //   split[0],
+          //   split[1] - 1
+          // );
+          // if (res.ok) {
+          //   const oldTransactions = user.transactions.filter(
+          //     (t) => !res.value.map((i) => i.id).includes(t.id)
+          //   );
+          //   setUser({
+          //     ...user,
+          //     transactions: [...oldTransactions, ...res.value],
+          // });
+          // }
         }}
       >
         {transaction.ignore ? (
