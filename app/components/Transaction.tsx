@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { SimpleTransaction, ignore, getMonthTransactions } from "../lib";
+import { SimpleTransaction, getAllTransactions, ignore } from "../lib";
 import { Text, View, Image, Alert, Pressable } from "react-native";
 import tw from "twrnc";
 import UserContext from "../UserContext";
@@ -87,21 +87,14 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
           }
 
           // TODO: fix this, when you click it fast it is weird because of timing issues
-          // const split = transaction.date.split("-").map((i) => Number(i));
-          // const res = await getMonthTransactions(
-          //   user.id,
-          //   split[0],
-          //   split[1] - 1
-          // );
-          // if (res.ok) {
-          //   const oldTransactions = user.transactions.filter(
-          //     (t) => !res.value.map((i) => i.id).includes(t.id)
-          //   );
-          //   setUser({
-          //     ...user,
-          //     transactions: [...oldTransactions, ...res.value],
-          // });
-          // }
+
+          const transactions = await getAllTransactions(user.id);
+          if (!transactions.ok) {
+            Alert.alert("Transaction Sync Failed");
+            return;
+          }
+
+          setUser({ ...user, transactions: transactions.value });
         }}
       >
         {transaction.ignore ? (

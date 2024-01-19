@@ -25,23 +25,23 @@ export async function publicTokenExchange(
   });
 }
 
-export async function getMonthTransactions(
-  user_id: string,
-  year: number,
-  month: number
-): APIResponse<Array<SimpleTransaction>> {
-  try {
-    const res = await fetch(
-      `${endpoint}/get-month-transactions/${year}/${month}/${user_id}`
-    );
+// export async function getMonthTransactions(
+//   user_id: string,
+//   year: number,
+//   month: number
+// ): APIResponse<Array<SimpleTransaction>> {
+//   try {
+//     const res = await fetch(
+//       `${endpoint}/get-month-transactions/${year}/${month}/${user_id}`
+//     );
 
-    const json: Array<SimpleTransaction> = await res.json();
-    return { ok: true, value: json };
-  } catch (error) {
-    console.error(error);
-    return { ok: false, error };
-  }
-}
+//     const json: Array<SimpleTransaction> = await res.json();
+//     return { ok: true, value: json };
+//   } catch (error) {
+//     console.error(error);
+//     return { ok: false, error };
+//   }
+// }
 
 export async function getAllTransactions(
   user_id: string

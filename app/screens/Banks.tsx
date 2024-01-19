@@ -8,7 +8,6 @@ import {
   createLinkToken,
   publicTokenExchange,
   getAllTransactions,
-  getMonthTransactions,
 } from "../lib";
 import Loading from "../components/Loading";
 import UserContext from "../UserContext";
@@ -69,11 +68,7 @@ const Banks: React.FC = () => {
         onSuccess={async (success: LinkSuccess) => {
           await publicTokenExchange(success.publicToken, user.id);
           const now = new Date();
-          const res = await getMonthTransactions(
-            user.id,
-            now.getFullYear(),
-            now.getMonth()
-          );
+          const res = await getAllTransactions(user.id);
 
           if (!res.ok) {
             Alert.alert(
