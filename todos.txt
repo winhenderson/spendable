@@ -1,5 +1,5 @@
 [*]  Fix ts bug in calculateSpent() where it lets strings through
-[ ]  Add some sort of default icon
+[*]  Add some sort of default icon
 [*]  fix bug where the first time the transactions load everything is backward
 [ ]  add the ability to create custom transactions
 [ ]  Make the monthly spendable amount something that is different depending on the month
@@ -11,8 +11,14 @@
 [ ]  add swipe gestures to change months
 [ ]  android
 [ ]  share types between server -> app
+[ ]  handle modified and deleted transactions from plaid
 
-/ ********
+
+
+
+
+
+
 
 1. Create an account
 2. Add a bank -> fetch current month transactions and put them in the db and state
@@ -24,5 +30,3 @@
 8. Ignore a transaction -> change the db + optimistically update. Somehow fix the little flicker thing from optimistcally updating and the double click problem
 
 It seems like every time the month changes i need to fetch the transactions again from plaid and modify/add to the db and state
-
-*****/

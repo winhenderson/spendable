@@ -1,10 +1,16 @@
 import { useState } from "react";
-import { Alert, Pressable, SafeAreaView, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import tw from "twrnc";
 import { User, getAllTransactions, signUp, supabase } from "../lib";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 type Props = {
   onSignupSuccess(user: User): unknown;
@@ -54,7 +60,7 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
   }
 
   return (
-    <KeyboardAwareScrollView>
+    <ScrollView automaticallyAdjustKeyboardInsets={true} scrollEnabled={false}>
       <SafeAreaView
         style={tw`bg-white dark:bg-zinc-900 flex flex-col items-center justify-center grow-1 gap-4`}
       >
@@ -111,7 +117,7 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
           </Pressable>
         </View>
       </SafeAreaView>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 };
 
