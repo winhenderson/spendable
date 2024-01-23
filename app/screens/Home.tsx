@@ -1,21 +1,45 @@
-import { useContext, useState } from "react";
-import { FlatList, SafeAreaView, ScrollView, View, Text } from "react-native";
+import { useCallback, useContext, useState } from "react";
+import {
+  FlatList,
+  SafeAreaView,
+  View,
+  Text,
+  Alert,
+  RefreshControl,
+} from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
 import UserContext from "../UserContext";
-import TransactionsList from "../components/TransactionsList";
 import MonthSwitcher from "../components/MonthSwitcher";
 import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
+import { getAllTransactions } from "../lib";
 
 const Home: React.FC = () => {
-  const [user] = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext);
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getTransactions = useCallback(async () => {
+    if (!user) {
+      throw new Error("No user to sync transactions for");
+    }
+    setRefreshing(true);
+
+    getAllTransactions(user.id).then((transactions) => {
+      if (!transactions.ok) {
+        Alert.alert("Transaction Sync Failed");
+        return;
+      }
+      setUser({ ...user, transactions: transactions.value });
+      setRefreshing(false);
+    });
+  }, [user, setUser]);
 
   if (!user) {
     return <Loading />;
@@ -65,6 +89,9 @@ const Home: React.FC = () => {
       style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2`}
     >
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getTransactions} />
+        }
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <>

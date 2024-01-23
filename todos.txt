@@ -4,7 +4,8 @@
 [ ]  add the ability to create custom transactions
 [ ]  Make the monthly spendable amount something that is different depending on the month
 [*]  be able to test the spendableToday() function by controlling time somehow
-[ ]  Make the auth screen work with a pop up keyboard on a real phone
+[*]  Make the auth screen work with a pop up keyboard on a real phone
+[*]  pull to refresh
 [ ]  maybe make the api requests require some sort of token?
 [ ]  Tests for the lib file?
 [ ]  make banks screen look better/have some functionality
