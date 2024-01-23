@@ -39,7 +39,7 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
 
   return (
     <View
-      style={tw`w-full flex flex-row p-2 items-center rounded-2xl ${
+      style={tw`w-full flex flex-row py-2 px-6 items-center rounded-2xl ${
         transaction.ignore ? "bg-zinc-100 dark:bg-zinc-800" : ""
       }`}
     >

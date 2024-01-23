@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView, ScrollView, View, Text } from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
 import UserContext from "../UserContext";
@@ -8,6 +8,7 @@ import MonthSwitcher from "../components/MonthSwitcher";
 import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
+import Transaction from "../components/Transaction";
 
 const Home: React.FC = () => {
   const [user] = useContext(UserContext);
@@ -53,25 +54,66 @@ const Home: React.FC = () => {
     unignoredMonthTransactions.map((i) => i.amount)
   );
 
+  const sorted = monthTransactions.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return Number(dateB) - Number(dateA);
+  });
+
   return (
     <SafeAreaView
-      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow p-1 gap-2`}
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2`}
     >
-      <MonthSwitcher
-        year={year}
-        setYear={setYear}
-        month={month}
-        setMonth={setMonth}
-        firstTransaction={firstTransaction}
+      <FlatList
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <>
+            <MonthSwitcher
+              year={year}
+              setYear={setYear}
+              month={month}
+              setMonth={setMonth}
+              firstTransaction={firstTransaction}
+            />
+            <Balance spent={spent} spendable={user.amount} />
+            <MonthInfo
+              spendable={user.amount}
+              spent={spent}
+              month={month}
+              year={year}
+            />
+
+            <View style={tw`flex flex-row items-center w-full p-2`}>
+              <Text
+                style={tw`uppercase font-bold text-xs text-teal-900 dark:text-teal-600 grow`}
+              >
+                Merchant
+              </Text>
+              <Text
+                style={tw`uppercase font-bold text-xs w-18 text-teal-900 dark:text-teal-600`}
+              >
+                Date
+              </Text>
+              <Text
+                style={tw`uppercase font-bold text-xs w-26 text-teal-900 dark:text-teal-600`}
+              >
+                Amount
+              </Text>
+            </View>
+          </>
+        }
+        ListHeaderComponentStyle={tw`flex items-center w-full bg-white`}
+        ItemSeparatorComponent={() => (
+          <View style={tw`h-[1px] bg-zinc-100 dark:bg-zinc-800 mx-2`} />
+        )}
+        style={tw`flex w-full`}
+        contentContainerStyle={tw`flex items-center pb-5`}
+        data={sorted}
+        renderItem={(transaction) => (
+          <Transaction transaction={transaction.item} />
+        )}
+        keyExtractor={(item) => item.id}
       />
-      <Balance spent={spent} spendable={user.amount} />
-      <MonthInfo
-        spendable={user.amount}
-        spent={spent}
-        month={month}
-        year={year}
-      />
-      <TransactionsList transactions={monthTransactions} />
     </SafeAreaView>
   );
 };
