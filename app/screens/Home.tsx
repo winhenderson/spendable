@@ -16,8 +16,11 @@ import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
 import { getAllTransactions } from "../lib";
+import { Pencil } from "lucide-react-native";
+import ColorSchemeContext from "../ColorSchemeContext";
 
 const Home: React.FC = () => {
+  const [colorScheme] = useContext(ColorSchemeContext);
   const [user, setUser] = useContext(UserContext);
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -40,6 +43,10 @@ const Home: React.FC = () => {
       setRefreshing(false);
     });
   }, [user, setUser]);
+
+  function addTransaction() {
+    console.log("need to implement this!");
+  }
 
   if (!user) {
     return <Loading />;
@@ -90,7 +97,12 @@ const Home: React.FC = () => {
     >
       <FlatList
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={getTransactions} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={getTransactions}
+            colors={colorScheme === "dark" ? ["white"] : ["gray"]}
+            tintColor={colorScheme === "dark" ? "white" : "gray"}
+          />
         }
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
@@ -122,19 +134,25 @@ const Home: React.FC = () => {
                 Date
               </Text>
               <Text
-                style={tw`uppercase font-bold text-xs w-26 text-teal-900 dark:text-teal-600`}
+                style={tw`uppercase font-bold text-xs w-21 text-teal-900 dark:text-teal-600`}
               >
                 Amount
+              </Text>
+              <Text onPress={addTransaction}>
+                <Pencil
+                  style={tw`text-teal-900 dark:text-teal-600`}
+                  size={18}
+                />
               </Text>
             </View>
           </>
         }
-        ListHeaderComponentStyle={tw`flex items-center w-full bg-white`}
+        ListHeaderComponentStyle={tw`flex items-center w-full bg-white dark:bg-zinc-900 gap-2`}
         ItemSeparatorComponent={() => (
           <View style={tw`h-[1px] bg-zinc-100 dark:bg-zinc-800 mx-2`} />
         )}
         style={tw`flex w-full`}
-        contentContainerStyle={tw`flex items-center pb-5`}
+        contentContainerStyle={tw`flex items-center pb-5 gap-1`}
         data={sorted}
         renderItem={(transaction) => (
           <Transaction transaction={transaction.item} />
