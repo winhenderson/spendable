@@ -6,14 +6,17 @@ import ColorSchemeContext from "../ColorSchemeContext";
 
 type Props = {
   title: string;
+  colorOverride?: string;
 };
 
-const LetterIcon: React.FC<Props> = ({ title }) => {
+const LetterIcon: React.FC<Props> = ({ title, colorOverride }) => {
   const [colorScheme] = React.useContext(ColorSchemeContext);
-  const bgColor = randomColor({
-    luminosity: colorScheme === "dark" ? "dark" : "bright",
-    seed: title.split("")[0],
-  });
+  const bgColor =
+    colorOverride ??
+    randomColor({
+      luminosity: colorScheme === "dark" ? "dark" : "bright",
+      seed: title.split("")[0],
+    });
 
   const textColor = getContrast(bgColor);
 

@@ -148,6 +148,7 @@ export type BankTitle = {
   name: string;
   officialName: string | null;
   logo: string | null;
+  primary_color: string | null;
 };
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";

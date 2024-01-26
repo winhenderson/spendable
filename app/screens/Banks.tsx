@@ -49,7 +49,7 @@ const Banks: React.FC = () => {
     <SafeAreaView style={tw`bg-white dark:bg-zinc-900 grow`}>
       <FlatList
         ListHeaderComponent={
-          <View style={tw`flex items-center gap-4`}>
+          <View style={tw`flex items-center gap-4 mb-4`}>
             <View style={tw`flex flex-row justify-center items-center`}>
               <Text style={tw`text-3xl text-teal-900 font-bold`}>
                 Connected Banks
@@ -95,9 +95,12 @@ const Banks: React.FC = () => {
             {bank.item.logo ? (
               <Image source={{ uri: bank.item.logo }} />
             ) : (
-              <LetterIcon title={bank.item.name} />
+              <LetterIcon
+                colorOverride={bank.item.primary_color ?? undefined}
+                title={bank.item.name}
+              />
             )}
-            <Text style={tw`text-teal-950 dark:text-teal-200`}>
+            <Text style={tw`text-teal-950 dark:text-teal-200 font-semibold`}>
               {bank.item.name}
             </Text>
           </View>
