@@ -1,15 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { SimpleTransaction, getAllTransactions, ignore } from "../lib";
 import { Text, View, Image, Alert, Pressable } from "react-native";
 import tw from "twrnc";
 import UserContext from "../UserContext";
 import { Eye, EyeOff } from "lucide-react-native";
 import LetterIcon from "./LetterIcon";
+import Loading from "./Loading";
 
 type Props = { transaction: SimpleTransaction };
 
 const Transaction: React.FC<Props> = ({ transaction }) => {
   const [user, setUser] = useContext(UserContext);
+  const [syncing, setSyncing] = useState(false);
 
   if (!user) {
     throw new Error("No logged in user");
@@ -78,15 +80,15 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
 
       <Pressable
         style={tw`w-5`}
+        disabled={syncing}
         onPress={async () => {
+          setSyncing(true);
           toggleIgnored();
           const success = await ignore(transaction.id, user.id);
           if (!success) {
             toggleIgnored();
             Alert.alert("Update Failed");
           }
-
-          // TODO: fix this, when you click it fast it is weird because of timing issues
 
           const transactions = await getAllTransactions(user.id);
           if (!transactions.ok) {
@@ -95,6 +97,7 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
           }
 
           setUser({ ...user, transactions: transactions.value });
+          setSyncing(false);
         }}
       >
         {transaction.ignore ? (
@@ -106,8 +109,6 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
     </View>
   );
 };
-
-// TODO: add the default icon thing like a colored circle with a letter?
 
 function createDate(dateString: string) {
   const date = new Date(dateString);
