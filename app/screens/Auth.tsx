@@ -49,7 +49,6 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
       }
 
       if (data) {
-        console.log("in here");
         const user = await signUp(email, data.user.id);
         if (!user.ok) {
           return;

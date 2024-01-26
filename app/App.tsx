@@ -32,22 +32,19 @@ export default function App() {
     // supabase.auth.signOut();
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      console.log("getSession callback");
       getUserFromSession(data.session);
     });
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log({ event });
       setSession(session);
-      console.log("onAuthStateChange callback", session?.user.email);
       getUserFromSession(session);
     });
   }, []);
 
   async function getUserFromSession(session: Session | null) {
     if (session) {
-      console.log("in getUserFromSession()");
       const userRes = await getUserById(session.user.id);
       if (!userRes.ok) {
-        console.error("in the bad if", userRes.error);
         return;
       }
 

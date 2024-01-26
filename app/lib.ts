@@ -25,24 +25,6 @@ export async function publicTokenExchange(
   });
 }
 
-// export async function getMonthTransactions(
-//   user_id: string,
-//   year: number,
-//   month: number
-// ): APIResponse<Array<SimpleTransaction>> {
-//   try {
-//     const res = await fetch(
-//       `${endpoint}/get-month-transactions/${year}/${month}/${user_id}`
-//     );
-
-//     const json: Array<SimpleTransaction> = await res.json();
-//     return { ok: true, value: json };
-//   } catch (error) {
-//     console.error(error);
-//     return { ok: false, error };
-//   }
-// }
-
 export async function getAllTransactions(
   user_id: string
 ): APIResponse<Array<SimpleTransaction>> {
@@ -110,13 +92,23 @@ export async function updateAmount(newAmount: number, userId: string) {
   });
 }
 
-export async function getUserById(user_id: string): APIResponse<User> {
+export async function getUserById(
+  user_id: string,
+  attemptNumber = 0
+): APIResponse<User> {
   try {
     const res = await fetch(`${endpoint}/get-user-by-id/${user_id}`);
 
     const json = await res.json();
     return { ok: true, value: json };
   } catch (error) {
+    // Fixes race condition on sign in when database hasn't updated before the get_user_by_id asks for that user
+    if (attemptNumber < 4) {
+      const nextAttempt = attemptNumber + 1;
+      await new Promise((resolve) => setTimeout(resolve, 200 * nextAttempt));
+      console.warn("retrying");
+      return getUserById(user_id, nextAttempt);
+    }
     console.error(error);
     return { ok: false, error };
   }
