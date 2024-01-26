@@ -53,6 +53,22 @@ export async function addNewTransactions(
 
       has_more = res.data.has_more;
       plaidTransactions.push(...res.data.added);
+
+      // delete the removed transactions from the db
+      prisma.transactions.deleteMany({
+        where: {
+          id: { in: res.data.removed.map((i) => i.transaction_id ?? "") },
+        },
+      });
+
+      // update the modified transactions from the db
+      prisma.transactions.updateMany({
+        where: {
+          id: { in: res.data.modified.map((i) => i.transaction_id) },
+        },
+        data: res.data.modified.map((t) => createDbTransaction(t, item.id)),
+      });
+
       // also handle the data.modified ones and updateMany them to the transacciont table
       nextCursor = res.data.next_cursor;
     }
