@@ -13,6 +13,7 @@
 [ ]  android
 [ ]  share types between server -> app
 [ ]  handle modified and deleted transactions from plaid
+[ ]  insert some test modified/removed transactions inside the has_more loop to test my code
 
 
 
