@@ -34,7 +34,7 @@ export async function getAllTransactions(
     const json: Array<SimpleTransaction> = await res.json();
     return { ok: true, value: json };
   } catch (error) {
-    console.error(error);
+    console.error("Error in getAllTransactions", error);
     return { ok: false, error };
   }
 }
@@ -49,7 +49,7 @@ export async function accountsGet(
     const json = await res.json();
     return { ok: true, value: json };
   } catch (error) {
-    console.error(error);
+    console.error("Error in accountsGet", error);
     return { ok: false, error };
   }
 }
@@ -109,7 +109,7 @@ export async function getUserById(
       console.warn("retrying");
       return getUserById(user_id, nextAttempt);
     }
-    console.error(error);
+    console.error("Error in getUserById", error);
     return { ok: false, error };
   }
 }

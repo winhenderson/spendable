@@ -1,12 +1,5 @@
 import { useCallback, useContext, useState } from "react";
-import {
-  FlatList,
-  SafeAreaView,
-  View,
-  Text,
-  Alert,
-  RefreshControl,
-} from "react-native";
+import { FlatList, View, Text, Alert, RefreshControl } from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
 import UserContext from "../UserContext";
@@ -18,6 +11,7 @@ import Transaction from "../components/Transaction";
 import { getAllTransactions } from "../lib";
 import { Pencil } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -93,7 +87,7 @@ const Home: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2`}
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2 min-h-screen`}
     >
       <FlatList
         refreshControl={

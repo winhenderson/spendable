@@ -1,22 +1,17 @@
 import { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import tw from "twrnc";
-import { User, getAllTransactions, signUp, supabase } from "../lib";
+import { User, signUp, supabase } from "../lib";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = {
   onSignupSuccess(user: User): unknown;
 };
 
 const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
+  const insets = useSafeAreaInsets();
   const [screenShown, setScreenShown] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,8 +54,12 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
   }
 
   return (
-    <ScrollView automaticallyAdjustKeyboardInsets={true} scrollEnabled={false}>
-      <SafeAreaView
+    <ScrollView
+      automaticallyAdjustKeyboardInsets={true}
+      scrollEnabled={false}
+      style={tw`pb-[${insets.bottom}] pt-[${insets.top}]`}
+    >
+      <View
         style={tw`bg-white dark:bg-zinc-900 flex flex-col items-center justify-center grow-1 gap-4`}
       >
         <Text
@@ -115,7 +114,7 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
             </Text>
           </Pressable>
         </View>
-      </SafeAreaView>
+      </View>
     </ScrollView>
   );
 };

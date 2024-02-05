@@ -8,11 +8,11 @@ import { User, getAllTransactions, getUserById, supabase } from "./lib";
 import Auth from "./screens/Auth";
 import { HomeIcon, LandmarkIcon, UserIcon } from "lucide-react-native";
 import Account from "./screens/Account";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import UserContext from "./UserContext";
 import Loading from "./components/Loading";
 import tw, { useAppColorScheme, useDeviceContext } from "twrnc";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import Banks from "./screens/Banks";
 import ColorSchemeContext from "./ColorSchemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -57,7 +57,11 @@ export default function App() {
   }
 
   if (!session) {
-    return <Auth onSignupSuccess={setUser} />;
+    return (
+      <SafeAreaProvider>
+        <Auth onSignupSuccess={setUser} />
+      </SafeAreaProvider>
+    );
   }
 
   if (!user) {
@@ -65,7 +69,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={tw`h-full`}>
+    <SafeAreaProvider>
       <ColorSchemeContext.Provider
         value={[colorScheme ?? "dark", setColorScheme]}
       >
@@ -125,6 +129,6 @@ export default function App() {
           </NavigationContainer>
         </UserContext.Provider>
       </ColorSchemeContext.Provider>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

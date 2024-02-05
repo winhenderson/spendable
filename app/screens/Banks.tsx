@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, View, Image, Alert } from "react-native";
+import { FlatList, Text, View, Image, Alert } from "react-native";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
 import {
@@ -12,6 +12,7 @@ import {
 import Loading from "../components/Loading";
 import UserContext from "../UserContext";
 import LetterIcon from "../components/LetterIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Banks: React.FC = () => {
   const [user, setUser] = useContext(UserContext);

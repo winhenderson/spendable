@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView, Switch } from "react-native";
+import { Switch } from "react-native";
 import Button from "../components/Button";
 import tw from "twrnc";
 import { supabase, updateAmount } from "../lib";
@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import UserContext from "../UserContext";
 import ColorSchemeContext from "../ColorSchemeContext";
 import Loading from "../components/Loading";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
