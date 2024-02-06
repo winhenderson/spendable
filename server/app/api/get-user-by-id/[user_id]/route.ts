@@ -46,7 +46,7 @@ export async function GET(
       )
       .flat(),
     id: dbResult.id,
-    amount: dbResult.amount ? Number(dbResult.amount) : null,
+    defaultSpendable: dbResult.amount ? Number(dbResult.amount) : null,
     email: dbResult.email,
   };
 

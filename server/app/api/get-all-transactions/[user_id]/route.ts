@@ -8,7 +8,6 @@ export async function GET(
   req: Request,
   { params }: { params: { user_id: string } }
 ) {
-  console.log("get-month-transactions getting called");
   const user_id = params.user_id;
 
   const dbTransactions = await prisma.transactions.findMany({
@@ -50,8 +49,6 @@ export async function addNewTransactions(
         access_token: item.plaid_access_token,
         cursor: nextCursor ?? undefined,
       });
-      console.log(res.data.modified);
-      console.log(res.data.removed);
 
       has_more = res.data.has_more;
       plaidTransactions.push(...res.data.added);

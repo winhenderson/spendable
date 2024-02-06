@@ -1,26 +1,27 @@
 import React, { useContext, useState } from "react";
-import { Switch } from "react-native";
+import { Switch, View } from "react-native";
 import Button from "../components/Button";
 import tw from "twrnc";
-import { supabase, updateAmount } from "../lib";
+import { supabase, updateDefaultAmount } from "../lib";
 import Input from "../components/Input";
 import UserContext from "../UserContext";
 import ColorSchemeContext from "../ColorSchemeContext";
 import Loading from "../components/Loading";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [colorScheme, setColorScheme] = useContext(ColorSchemeContext);
+  const insets = useSafeAreaInsets();
 
-  const [amount, setAmount] = useState(String(user?.amount));
+  const [amount, setAmount] = useState(String(user?.defaultSpendable));
   if (!user) {
     return <Loading />;
   }
 
   return (
-    <SafeAreaView
-      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow p-1 gap-2`}
+    <View
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow p-1 gap-2 pb-[${insets.bottom}] pt-[${insets.top}]`}
     >
       <Switch
         onValueChange={(value) => {
@@ -39,8 +40,8 @@ const Settings: React.FC = () => {
       </Input>
       <Button
         onPress={() => {
-          updateAmount(Number(amount), user.id);
-          setUser({ ...user, amount: Number(amount) });
+          updateDefaultAmount(Number(amount), user.id);
+          setUser({ ...user, defaultSpendable: Number(amount) });
         }}
         color="purple-800"
         style="text-sm"
@@ -58,7 +59,7 @@ const Settings: React.FC = () => {
       >
         Sign Out
       </Button>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -8,7 +8,7 @@ import { User, getAllTransactions, getUserById, supabase } from "./lib";
 import Auth from "./screens/Auth";
 import { HomeIcon, LandmarkIcon, UserIcon } from "lucide-react-native";
 import Account from "./screens/Account";
-import { Text, View } from "react-native";
+import { StatusBar, Text } from "react-native";
 import UserContext from "./UserContext";
 import Loading from "./components/Loading";
 import tw, { useAppColorScheme, useDeviceContext } from "twrnc";
@@ -70,6 +70,9 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar
+        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+      />
       <ColorSchemeContext.Provider
         value={[colorScheme ?? "dark", setColorScheme]}
       >

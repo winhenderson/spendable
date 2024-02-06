@@ -3,19 +3,15 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: { user_id: string } }
+) {
+  const user_id = params.user_id;
   const body = await request.json();
 
-  // const user = await prisma.public_users.findFirst({
-  //   where: { auth_id: body.user_id },
-  // });
-
-  // if (!user) {
-  //   throw new Error("invalid credentials");
-  // }
-
   await prisma.public_users.update({
-    where: { id: body.userId },
+    where: { id: user_id },
     data: { amount: body.newAmount },
   });
 

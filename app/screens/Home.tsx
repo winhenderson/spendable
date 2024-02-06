@@ -9,9 +9,9 @@ import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
 import { getAllTransactions } from "../lib";
-import { Pencil } from "lucide-react-native";
+import { Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -21,6 +21,7 @@ const Home: React.FC = () => {
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentYear);
   const [refreshing, setRefreshing] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -75,7 +76,7 @@ const Home: React.FC = () => {
   }
 
   const spent = calculateSpent(
-    user.amount,
+    user.defaultSpendable,
     unignoredMonthTransactions.map((i) => i.amount)
   );
 
@@ -86,8 +87,10 @@ const Home: React.FC = () => {
   });
 
   return (
-    <SafeAreaView
-      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2 min-h-screen`}
+    <View
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2 min-h-screen pt-[${
+        insets.top + 4
+      }] pb-[${insets.bottom}]`}
     >
       <FlatList
         refreshControl={
@@ -108,13 +111,8 @@ const Home: React.FC = () => {
               setMonth={setMonth}
               firstTransaction={firstTransaction}
             />
-            <Balance spent={spent} spendable={user.amount} />
-            <MonthInfo
-              spendable={user.amount}
-              spent={spent}
-              month={month}
-              year={year}
-            />
+            <Balance spent={spent} spendable={user.defaultSpendable} />
+            <MonthInfo spent={spent} month={month} year={year} />
 
             <View style={tw`flex flex-row items-center w-full p-2`}>
               <Text
@@ -133,10 +131,7 @@ const Home: React.FC = () => {
                 Amount
               </Text>
               <Text onPress={addTransaction}>
-                <Pencil
-                  style={tw`text-teal-900 dark:text-teal-600`}
-                  size={18}
-                />
+                <Plus style={tw`text-teal-900 dark:text-teal-600`} size={18} />
               </Text>
             </View>
           </>
@@ -153,7 +148,7 @@ const Home: React.FC = () => {
         )}
         keyExtractor={(item) => item.id}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

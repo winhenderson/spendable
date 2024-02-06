@@ -22,7 +22,7 @@ const Input: React.FC<Props> = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <View style={tw`w-1/2`}>
+    <View style={tw`w-full`}>
       <Text
         style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
       >

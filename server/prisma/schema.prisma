@@ -334,10 +334,9 @@ model public_users {
 model months {
   id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   created_at DateTime     @default(now()) @db.Timestamptz(6)
-  month      String
-  year       String
   amount     Decimal?     @db.Decimal
   user_id    String       @db.Uuid
+  date       String       @unique
   users      public_users @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@schema("public")

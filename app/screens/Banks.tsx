@@ -12,12 +12,13 @@ import {
 import Loading from "../components/Loading";
 import UserContext from "../UserContext";
 import LetterIcon from "../components/LetterIcon";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Banks: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [linkToken, setLinkToken] = useState<string>();
   const [banks, setBanks] = useState<BankTitle[]>([]);
+  const insets = useSafeAreaInsets();
 
   if (!user) {
     throw new Error("Not Registered");
@@ -47,7 +48,9 @@ const Banks: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={tw`bg-white dark:bg-zinc-900 grow`}>
+    <View
+      style={tw`bg-white dark:bg-zinc-900 grow pt-[${insets.top}] pb-[${insets.bottom}]`}
+    >
       <FlatList
         ListHeaderComponent={
           <View style={tw`flex items-center gap-4 mb-4`}>
@@ -107,7 +110,7 @@ const Banks: React.FC = () => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

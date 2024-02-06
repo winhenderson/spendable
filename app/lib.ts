@@ -85,11 +85,42 @@ export async function signUp(email: string, id: string): APIResponse<User> {
   }
 }
 
-export async function updateAmount(newAmount: number, userId: string) {
-  await fetch(`${endpoint}/update-amount`, {
+export async function updateDefaultAmount(newAmount: number, userId: string) {
+  await fetch(`${endpoint}/update-default-amount/${userId}`, {
     method: "POST",
-    body: JSON.stringify({ newAmount, userId }),
+    body: JSON.stringify({ newAmount }),
   });
+}
+
+export async function updateMonthAmount(
+  newAmount: number,
+  userId: string,
+  month: number,
+  year: number
+) {
+  console.log("in here", { newAmount, userId });
+  await fetch(`${endpoint}/update-month-amount/${userId}/${year}/${month}`, {
+    method: "POST",
+    body: JSON.stringify({ newAmount }),
+  });
+}
+
+export async function getMonthAmount(
+  userId: string,
+  year: number,
+  month: number
+): APIResponse<number> {
+  try {
+    const res = await fetch(
+      `${endpoint}/get-month-amount/${userId}/${year}/${month}`
+    );
+    const json = await res.json();
+
+    return { ok: true, value: json };
+  } catch (error) {
+    console.error("error in getMonthAmount");
+    return { ok: false, error };
+  }
 }
 
 export async function getUserById(
@@ -130,7 +161,7 @@ export type SimpleTransaction = {
 export type User = {
   id: string;
   email: string;
-  amount: number;
+  defaultSpendable: number;
   transactions: SimpleTransaction[];
 };
 

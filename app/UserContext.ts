@@ -7,7 +7,7 @@ const UserContext = React.createContext<
   {
     id: "",
     email: "",
-    amount: 0,
+    defaultSpendable: 0,
     transactions: [],
   },
   () => {},
