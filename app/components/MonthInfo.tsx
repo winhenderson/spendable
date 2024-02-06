@@ -1,19 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import tw from "twrnc";
-import { getMonthAmount, isCurrentMonth, updateMonthAmount } from "../lib";
+import { isCurrentMonth, updateMonthAmount } from "../lib";
 import { spendableToday } from "../math";
 import { Pencil } from "lucide-react-native";
 import UserContext from "../UserContext";
 import Loading from "./Loading";
 
 type Props = {
+  spendable: string;
   spent: number;
   month: number;
   year: number;
 };
 
-const MonthInfo: React.FC<Props> = ({ spent, month, year }) => {
+const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
   const monthString = new Date(2024, month).toLocaleString("en-US", {
     month: "long",
   });
@@ -21,24 +22,13 @@ const MonthInfo: React.FC<Props> = ({ spent, month, year }) => {
 
   const [editing, setEditing] = useState(false);
   const [user] = useContext(UserContext);
-  const [amount, setAmount] = useState(user?.defaultSpendable.toString());
-
-  useEffect(() => {
-    getMonthAmount(user?.id ?? "", year, month).then((res) => {
-      if (res.ok) {
-        if (res.value) {
-          setAmount(res.value.toString());
-        } else {
-          setAmount(user?.defaultSpendable.toString());
-        }
-      }
-    });
-  }, [month, user, year]);
+  const [amount, setAmount] = useState(spendable);
 
   if (!user) {
     console.error("no user somehow");
     return <Loading />;
   }
+  console.log("000 spendable ", spendable);
 
   return (
     <View style={tw`pb-3 pt-2 w-2/3 flex flex-row justify-between`}>

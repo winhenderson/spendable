@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { FlatList, View, Text, Alert, RefreshControl } from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
@@ -8,7 +8,7 @@ import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
-import { getAllTransactions } from "../lib";
+import { getAllTransactions, getMonthAmount } from "../lib";
 import { Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,6 +22,21 @@ const Home: React.FC = () => {
   const [year, setYear] = useState(currentYear);
   const [refreshing, setRefreshing] = useState(false);
   const insets = useSafeAreaInsets();
+  const [amount, setAmount] = useState(user?.defaultSpendable.toString());
+
+  useEffect(() => {
+    getMonthAmount(user?.id ?? "", year, month).then((res) => {
+      if (res.ok) {
+        if (res.value) {
+          setAmount(res.value.toString());
+          // } else {
+          //   console.log("shoudl be in here", user?.defaultSpendable.toString());
+          //   setAmount(user?.defaultSpendable.toString());
+          //   // console.log(amount);
+        }
+      }
+    });
+  }, [month, user, year, setAmount]);
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -111,8 +126,16 @@ const Home: React.FC = () => {
               setMonth={setMonth}
               firstTransaction={firstTransaction}
             />
-            <Balance spent={spent} spendable={user.defaultSpendable} />
-            <MonthInfo spent={spent} month={month} year={year} />
+            <Balance
+              spent={spent}
+              spendable={amount ? Number(amount) : user.defaultSpendable}
+            />
+            <MonthInfo
+              spendable={amount ?? user.defaultSpendable.toString()}
+              spent={spent}
+              month={month}
+              year={year}
+            />
 
             <View style={tw`flex flex-row items-center w-full p-2`}>
               <Text
