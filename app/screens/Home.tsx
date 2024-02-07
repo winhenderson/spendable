@@ -8,7 +8,7 @@ import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
-import { getAllTransactions, getMonthAmount } from "../lib";
+import { getAllTransactions, getMonthAmount, updateMonthAmount } from "../lib";
 import { Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -26,27 +26,19 @@ const Home: React.FC = () => {
   console.log("amount: ", amount);
 
   useEffect(() => {
-    getMonthAmount(user?.id ?? "", year, month).then((res) => {
-      if (res.ok && res.value) {
-        setAmount(res.value);
+    if (!user) {
+      console.error("no user in the useEffect for getting the month amount");
+      return;
+    }
+    console.log("in here");
+    getMonthAmount(user.id, year, month).then((res) => {
+      if (!res.ok) {
+        console.error("no good response from getMonthAmount");
+        return;
       }
+      setAmount(res.value ?? user.defaultSpendable);
     });
   }, [month, year, user]);
-
-  // useEffect(() => {
-  //   console.log("in the use Effect");
-  //   getMonthAmount(user?.id ?? "", year, month).then((res) => {
-  //     if (res.ok) {
-  //       if (res.value) {
-  //         setAmount(res.value.toString());
-  //         // } else {
-  //         //   console.log("shoudl be in here", user?.defaultSpendable.toString());
-  //         //   setAmount(user?.defaultSpendable.toString());
-  //         //   // console.log(amount);
-  //       }
-  //     }
-  //   });
-  // }, [month, user, year, setAmount]);
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -138,6 +130,10 @@ const Home: React.FC = () => {
             />
             <Balance spent={spent} spendable={amount} />
             <MonthInfo
+              updateMonthlySpendable={(newAmount: number) => {
+                setAmount(newAmount);
+                updateMonthAmount(newAmount, user.id, month, year);
+              }}
               spendable={amount}
               spent={spent}
               month={month}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import tw from "twrnc";
 import { isCurrentMonth, updateMonthAmount } from "../lib";
@@ -12,23 +12,29 @@ type Props = {
   spent: number;
   month: number;
   year: number;
+  updateMonthlySpendable(newAmount: number): unknown;
 };
 
-const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
+const MonthInfo: React.FC<Props> = ({
+  spendable,
+  spent,
+  month,
+  year,
+  updateMonthlySpendable,
+}) => {
   const monthString = new Date(2024, month).toLocaleString("en-US", {
     month: "long",
   });
   const monthIsCurrent = isCurrentMonth(new Date(year, month));
 
-  const [editing, setEditing] = useState(false);
   const [user] = useContext(UserContext);
-  const [amount, setAmount] = useState(spendable.toString());
+  const [editableAmount, setEditableAmount] = useState<string | null>(null);
+  const editing = editableAmount !== null;
 
   if (!user) {
     console.error("no user somehow");
     return <Loading />;
   }
-  console.log("000 spendable", spendable);
 
   return (
     <View style={tw`pb-3 pt-2 w-2/3 flex flex-row justify-between`}>
@@ -45,14 +51,16 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
           <TextInput
             enterKeyHint="enter"
             enablesReturnKeyAutomatically={true}
-            value={amount}
-            onFocus={() => setEditing(true)}
+            value={editableAmount ?? spendable.toString()}
+            onFocus={() => {
+              setEditableAmount(spendable.toString());
+            }}
             onBlur={() => {
-              setEditing(false);
-              updateMonthAmount(Number(amount), user.id, month, year);
+              updateMonthlySpendable(Number(editableAmount));
+              setEditableAmount(null);
             }}
             style={tw`text-teal-950/80 text-2xl font-bold py-0 pr-1 dark:text-zinc-300`}
-            onChangeText={setAmount}
+            onChangeText={setEditableAmount}
             keyboardType="numeric"
             inputMode="numeric"
           />
@@ -85,7 +93,7 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
         >
           $
           {monthIsCurrent
-            ? Math.round(spendableToday(Number(amount), spent))
+            ? Math.round(spendableToday(Number(editableAmount), spent))
             : Math.round(spent)}
         </Text>
         <Text
