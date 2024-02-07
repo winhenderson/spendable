@@ -16,7 +16,13 @@ export async function GET(
     where: { user_id, date: `${month}-${year}` },
     select: { amount: true },
   });
-  console.log(dbMonthResult);
 
-  return Response.json(dbMonthResult?.amount ?? null);
+  if (dbMonthResult) {
+    if (dbMonthResult.amount === null) {
+      throw new Error("no amount found in the database for an existing month");
+    }
+    return Response.json(dbMonthResult.amount);
+  }
+
+  return Response.json(null);
 }

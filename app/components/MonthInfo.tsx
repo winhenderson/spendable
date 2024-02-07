@@ -8,7 +8,7 @@ import UserContext from "../UserContext";
 import Loading from "./Loading";
 
 type Props = {
-  spendable: string;
+  spendable: number;
   spent: number;
   month: number;
   year: number;
@@ -22,20 +22,24 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
 
   const [editing, setEditing] = useState(false);
   const [user] = useContext(UserContext);
-  const [amount, setAmount] = useState(spendable);
+  const [amount, setAmount] = useState(spendable.toString());
 
   if (!user) {
     console.error("no user somehow");
     return <Loading />;
   }
-  console.log("000 spendable ", spendable);
+  console.log("000 spendable", spendable);
 
   return (
     <View style={tw`pb-3 pt-2 w-2/3 flex flex-row justify-between`}>
       <View style={tw`w-1/2 flex items-center`}>
         <View style={tw`flex flex-row items-center`}>
           {!editing && (
-            <Text style={tw`text-teal-950/80 text-2xl font-bold`}>$</Text>
+            <Text
+              style={tw`text-teal-950/80 text-2xl font-bold dark:text-zinc-300`}
+            >
+              $
+            </Text>
           )}
 
           <TextInput
@@ -44,11 +48,10 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
             value={amount}
             onFocus={() => setEditing(true)}
             onBlur={() => {
-              console.log("blurred");
               setEditing(false);
               updateMonthAmount(Number(amount), user.id, month, year);
             }}
-            style={tw`text-teal-950/80 text-2xl font-bold pt-0 pb-0`}
+            style={tw`text-teal-950/80 text-2xl font-bold py-0 pr-1 dark:text-zinc-300`}
             onChangeText={setAmount}
             keyboardType="numeric"
             inputMode="numeric"
@@ -56,18 +59,21 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
 
           {!editing && (
             <View style={tw`flex justify-center`}>
-              <Pencil size={15} style={tw`text-teal-900/65 text-xs`} />
+              <Pencil
+                size={15}
+                style={tw`text-teal-900/65 text-xs dark:text-teal-600/50`}
+              />
             </View>
           )}
         </View>
 
         <Text
-          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600 -mt-1`}
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500 -mt-1`}
         >
           Spendable
         </Text>
         <Text
-          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500`}
         >
           For {monthString}
         </Text>
@@ -75,7 +81,7 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
 
       <View style={tw`w-1/2 flex items-center`}>
         <Text
-          style={tw`text-2xl font-bold text-teal-950/80 dark:text-zinc-400`}
+          style={tw`text-2xl font-bold text-teal-950/80 dark:text-zinc-300`}
         >
           $
           {monthIsCurrent
@@ -83,12 +89,12 @@ const MonthInfo: React.FC<Props> = ({ spendable, spent, month, year }) => {
             : Math.round(spent)}
         </Text>
         <Text
-          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500`}
         >
           {monthIsCurrent ? "Maximum" : "Spent In"}
         </Text>
         <Text
-          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-600`}
+          style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500`}
         >
           {monthIsCurrent ? "For Today" : `${monthString} ${year}`}
         </Text>

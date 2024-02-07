@@ -22,21 +22,31 @@ const Home: React.FC = () => {
   const [year, setYear] = useState(currentYear);
   const [refreshing, setRefreshing] = useState(false);
   const insets = useSafeAreaInsets();
-  const [amount, setAmount] = useState(user?.defaultSpendable.toString());
+  const [amount, setAmount] = useState(user?.defaultSpendable ?? 0);
+  console.log("amount: ", amount);
 
   useEffect(() => {
     getMonthAmount(user?.id ?? "", year, month).then((res) => {
-      if (res.ok) {
-        if (res.value) {
-          setAmount(res.value.toString());
-          // } else {
-          //   console.log("shoudl be in here", user?.defaultSpendable.toString());
-          //   setAmount(user?.defaultSpendable.toString());
-          //   // console.log(amount);
-        }
+      if (res.ok && res.value) {
+        setAmount(res.value);
       }
     });
-  }, [month, user, year, setAmount]);
+  }, [month, year, user]);
+
+  // useEffect(() => {
+  //   console.log("in the use Effect");
+  //   getMonthAmount(user?.id ?? "", year, month).then((res) => {
+  //     if (res.ok) {
+  //       if (res.value) {
+  //         setAmount(res.value.toString());
+  //         // } else {
+  //         //   console.log("shoudl be in here", user?.defaultSpendable.toString());
+  //         //   setAmount(user?.defaultSpendable.toString());
+  //         //   // console.log(amount);
+  //       }
+  //     }
+  //   });
+  // }, [month, user, year, setAmount]);
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -126,12 +136,9 @@ const Home: React.FC = () => {
               setMonth={setMonth}
               firstTransaction={firstTransaction}
             />
-            <Balance
-              spent={spent}
-              spendable={amount ? Number(amount) : user.defaultSpendable}
-            />
+            <Balance spent={spent} spendable={amount} />
             <MonthInfo
-              spendable={amount ?? user.defaultSpendable.toString()}
+              spendable={amount}
               spent={spent}
               month={month}
               year={year}

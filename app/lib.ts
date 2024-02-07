@@ -109,7 +109,7 @@ export async function getMonthAmount(
   userId: string,
   year: number,
   month: number
-): APIResponse<number> {
+): APIResponse<number | null> {
   try {
     const res = await fetch(
       `${endpoint}/get-month-amount/${userId}/${year}/${month}`
