@@ -2,7 +2,7 @@
 [*]  Add some sort of default icon
 [*]  fix bug where the first time the transactions load everything is backward
 [ ]  add the ability to create custom transactions
-[ ]  Make the monthly spendable amount something that is different depending on the month
+[*]  Make the monthly spendable amount something that is different depending on the month
 [*]  be able to test the spendableToday() function by controlling time somehow
 [*]  Make the auth screen work with a pop up keyboard on a real phone
 [*]  pull to refresh
@@ -13,10 +13,11 @@
 [ ]  android
 [ ]  share types between server -> app
 [ ]  handle modified and deleted transactions from plaid
-[ ]  fix invisible status bar and spinner
-[ ]  fix styling of monthly spendable
+[*]  fix invisible status bar and spinner
+[*]  fix styling of monthly spendable
 [ ]  show when banks are logged out
 [ ]  show network activity indicator in status bar
 [ ]  blur letter default icons
 [ ]  make buttons bigger to press
 [ ]  insert some test modified/removed transactions inside the has_more loop to test my code
+[ ]  get all the custom months at the same time and store them in the user object
