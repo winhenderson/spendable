@@ -7,9 +7,9 @@
     "icon": "./assets/Cat.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/cat.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#042f2e"
     },
     "assetBundlePatterns": ["**/*"],
     "plugins": [
@@ -28,13 +28,13 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/1024.png",
+        "backgroundColor": "#042f2e"
       },
       "package": "com.spendable"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon-512.png"
     },
     "extra": {
       "eas": {
