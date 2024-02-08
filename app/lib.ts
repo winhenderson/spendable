@@ -105,24 +105,6 @@ export async function updateMonthAmount(
   });
 }
 
-export async function getMonthAmount(
-  userId: string,
-  year: number,
-  month: number
-): APIResponse<number | null> {
-  try {
-    const res = await fetch(
-      `${endpoint}/get-month-amount/${userId}/${year}/${month}`
-    );
-    const json = await res.json();
-
-    return { ok: true, value: json };
-  } catch (error) {
-    console.error("error in getMonthAmount");
-    return { ok: false, error };
-  }
-}
-
 export async function getUserById(
   user_id: string,
   attemptNumber = 0
@@ -163,6 +145,7 @@ export type User = {
   email: string;
   defaultSpendable: number;
   transactions: SimpleTransaction[];
+  months: Record<string, number>;
 };
 
 export type ColorScheme = "light" | "dark";

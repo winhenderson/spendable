@@ -24,12 +24,20 @@ export async function GET(
           },
         },
       },
+      months: {
+        select: { date: true, amount: true },
+      },
     },
     where: { auth_id: user_id },
   });
 
   if (!dbResult) {
     throw new Error(`bad request: ${user_id} `);
+  }
+
+  const monthsMap: Record<string, number> = {};
+  for (const month of dbResult.months) {
+    monthsMap[month.date] = Number(month.amount);
   }
 
   const user = {
@@ -48,6 +56,7 @@ export async function GET(
     id: dbResult.id,
     defaultSpendable: dbResult.amount ? Number(dbResult.amount) : null,
     email: dbResult.email,
+    months: monthsMap,
   };
 
   if (!user) {

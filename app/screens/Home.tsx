@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { FlatList, View, Text, Alert, RefreshControl } from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
@@ -8,12 +8,7 @@ import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
-import {
-  getAllTransactions,
-  getMonthAmount,
-  isCurrentMonth,
-  updateMonthAmount,
-} from "../lib";
+import { getAllTransactions, isCurrentMonth, updateMonthAmount } from "../lib";
 import { Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -28,21 +23,11 @@ const Home: React.FC = () => {
   const [year, setYear] = useState(currentYear);
   const [refreshing, setRefreshing] = useState(false);
   const insets = useSafeAreaInsets();
-  const [amount, setAmount] = useState(user?.defaultSpendable ?? 0);
-
-  useEffect(() => {
-    if (!user) {
-      console.error("no user in the useEffect for getting the month amount");
-      return;
-    }
-    getMonthAmount(user.id, year, month).then((res) => {
-      if (!res.ok) {
-        console.error("no good response from getMonthAmount");
-        return;
-      }
-      setAmount(res.value ?? user.defaultSpendable);
-    });
-  }, [month, year, user]);
+  const [amount, setAmount] = useState(
+    user?.months[`${month.toString().padStart(2, "0")}-${year}`] ??
+      user?.defaultSpendable ??
+      0
+  );
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -115,24 +100,43 @@ const Home: React.FC = () => {
     if (monthIsCurrent) {
       return;
     }
+    let newYear = year;
+    let newMonth;
     if (month === 11) {
-      setYear(year + 1);
-      setMonth(0);
+      newYear = year + 1;
+      newMonth = 0;
     } else {
-      setMonth(month + 1);
+      newMonth = month + 1;
     }
+    setAmount(
+      user?.months[`${newMonth.toString().padStart(2, "0")}-${newYear}`] ??
+        user?.defaultSpendable ??
+        0
+    );
+    setMonth(newMonth);
+    setYear(newYear);
   }
 
   function backwardMonth() {
     if (monthIsLast) {
       return;
     }
+    let newMonth;
+    let newYear;
     if (month === 0) {
-      setYear(year - 1);
-      setMonth(11);
+      newYear = year - 1;
+      newMonth = 11;
     } else {
-      setMonth(month - 1);
+      newYear = year;
+      newMonth = month - 1;
     }
+    setAmount(
+      user?.months[`${newMonth.toString().padStart(2, "0")}-${newYear}`] ??
+        user?.defaultSpendable ??
+        0
+    );
+    setMonth(newMonth);
+    setYear(newYear);
   }
 
   return (

@@ -9,6 +9,7 @@ const UserContext = React.createContext<
     email: "",
     defaultSpendable: 0,
     transactions: [],
+    months: {},
   },
   () => {},
 ]);
