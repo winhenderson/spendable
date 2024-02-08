@@ -17,7 +17,8 @@
 [*]  fix styling of monthly spendable
 [ ]  show when banks are logged out
 [ ]  show network activity indicator in status bar
-[ ]  blur letter default icons
+[*]  blur letter default icons
 [*]  make buttons bigger to press
 [ ]  insert some test modified/removed transactions inside the has_more loop to test my code
 [ ]  get all the custom months at the same time and store them in the user object
+[ ]  add splash/loading screen

@@ -7,9 +7,10 @@ import ColorSchemeContext from "../ColorSchemeContext";
 type Props = {
   title: string;
   colorOverride?: string;
+  blurred: boolean;
 };
 
-const LetterIcon: React.FC<Props> = ({ title, colorOverride }) => {
+const LetterIcon: React.FC<Props> = ({ title, colorOverride, blurred }) => {
   const [colorScheme] = React.useContext(ColorSchemeContext);
   const bgColor =
     colorOverride ??
@@ -22,7 +23,9 @@ const LetterIcon: React.FC<Props> = ({ title, colorOverride }) => {
 
   return (
     <View
-      style={tw`bg-[${bgColor}] rounded-full flex justify-center items-center p-1 w-7 h-7`}
+      style={tw`bg-[${bgColor}]${
+        blurred ? "/50" : ""
+      } rounded-full flex justify-center items-center p-1 w-7 h-7`}
     >
       <Text style={tw`text-${textColor} font-semibold`}>
         {title.split("")[0]}
@@ -32,12 +35,10 @@ const LetterIcon: React.FC<Props> = ({ title, colorOverride }) => {
 };
 
 function getContrast(hexcolor: string) {
-  // If a leading # is provided, remove it
   if (hexcolor.slice(0, 1) === "#") {
     hexcolor = hexcolor.slice(1);
   }
 
-  // If a three-character hexcode, make six-character
   if (hexcolor.length === 3) {
     hexcolor = hexcolor
       .split("")
@@ -47,15 +48,12 @@ function getContrast(hexcolor: string) {
       .join("");
   }
 
-  // Convert to RGB value
   const r = parseInt(hexcolor.substr(0, 2), 16);
   const g = parseInt(hexcolor.substr(2, 2), 16);
   const b = parseInt(hexcolor.substr(4, 2), 16);
 
-  // Get YIQ ratio
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
 
-  // Check contrast
   return yiq >= 128 ? "zinc-900" : "zinc-50";
 }
 

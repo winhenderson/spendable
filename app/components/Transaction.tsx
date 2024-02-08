@@ -53,7 +53,7 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
             style={tw`w-7 h-7 rounded-lg`}
           />
         ) : (
-          <LetterIcon title={transaction.name} />
+          <LetterIcon title={transaction.name} blurred={transaction.ignore} />
         )}
       </View>
       <Text style={tw`dark:text-zinc-50 w-1/2 p-2 ${struckThrough}`}>
