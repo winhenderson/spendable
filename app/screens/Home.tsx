@@ -8,10 +8,16 @@ import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
-import { getAllTransactions, getMonthAmount, updateMonthAmount } from "../lib";
+import {
+  getAllTransactions,
+  getMonthAmount,
+  isCurrentMonth,
+  updateMonthAmount,
+} from "../lib";
 import { Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import GestureRecognizer from "react-native-swipe-gestures";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -23,14 +29,12 @@ const Home: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const insets = useSafeAreaInsets();
   const [amount, setAmount] = useState(user?.defaultSpendable ?? 0);
-  console.log("amount: ", amount);
 
   useEffect(() => {
     if (!user) {
       console.error("no user in the useEffect for getting the month amount");
       return;
     }
-    console.log("in here");
     getMonthAmount(user.id, year, month).then((res) => {
       if (!res.ok) {
         console.error("no good response from getMonthAmount");
@@ -103,8 +107,39 @@ const Home: React.FC = () => {
     return Number(dateB) - Number(dateA);
   });
 
+  const monthIsCurrent = isCurrentMonth(new Date(year, month));
+  const monthIsLast =
+    firstTransaction.month === month && firstTransaction.year === year;
+
+  function forwardMonth() {
+    if (monthIsCurrent) {
+      return;
+    }
+    if (month === 11) {
+      setYear(year + 1);
+      setMonth(0);
+    } else {
+      setMonth(month + 1);
+    }
+  }
+
+  function backwardMonth() {
+    if (monthIsLast) {
+      return;
+    }
+    if (month === 0) {
+      setYear(year - 1);
+      setMonth(11);
+    } else {
+      setMonth(month - 1);
+    }
+  }
+
   return (
-    <View
+    <GestureRecognizer
+      config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 30 }}
+      onSwipeLeft={() => forwardMonth()}
+      onSwipeRight={() => backwardMonth()}
       style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2 min-h-screen pt-[${
         insets.top + 4
       }] pb-[${insets.bottom}]`}
@@ -123,10 +158,11 @@ const Home: React.FC = () => {
           <>
             <MonthSwitcher
               year={year}
-              setYear={setYear}
+              forwardMonth={forwardMonth}
+              backwardMonth={backwardMonth}
               month={month}
-              setMonth={setMonth}
-              firstTransaction={firstTransaction}
+              monthIsCurrent={monthIsCurrent}
+              monthIsLast={monthIsLast}
             />
             <Balance spent={spent} spendable={amount} />
             <MonthInfo
@@ -174,7 +210,7 @@ const Home: React.FC = () => {
         )}
         keyExtractor={(item) => item.id}
       />
-    </View>
+    </GestureRecognizer>
   );
 };
 

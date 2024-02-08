@@ -2,54 +2,27 @@ import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import React from "react";
 import { View, Text, Pressable } from "react-native";
 import tw from "twrnc";
-import { isCurrentMonth } from "../lib";
 
 type Props = {
   month: number;
   year: number;
-  setMonth(newMonth: number): unknown;
-  setYear(newYear: number): unknown;
-  firstTransaction: { month: number; year: number };
+  forwardMonth(): unknown;
+  backwardMonth(): unknown;
+  monthIsCurrent: boolean;
+  monthIsLast: boolean;
 };
 
 const MonthSwitcher: React.FC<Props> = ({
   month,
   year,
-  setMonth,
-  setYear,
-  firstTransaction,
+  forwardMonth,
+  backwardMonth,
+  monthIsCurrent,
+  monthIsLast,
 }) => {
-  const monthIsCurrent = isCurrentMonth(new Date(year, month));
-  const monthIsLast =
-    firstTransaction.month === month && firstTransaction.year === year;
-
-  function forwardMonth() {
-    if (monthIsCurrent) {
-      return;
-    }
-    if (month === 11) {
-      setYear(year + 1);
-      setMonth(0);
-    } else {
-      setMonth(month + 1);
-    }
-  }
-
-  function backwardMonth() {
-    if (monthIsLast) {
-      return;
-    }
-    if (month === 0) {
-      setYear(year - 1);
-      setMonth(11);
-    } else {
-      setMonth(month - 1);
-    }
-  }
-
   return (
     <View style={tw`flex flex-row items-center w-1/2 justify-around`}>
-      <Pressable onPress={monthIsLast ? () => {} : backwardMonth} hitSlop={10}>
+      <Pressable onPress={backwardMonth} hitSlop={10}>
         <ChevronLeft
           style={tw`${
             monthIsLast
@@ -70,10 +43,7 @@ const MonthSwitcher: React.FC<Props> = ({
           {getMonthName(month)}
         </Text>
       </View>
-      <Pressable
-        onPress={monthIsCurrent ? () => {} : forwardMonth}
-        hitSlop={10}
-      >
+      <Pressable onPress={forwardMonth} hitSlop={10}>
         <ChevronRight
           style={tw`${
             monthIsCurrent

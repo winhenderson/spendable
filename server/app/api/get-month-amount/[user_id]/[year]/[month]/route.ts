@@ -10,7 +10,6 @@ export async function GET(
   const user_id = params.user_id;
   const year = params.year;
   const month = String(params.month).padStart(2, "0");
-  console.log("in the get month: ", month);
 
   const dbMonthResult = await prisma.months.findFirst({
     where: { user_id, date: `${month}-${year}` },

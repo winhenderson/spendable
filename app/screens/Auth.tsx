@@ -57,7 +57,9 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
     <ScrollView
       automaticallyAdjustKeyboardInsets={true}
       scrollEnabled={false}
-      style={tw`pb-[${insets.bottom}] pt-[${insets.top + 20}]`}
+      style={tw`pb-[${insets.bottom}] pt-[${
+        insets.top + 20
+      }] dark:bg-zinc-900 bg-white`}
     >
       <View
         style={tw`bg-white dark:bg-zinc-900 flex flex-col items-center justify-center grow-1 gap-4 w-2/3 m-auto`}
