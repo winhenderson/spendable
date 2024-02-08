@@ -49,7 +49,7 @@ const MonthSwitcher: React.FC<Props> = ({
 
   return (
     <View style={tw`flex flex-row items-center w-1/2 justify-around`}>
-      <Pressable onPress={monthIsLast ? () => {} : backwardMonth}>
+      <Pressable onPress={monthIsLast ? () => {} : backwardMonth} hitSlop={10}>
         <ChevronLeft
           style={tw`${
             monthIsLast
@@ -70,7 +70,10 @@ const MonthSwitcher: React.FC<Props> = ({
           {getMonthName(month)}
         </Text>
       </View>
-      <Pressable onPress={monthIsCurrent ? () => {} : forwardMonth}>
+      <Pressable
+        onPress={monthIsCurrent ? () => {} : forwardMonth}
+        hitSlop={10}
+      >
         <ChevronRight
           style={tw`${
             monthIsCurrent

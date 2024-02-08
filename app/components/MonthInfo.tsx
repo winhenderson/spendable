@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TextInput } from "react-native";
+import React, { useContext, useRef, useState } from "react";
+import { View, Text, TextInput, Pressable } from "react-native";
 import tw from "twrnc";
-import { isCurrentMonth, updateMonthAmount } from "../lib";
+import { isCurrentMonth } from "../lib";
 import { spendableToday } from "../math";
 import { Pencil } from "lucide-react-native";
 import UserContext from "../UserContext";
@@ -27,6 +27,8 @@ const MonthInfo: React.FC<Props> = ({
   });
   const monthIsCurrent = isCurrentMonth(new Date(year, month));
 
+  const inputRef = useRef<TextInput>(null);
+
   const [user] = useContext(UserContext);
   const [editingAmount, setEditingAmount] = useState<string | null>(null);
   const editing = editingAmount !== null;
@@ -38,7 +40,11 @@ const MonthInfo: React.FC<Props> = ({
 
   return (
     <View style={tw`pb-3 pt-2 w-2/3 flex flex-row justify-between`}>
-      <View style={tw`w-1/2 flex items-center`}>
+      <Pressable
+        style={tw`w-1/2 flex items-center`}
+        onPress={() => inputRef.current?.focus()}
+        onBlur={() => inputRef.current?.blur()}
+      >
         <View style={tw`flex flex-row`}>
           {!editing && (
             <TextInput
@@ -49,6 +55,7 @@ const MonthInfo: React.FC<Props> = ({
           )}
 
           <TextInput
+            ref={inputRef}
             enterKeyHint="enter"
             enablesReturnKeyAutomatically={true}
             value={editingAmount ?? spendable.toString()}
@@ -85,7 +92,7 @@ const MonthInfo: React.FC<Props> = ({
         >
           For {monthString}
         </Text>
-      </View>
+      </Pressable>
 
       <View style={tw`w-1/2 flex items-center`}>
         <TextInput
@@ -99,14 +106,6 @@ const MonthInfo: React.FC<Props> = ({
           `}
         />
 
-        {/* <Text
-          style={tw`text-2xl font-bold text-teal-950/80 dark:text-zinc-300`}
-        >
-          $
-          {monthIsCurrent
-            ? Math.round(spendableToday(Number(editingAmount), spent))
-            : Math.round(spent)}
-        </Text> */}
         <Text
           style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500`}
         >
