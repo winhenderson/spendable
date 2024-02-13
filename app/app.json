@@ -4,10 +4,10 @@
     "slug": "spendable",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Cat.png",
+    "icon": "./assets/1024.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/cat.png",
+      "image": "./assets/1024.png",
       "resizeMode": "contain",
       "backgroundColor": "#042f2e"
     },
