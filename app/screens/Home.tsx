@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useRef, useState } from "react";
 import {
   FlatList,
   View,
@@ -6,6 +6,7 @@ import {
   Alert,
   RefreshControl,
   Pressable,
+  TextInput,
 } from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
@@ -23,6 +24,7 @@ import GestureRecognizer from "react-native-swipe-gestures";
 import Modal from "react-native-modal";
 import Input from "../components/Input";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import Button from "../components/Button";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -42,6 +44,15 @@ const Home: React.FC = () => {
   const [newNameValue, setNewNameValue] = useState("");
   const [newDateValue, setNewDateValue] = useState(new Date());
   const [newAmountValue, setNewAmountValue] = useState("");
+  const newTransactionNameRef = useRef<TextInput>(null);
+  const newTransactionAmountRef = useRef<TextInput>(null);
+
+  function onModalClose() {
+    setAddingNewTransaction(false);
+    setNewNameValue("");
+    setNewDateValue(new Date());
+    setNewAmountValue("");
+  }
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -161,59 +172,89 @@ const Home: React.FC = () => {
       <Modal
         avoidKeyboard={true}
         isVisible={addingNewTransaction}
-        onBackdropPress={() => setAddingNewTransaction(false)}
+        onBackdropPress={onModalClose}
       >
         <View
           style={tw`justify-center items-center bg-white rounded-lg p-6 dark:bg-zinc-900`}
         >
-          <Text
-            style={tw`text-2xl font-bold text-teal-800 pb-8 dark:text-teal-600`}
+          <Pressable
+            onPress={() => {
+              newTransactionNameRef.current?.blur();
+              newTransactionAmountRef.current?.blur();
+            }}
+            style={tw`w-full`}
           >
-            Add Custom Transaction
-          </Text>
-          <View style={tw`w-full gap-4`}>
-            <Input
-              type="text"
-              onChange={setNewNameValue}
-              value={newNameValue}
-              placeholder=""
+            <Text
+              style={tw`text-2xl font-bold text-teal-800 pb-8 dark:text-teal-600`}
             >
-              Transaction Name
-            </Input>
+              Add Custom Transaction
+            </Text>
+            <View style={tw`w-full gap-4`}>
+              <Input
+                ref={newTransactionNameRef}
+                type="text"
+                onChange={setNewNameValue}
+                value={newNameValue}
+                placeholder=""
+              >
+                Transaction Name
+              </Input>
 
-            <View style={tw`flex flex-row justify-between`}>
-              <View style={tw`flex`}>
-                <Text
-                  style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
-                >
-                  Date
-                </Text>
-                <RNDateTimePicker
-                  style={tw`-ml-2 mt-auto mb-2`}
-                  value={newDateValue}
-                  accentColor={"#1f938c"}
-                  onChange={(event, date) =>
-                    event.type === "set"
-                      ? date
-                        ? setNewDateValue(date)
+              <View style={tw`flex flex-row justify-between`}>
+                <View style={tw`flex`}>
+                  <Text
+                    style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
+                  >
+                    Date
+                  </Text>
+                  <RNDateTimePicker
+                    key={tw.memoBuster}
+                    style={tw`-ml-2 mt-auto mb-2`}
+                    value={newDateValue}
+                    themeVariant={colorScheme}
+                    accentColor={"#1f938c"}
+                    onChange={(event, date) =>
+                      event.type === "set"
+                        ? date
+                          ? setNewDateValue(date)
+                          : {}
                         : {}
-                      : {}
-                  }
-                />
+                    }
+                  />
+                </View>
+
+                <View style={tw`w-1/2`}>
+                  <Input
+                    type="number"
+                    ref={newTransactionAmountRef}
+                    onChange={setNewAmountValue}
+                    value={newAmountValue}
+                    placeholder=""
+                  >
+                    Amount
+                  </Input>
+                </View>
               </View>
 
-              <View style={tw`w-1/2`}>
-                <Input
-                  type="number"
-                  onChange={setNewAmountValue}
-                  value={newAmountValue}
-                  placeholder=""
+              <View style={tw`flex flex-row gap-2 mt-6`}>
+                <Button
+                  onPress={onModalClose}
+                  color="zinc-400"
+                  darkColor="zinc-700"
                 >
-                  Amount
-                </Input>
+                  Cancel
+                </Button>
+
+                <Button
+                  onPress={() => {}}
+                  color="teal-600"
+                  darkColor="teal-700"
+                >
+                  Create
+                </Button>
               </View>
             </View>
-          </View>
+          </Pressable>
         </View>
       </Modal>
 

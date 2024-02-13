@@ -44,6 +44,7 @@ const Settings: React.FC = () => {
           setUser({ ...user, defaultSpendable: Number(amount) });
         }}
         color="purple-800"
+        darkColor="purple-900"
         style="text-sm"
       >
         Update Amount
@@ -54,6 +55,7 @@ const Settings: React.FC = () => {
           setUser(null);
           supabase.auth.signOut();
         }}
+        darkColor="red-800"
         color="red-700"
         style="text-sm"
       >

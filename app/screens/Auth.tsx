@@ -98,6 +98,7 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
           <Button
             onPress={screenShown === "login" ? login : signup}
             color="sky-500"
+            darkColor="sky-500"
           >
             {screenShown === "login" ? "Log In" : "Sign Up"}
           </Button>

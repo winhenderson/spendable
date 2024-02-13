@@ -7,10 +7,14 @@ import ColorSchemeContext from "../ColorSchemeContext";
 type Props = {
   title: string;
   colorOverride?: string;
-  blurred: boolean;
+  blurred?: boolean;
 };
 
-const LetterIcon: React.FC<Props> = ({ title, colorOverride, blurred }) => {
+const LetterIcon: React.FC<Props> = ({
+  title,
+  colorOverride,
+  blurred = false,
+}) => {
   const [colorScheme] = React.useContext(ColorSchemeContext);
   const bgColor =
     colorOverride ??

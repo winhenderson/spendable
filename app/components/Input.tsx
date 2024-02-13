@@ -1,4 +1,10 @@
-import React, { HTMLInputTypeAttribute, ReactNode, useState } from "react";
+import React, {
+  HTMLInputTypeAttribute,
+  ReactNode,
+  Ref,
+  forwardRef,
+  useState,
+} from "react";
 import { View, Text, TextInput } from "react-native";
 import tw from "twrnc";
 
@@ -8,17 +14,14 @@ type Props = {
   value: string;
   newPassword?: boolean;
   placeholder: string;
+  ref?: Ref<TextInput>;
   children: ReactNode;
 };
 
-const Input: React.FC<Props> = ({
-  type,
-  onChange,
-  value,
-  newPassword = false,
-  placeholder,
-  children,
-}) => {
+const Input: React.FC<Props> = forwardRef(function Input(
+  { type, onChange, value, newPassword = false, placeholder, children },
+  ref
+) {
   const [focused, setFocused] = useState(false);
 
   return (
@@ -29,7 +32,10 @@ const Input: React.FC<Props> = ({
         {children}
       </Text>
       <TextInput
-        autoCapitalize="none"
+        ref={ref}
+        autoCapitalize={
+          type === "email" || type === "password" ? "none" : "words"
+        }
         placeholder={placeholder}
         placeholderTextColor={"gray"}
         style={tw`bg-gray-200 dark:bg-zinc-800 p-4 rounded-full text-teal-950 dark:text-zinc-200 ${
@@ -38,19 +44,27 @@ const Input: React.FC<Props> = ({
         onChangeText={onChange}
         value={value}
         secureTextEntry={type === "password"}
-        keyboardType={type === "email" ? "email-address" : "default"}
+        keyboardType={
+          type === "email"
+            ? "email-address"
+            : type === "number"
+            ? "numeric"
+            : "default"
+        }
         textContentType={
           type === "email"
             ? "emailAddress"
-            : newPassword
-            ? "newPassword"
-            : "password"
+            : type === "password"
+            ? newPassword
+              ? "newPassword"
+              : "password"
+            : "none"
         }
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
     </View>
   );
-};
+});
 
 export default Input;
