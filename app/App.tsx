@@ -20,7 +20,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  useDeviceContext(tw, { withDeviceColorScheme: false });
+  useDeviceContext(tw, {
+    observeDeviceColorSchemeChanges: false,
+    initialColorScheme: "device",
+  });
 
   const [colorScheme, , setColorScheme] = useAppColorScheme(tw);
 

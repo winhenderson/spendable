@@ -1,5 +1,12 @@
 import { useCallback, useContext, useState } from "react";
-import { FlatList, View, Text, Alert, RefreshControl } from "react-native";
+import {
+  FlatList,
+  View,
+  Text,
+  Alert,
+  RefreshControl,
+  Pressable,
+} from "react-native";
 import tw from "twrnc";
 import Balance from "../components/Balance";
 import UserContext from "../UserContext";
@@ -13,6 +20,9 @@ import { Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GestureRecognizer from "react-native-swipe-gestures";
+import Modal from "react-native-modal";
+import Input from "../components/Input";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -28,6 +38,10 @@ const Home: React.FC = () => {
       user?.defaultSpendable ??
       0
   );
+  const [addingNewTransaction, setAddingNewTransaction] = useState(true);
+  const [newNameValue, setNewNameValue] = useState("");
+  const [newDateValue, setNewDateValue] = useState(new Date());
+  const [newAmountValue, setNewAmountValue] = useState("");
 
   const getTransactions = useCallback(async () => {
     if (!user) {
@@ -44,10 +58,6 @@ const Home: React.FC = () => {
       setRefreshing(false);
     });
   }, [user, setUser]);
-
-  function addTransaction() {
-    console.log("need to implement this!");
-  }
 
   if (!user) {
     return <Loading />;
@@ -148,6 +158,65 @@ const Home: React.FC = () => {
         insets.top + 4
       }] pb-[${insets.bottom}]`}
     >
+      <Modal
+        avoidKeyboard={true}
+        isVisible={addingNewTransaction}
+        onBackdropPress={() => setAddingNewTransaction(false)}
+      >
+        <View
+          style={tw`justify-center items-center bg-white rounded-lg p-6 dark:bg-zinc-900`}
+        >
+          <Text
+            style={tw`text-2xl font-bold text-teal-800 pb-8 dark:text-teal-600`}
+          >
+            Add Custom Transaction
+          </Text>
+          <View style={tw`w-full gap-4`}>
+            <Input
+              type="text"
+              onChange={setNewNameValue}
+              value={newNameValue}
+              placeholder=""
+            >
+              Transaction Name
+            </Input>
+
+            <View style={tw`flex flex-row justify-between`}>
+              <View style={tw`flex`}>
+                <Text
+                  style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
+                >
+                  Date
+                </Text>
+                <RNDateTimePicker
+                  style={tw`-ml-2 mt-auto mb-2`}
+                  value={newDateValue}
+                  accentColor={"#1f938c"}
+                  onChange={(event, date) =>
+                    event.type === "set"
+                      ? date
+                        ? setNewDateValue(date)
+                        : {}
+                      : {}
+                  }
+                />
+              </View>
+
+              <View style={tw`w-1/2`}>
+                <Input
+                  type="number"
+                  onChange={setNewAmountValue}
+                  value={newAmountValue}
+                  placeholder=""
+                >
+                  Amount
+                </Input>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <FlatList
         refreshControl={
           <RefreshControl
@@ -196,9 +265,17 @@ const Home: React.FC = () => {
               >
                 Amount
               </Text>
-              <Text onPress={addTransaction}>
-                <Plus style={tw`text-teal-900 dark:text-teal-600`} size={18} />
-              </Text>
+              <Pressable
+                onPress={() => setAddingNewTransaction(true)}
+                hitSlop={12}
+              >
+                <Text>
+                  <Plus
+                    style={tw`text-teal-900 dark:text-teal-600`}
+                    size={18}
+                  />
+                </Text>
+              </Pressable>
             </View>
           </>
         }
