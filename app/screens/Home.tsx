@@ -17,7 +17,7 @@ import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
 import { getAllTransactions, isCurrentMonth, updateMonthAmount } from "../lib";
-import { Plus } from "lucide-react-native";
+import { Check, ChevronDown, ChevronUp, Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GestureRecognizer from "react-native-swipe-gestures";
@@ -25,6 +25,7 @@ import Modal from "react-native-modal";
 import Input from "../components/Input";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../components/Button";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -44,6 +45,9 @@ const Home: React.FC = () => {
   const [newNameValue, setNewNameValue] = useState("");
   const [newDateValue, setNewDateValue] = useState(new Date());
   const [newAmountValue, setNewAmountValue] = useState("");
+  const [banks, setBanks] = useState(user?.banks ?? []);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownValue, setDropdownValue] = useState("");
   const newTransactionNameRef = useRef<TextInput>(null);
   const newTransactionAmountRef = useRef<TextInput>(null);
 
@@ -175,72 +179,150 @@ const Home: React.FC = () => {
         onBackdropPress={onModalClose}
       >
         <View
-          style={tw`justify-center items-center bg-white rounded-lg p-6 dark:bg-zinc-900`}
+          style={tw`justify-center items-center bg-white rounded-lg px-6 py-4 dark:bg-zinc-900`}
         >
           <Pressable
             onPress={() => {
               newTransactionNameRef.current?.blur();
               newTransactionAmountRef.current?.blur();
+              setDropdownOpen(false);
             }}
             style={tw`w-full`}
           >
             <Text
-              style={tw`text-2xl font-bold text-teal-800 pb-8 dark:text-teal-600`}
+              style={tw`text-2xl font-bold text-teal-800 pb-5 dark:text-teal-600`}
             >
               Add Custom Transaction
             </Text>
-            <View style={tw`w-full gap-4`}>
-              <Input
-                ref={newTransactionNameRef}
-                type="text"
-                onChange={setNewNameValue}
-                value={newNameValue}
-                placeholder=""
-              >
-                Transaction Name
-              </Input>
 
-              <View style={tw`flex flex-row justify-between`}>
+            <View style={tw`w-full gap-3`}>
+              <View>
+                <Text
+                  style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-xs tracking-wide`}
+                >
+                  Account
+                </Text>
+
+                <DropDownPicker
+                  open={dropdownOpen}
+                  value={dropdownValue}
+                  items={banks.map((i) => {
+                    return { label: i.name, value: i.id };
+                  })}
+                  setItems={setBanks}
+                  setOpen={(value) => {
+                    setDropdownOpen(value);
+                    newTransactionAmountRef.current?.blur();
+                    newTransactionNameRef.current?.blur();
+                  }}
+                  setValue={setDropdownValue}
+                  placeholder="Select an account"
+                  style={tw`${
+                    dropdownOpen
+                      ? "border-teal-500 rounded-xl"
+                      : "dark:border-zinc-600 border-zinc-300 border-b rounded-full"
+                  } bg-zinc-50 dark:bg-zinc-800 px-4 py-2 min-h-2`}
+                  textStyle={tw`text-xs uppercase font-semibold text-zinc-500 dark:text-zinc-300`}
+                  dropDownContainerStyle={tw`border-t-zinc-400 dark:border-t-zinc-500 ${
+                    dropdownOpen
+                      ? "border-teal-500"
+                      : "dark:border-zinc-800 border-zinc-300"
+                  } bg-zinc-50 dark:bg-zinc-800 rounded-xl`}
+                  listMode="SCROLLVIEW"
+                  itemSeparator={true}
+                  itemSeparatorStyle={tw`bg-zinc-400 dark:bg-zinc-600 mx-2`}
+                  TickIconComponent={() => (
+                    <Check
+                      style={tw`dark:text-zinc-400 text-zinc-500`}
+                      size={20}
+                    />
+                  )}
+                  ArrowUpIconComponent={() => (
+                    <ChevronUp
+                      style={tw`dark:text-zinc-400 text-zinc-500`}
+                      size={20}
+                    />
+                  )}
+                  ArrowDownIconComponent={() => (
+                    <ChevronDown
+                      style={tw`dark:text-zinc-400 text-zinc-500`}
+                      size={20}
+                    />
+                  )}
+                  props={{ activeOpacity: 1 }}
+                />
+              </View>
+
+              <Pressable
+                onPress={() => setDropdownOpen(false)}
+                style={tw`-z-10`}
+              >
+                <Input
+                  onFocus={() => setDropdownOpen(false)}
+                  ref={newTransactionNameRef}
+                  type="text"
+                  onChange={setNewNameValue}
+                  value={newNameValue}
+                  placeholder=""
+                  small
+                >
+                  Transaction Name
+                </Input>
+              </Pressable>
+
+              <View style={tw`flex flex-row justify-between -z-10`}>
                 <View style={tw`flex`}>
                   <Text
-                    style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
+                    style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-xs tracking-wide`}
                   >
                     Date
                   </Text>
-                  <RNDateTimePicker
-                    key={tw.memoBuster}
-                    style={tw`-ml-2 mt-auto mb-2`}
-                    value={newDateValue}
-                    themeVariant={colorScheme}
-                    accentColor={"#1f938c"}
-                    onChange={(event, date) =>
-                      event.type === "set"
-                        ? date
-                          ? setNewDateValue(date)
+
+                  <Pressable
+                    onPress={() => setDropdownOpen(false)}
+                    style={tw`-z-10`}
+                  >
+                    <RNDateTimePicker
+                      key={tw.memoBuster}
+                      style={tw`-ml-2 mt-auto mb-2`}
+                      value={newDateValue}
+                      themeVariant={colorScheme}
+                      accentColor={"#1f938c"}
+                      onChange={(event, date) =>
+                        event.type === "set"
+                          ? date
+                            ? setNewDateValue(date)
+                            : {}
                           : {}
-                        : {}
-                    }
-                  />
+                      }
+                    />
+                  </Pressable>
                 </View>
 
-                <View style={tw`w-1/2`}>
+                <Pressable
+                  onPress={() => setDropdownOpen(false)}
+                  style={tw`-z-10 w-1/2`}
+                >
                   <Input
+                    onFocus={() => setDropdownOpen(false)}
                     type="number"
                     ref={newTransactionAmountRef}
                     onChange={setNewAmountValue}
                     value={newAmountValue}
                     placeholder=""
+                    small
                   >
                     Amount
                   </Input>
-                </View>
+                </Pressable>
               </View>
 
-              <View style={tw`flex flex-row gap-2 mt-6`}>
+              <View style={tw`flex flex-row gap-2 pt-2 -z-10`}>
                 <Button
                   onPress={onModalClose}
                   color="zinc-400"
                   darkColor="zinc-700"
+                  small
                 >
                   Cancel
                 </Button>
@@ -249,6 +331,7 @@ const Home: React.FC = () => {
                   onPress={() => {}}
                   color="teal-600"
                   darkColor="teal-700"
+                  small
                 >
                   Create
                 </Button>

@@ -55,6 +55,7 @@ export async function GET(
     const institution = institutionInfo.data.institution;
 
     banks.push({
+      id: institution.institution_id,
       name: institution.name,
       logo: institution.logo ?? null,
       primary_color: institution.primary_color ?? null,
@@ -94,6 +95,7 @@ export async function GET(
 }
 
 type BankInfo = {
+  id: string;
   name: string;
   logo: string | null;
   primary_color: string | null;

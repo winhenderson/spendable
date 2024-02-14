@@ -137,6 +137,7 @@ export type User = {
 export type ColorScheme = "light" | "dark";
 
 export type BankTitle = {
+  id: string;
   name: string;
   logo: string | null;
   primary_color: string | null;

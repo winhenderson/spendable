@@ -45,7 +45,6 @@ const Settings: React.FC = () => {
         }}
         color="purple-800"
         darkColor="purple-900"
-        style="text-sm"
       >
         Update Amount
       </Button>
@@ -57,7 +56,6 @@ const Settings: React.FC = () => {
         }}
         darkColor="red-800"
         color="red-700"
-        style="text-sm"
       >
         Sign Out
       </Button>

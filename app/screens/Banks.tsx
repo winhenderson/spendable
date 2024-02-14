@@ -6,6 +6,7 @@ import {
   createLinkToken,
   publicTokenExchange,
   getAllTransactions,
+  getUserById,
 } from "../lib";
 import Loading from "../components/Loading";
 import UserContext from "../UserContext";
@@ -56,20 +57,27 @@ const Banks: React.FC = () => {
               }}
               onSuccess={async (success: LinkSuccess) => {
                 await publicTokenExchange(success.publicToken, user.id);
-                const res = await getAllTransactions(user.id);
-
-                if (!res.ok) {
-                  Alert.alert(
-                    "Database error",
-                    `failed to fetch transactions for new bank.\nError: ${res.error}`
-                  );
+                const userRes = await getUserById(user.id);
+                if (!userRes.ok) {
+                  console.error("failed to get a user after adding an account");
                   return;
                 }
 
-                setUser({
-                  ...user,
-                  transactions: [...user.transactions, ...res.value],
-                });
+                setUser(userRes.value);
+                // const res = await getAllTransactions(user.id);
+
+                // if (!res.ok) {
+                //   Alert.alert(
+                //     "Database error",
+                //     `failed to fetch transactions for new bank.\nError: ${res.error}`
+                //   );
+                //   return;
+                // }
+
+                // setUser({
+                //   ...user,
+                //   transactions: [...user.transactions, ...res.value],
+                // });
               }}
               onExit={(exit: LinkExit) => console.log(exit)}
             >
@@ -84,7 +92,7 @@ const Banks: React.FC = () => {
         data={user.banks}
         contentContainerStyle={tw`gap-2 px-4`}
         renderItem={(bank) => (
-          <View style={tw`flex flex-row gap-2 items-center`}>
+          <View style={tw`flex flex-row gap-2 items-center`} key={bank.item.id}>
             {bank.item.logo ? (
               <Image source={{ uri: bank.item.logo }} />
             ) : (

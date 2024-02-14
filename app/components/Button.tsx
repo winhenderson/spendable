@@ -7,7 +7,7 @@ type Props = {
   children: ReactNode;
   color: string;
   darkColor: string;
-  style?: string;
+  small?: boolean;
 };
 
 const Button: React.FC<Props> = ({
@@ -15,12 +15,14 @@ const Button: React.FC<Props> = ({
   children,
   color,
   darkColor,
-  style = "",
+  small = false,
 }) => {
   return (
     <Pressable onPress={onPress} style={tw`w-full flex-shrink`}>
       <Text
-        style={tw`dark:bg-${darkColor} bg-${color} text-white text-lg font-bold uppercase p-4 overflow-hidden rounded-2xl text-center ${style}`}
+        style={tw`dark:bg-${darkColor} bg-${color} text-white font-bold uppercase p-4 ${
+          small ? "text-sm" : "text-lg"
+        } overflow-hidden rounded-2xl text-center`}
       >
         {children}
       </Text>
