@@ -5,7 +5,6 @@ export const dynamic = "force-dynamic"; // defaults to force-static
 
 export async function POST(request: Request) {
   const body = await request.json();
-  console.log({ body });
 
   if (!body.item_id || !body.title || !body.amount || !body.date) {
     throw new Error("a field is missing in the create-new-transaction request");

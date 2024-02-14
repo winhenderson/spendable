@@ -79,7 +79,7 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
       </Text>
 
       <Pressable
-        hitSlop={12}
+        hitSlop={{ top: 20, left: 17, right: 12, bottom: 16 }}
         style={tw`w-5`}
         disabled={syncing}
         onPress={async () => {

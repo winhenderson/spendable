@@ -117,14 +117,10 @@ export async function createTransaction(
   date: string,
   amount: number
 ) {
-  try {
-    await fetch(`${endpoint}/create-transaction`, {
-      method: "POST",
-      body: JSON.stringify({ item_id, title, date, amount }),
-    });
-  } catch (error) {
-    console.error("Error in createTransaction(): ", error);
-  }
+  await fetch(`${endpoint}/create-transaction`, {
+    method: "POST",
+    body: JSON.stringify({ item_id, title, date, amount }),
+  });
 }
 
 type APIResponse<T> = Promise<

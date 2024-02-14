@@ -64,20 +64,6 @@ const Banks: React.FC = () => {
                 }
 
                 setUser(userRes.value);
-                // const res = await getAllTransactions(user.id);
-
-                // if (!res.ok) {
-                //   Alert.alert(
-                //     "Database error",
-                //     `failed to fetch transactions for new bank.\nError: ${res.error}`
-                //   );
-                //   return;
-                // }
-
-                // setUser({
-                //   ...user,
-                //   transactions: [...user.transactions, ...res.value],
-                // });
               }}
               onExit={(exit: LinkExit) => console.log(exit)}
             >

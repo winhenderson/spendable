@@ -46,7 +46,7 @@ const Home: React.FC = () => {
       user?.defaultSpendable ??
       0
   );
-  const [addingNewTransaction, setAddingNewTransaction] = useState(true);
+  const [addingNewTransaction, setAddingNewTransaction] = useState(false);
   const [newNameValue, setNewNameValue] = useState("");
   const [newDateValue, setNewDateValue] = useState(new Date());
   const [newAmountValue, setNewAmountValue] = useState("");
@@ -337,20 +337,35 @@ const Home: React.FC = () => {
                       ? true
                       : false
                   }
-                  onPress={() => {
+                  onPress={async () => {
                     if (
-                      dropdownValue &&
-                      newNameValue &&
-                      newDateValue &&
-                      newAmountValue
+                      !dropdownValue ||
+                      !newNameValue ||
+                      !newDateValue ||
+                      !newAmountValue
                     ) {
-                      createTransaction(
-                        dropdownValue,
-                        newNameValue,
-                        formatDate(newDateValue),
-                        Number(newAmountValue)
-                      );
+                      return;
                     }
+
+                    await createTransaction(
+                      dropdownValue,
+                      newNameValue,
+                      formatDate(newDateValue),
+                      Number(newAmountValue)
+                    );
+                    onModalClose();
+
+                    const res = await getAllTransactions(user.id);
+
+                    if (!res.ok) {
+                      console.error("failed to get new transactions");
+                      return;
+                    }
+
+                    setUser({
+                      ...user,
+                      transactions: [...res.value],
+                    });
                   }}
                   color="teal-600"
                   darkColor="teal-700"
@@ -414,7 +429,7 @@ const Home: React.FC = () => {
               </Text>
               <Pressable
                 onPress={() => setAddingNewTransaction(true)}
-                hitSlop={12}
+                hitSlop={{ top: 20, left: 18, right: 10, bottom: 10 }}
               >
                 <Text>
                   <Plus
