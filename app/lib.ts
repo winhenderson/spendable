@@ -83,7 +83,6 @@ export async function updateMonthAmount(
   month: number,
   year: number
 ) {
-  console.log("in here", { newAmount, userId });
   await fetch(`${endpoint}/update-month-amount/${userId}/${year}/${month}`, {
     method: "POST",
     body: JSON.stringify({ newAmount }),
@@ -109,6 +108,22 @@ export async function getUserById(
     }
     console.error("Error in getUserById", error);
     return { ok: false, error };
+  }
+}
+
+export async function createTransaction(
+  item_id: string,
+  title: string,
+  date: string,
+  amount: number
+) {
+  try {
+    await fetch(`${endpoint}/create-transaction`, {
+      method: "POST",
+      body: JSON.stringify({ item_id, title, date, amount }),
+    });
+  } catch (error) {
+    console.error("Error in createTransaction(): ", error);
   }
 }
 

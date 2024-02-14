@@ -8,6 +8,7 @@ type Props = {
   color: string;
   darkColor: string;
   small?: boolean;
+  disabled?: boolean;
 };
 
 const Button: React.FC<Props> = ({
@@ -16,13 +17,21 @@ const Button: React.FC<Props> = ({
   color,
   darkColor,
   small = false,
+  disabled = false,
 }) => {
   return (
-    <Pressable onPress={onPress} style={tw`w-full flex-shrink`}>
+    <Pressable
+      onPress={onPress}
+      style={tw`w-full flex-shrink`}
+      disabled={disabled}
+    >
       <Text
-        style={tw`dark:bg-${darkColor} bg-${color} text-white font-bold uppercase p-4 ${
+        style={tw`
+        dark:bg-${darkColor} bg-${color} text-white font-bold uppercase p-4 ${
           small ? "text-sm" : "text-lg"
-        } overflow-hidden rounded-2xl text-center`}
+        } overflow-hidden rounded-2xl text-center
+${disabled ? "bg-opacity-50" : ""}
+        `}
       >
         {children}
       </Text>

@@ -16,7 +16,12 @@ import Loading from "../components/Loading";
 import { calculateSpent } from "../math";
 import MonthInfo from "../components/MonthInfo";
 import Transaction from "../components/Transaction";
-import { getAllTransactions, isCurrentMonth, updateMonthAmount } from "../lib";
+import {
+  createTransaction,
+  getAllTransactions,
+  isCurrentMonth,
+  updateMonthAmount,
+} from "../lib";
 import { Check, ChevronDown, ChevronUp, Plus } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -278,25 +283,21 @@ const Home: React.FC = () => {
                     Date
                   </Text>
 
-                  <Pressable
-                    onPress={() => setDropdownOpen(false)}
-                    style={tw`-z-10`}
-                  >
-                    <RNDateTimePicker
-                      key={tw.memoBuster}
-                      style={tw`-ml-2 mt-auto mb-2`}
-                      value={newDateValue}
-                      themeVariant={colorScheme}
-                      accentColor={"#1f938c"}
-                      onChange={(event, date) =>
-                        event.type === "set"
-                          ? date
-                            ? setNewDateValue(date)
-                            : {}
+                  <RNDateTimePicker
+                    key={tw.memoBuster}
+                    style={tw`-ml-2 mt-auto mb-2 -z-10`}
+                    value={newDateValue}
+                    themeVariant={colorScheme}
+                    accentColor={"#1f938c"}
+                    onChange={(event, date) => {
+                      setDropdownOpen(false);
+                      event.type === "set"
+                        ? date
+                          ? setNewDateValue(date)
                           : {}
-                      }
-                    />
-                  </Pressable>
+                        : {};
+                    }}
+                  />
                 </View>
 
                 <Pressable
@@ -312,7 +313,7 @@ const Home: React.FC = () => {
                     placeholder=""
                     small
                   >
-                    Amount
+                    Amount ($)
                   </Input>
                 </Pressable>
               </View>
@@ -328,7 +329,29 @@ const Home: React.FC = () => {
                 </Button>
 
                 <Button
-                  onPress={() => {}}
+                  disabled={
+                    !dropdownValue ||
+                    !newNameValue ||
+                    !newDateValue ||
+                    !newAmountValue
+                      ? true
+                      : false
+                  }
+                  onPress={() => {
+                    if (
+                      dropdownValue &&
+                      newNameValue &&
+                      newDateValue &&
+                      newAmountValue
+                    ) {
+                      createTransaction(
+                        dropdownValue,
+                        newNameValue,
+                        formatDate(newDateValue),
+                        Number(newAmountValue)
+                      );
+                    }
+                  }}
                   color="teal-600"
                   darkColor="teal-700"
                   small
@@ -420,3 +443,11 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+function formatDate(date: Date): string {
+  const year = date.getFullYear().toString().padStart(4, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
