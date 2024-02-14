@@ -15,6 +15,7 @@ export async function GET(
       email: true,
       items: {
         select: {
+          id: true,
           plaid_access_token: true,
           transactions: {
             select: {
@@ -54,12 +55,19 @@ export async function GET(
 
     const institution = institutionInfo.data.institution;
 
+    // const accountsInfo = await plaidClient.accountsGet({
+    // access_token: item.plaid_access_token,
+    // });
+
+    // for (const account of accountsInfo.data.accounts) {
+
     banks.push({
-      id: institution.institution_id,
+      id: item.id,
       name: institution.name,
       logo: institution.logo ?? null,
       primary_color: institution.primary_color ?? null,
     });
+    // }
   }
 
   const monthsMap: Record<string, number> = {};
