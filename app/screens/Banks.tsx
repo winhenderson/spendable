@@ -3,8 +3,6 @@ import { FlatList, Text, View, Image, Alert } from "react-native";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
 import {
-  BankTitle,
-  accountsGet,
   createLinkToken,
   publicTokenExchange,
   getAllTransactions,
@@ -17,7 +15,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const Banks: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [linkToken, setLinkToken] = useState<string>();
-  const [banks, setBanks] = useState<BankTitle[]>([]);
   const insets = useSafeAreaInsets();
 
   if (!user) {
@@ -28,14 +25,6 @@ const Banks: React.FC = () => {
     const token = await createLinkToken();
     setLinkToken(token);
   }
-
-  useEffect(() => {
-    accountsGet(user.id).then((res) => {
-      if (res.ok) {
-        setBanks(res.value);
-      }
-    });
-  }, [user, linkToken]);
 
   useEffect(() => {
     if (linkToken === undefined) {
@@ -92,7 +81,7 @@ const Banks: React.FC = () => {
             </PlaidLink>
           </View>
         }
-        data={banks}
+        data={user.banks}
         contentContainerStyle={tw`gap-2 px-4`}
         renderItem={(bank) => (
           <View style={tw`flex flex-row gap-2 items-center`}>

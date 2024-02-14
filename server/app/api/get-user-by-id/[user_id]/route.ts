@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
-import { prisma } from "@/helpers";
+import { plaidClient, prisma } from "@/helpers";
+import { CountryCode } from "plaid";
 
 export async function GET(
   request: Request,
@@ -14,6 +15,7 @@ export async function GET(
       email: true,
       items: {
         select: {
+          plaid_access_token: true,
           transactions: {
             select: {
               id: true,
@@ -35,12 +37,37 @@ export async function GET(
     throw new Error(`bad request: ${user_id} `);
   }
 
+  const banks: Array<BankInfo> = [];
+  for (const item of dbResult.items) {
+    const itemInfo = await plaidClient.itemGet({
+      access_token: item.plaid_access_token,
+    });
+
+    if (!itemInfo.data.item.institution_id) {
+      return;
+    }
+
+    const institutionInfo = await plaidClient.institutionsGetById({
+      institution_id: itemInfo.data.item.institution_id,
+      country_codes: [CountryCode.Us],
+    });
+
+    const institution = institutionInfo.data.institution;
+
+    banks.push({
+      name: institution.name,
+      logo: institution.logo ?? null,
+      primary_color: institution.primary_color ?? null,
+    });
+  }
+
   const monthsMap: Record<string, number> = {};
   for (const month of dbResult.months) {
     monthsMap[month.date] = Number(month.amount);
   }
 
   const user = {
+    banks: banks,
     transactions: dbResult.items
       .map((i) =>
         i.transactions.map((t) => {
@@ -65,3 +92,9 @@ export async function GET(
 
   return Response.json(user);
 }
+
+type BankInfo = {
+  name: string;
+  logo: string | null;
+  primary_color: string | null;
+};

@@ -298,16 +298,12 @@ model items {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model transactions {
-  account_id       String
   transaction_date String
   amount           Decimal   @db.Decimal
-  currency         String?
-  category         String?
   merchant_name    String?
   pending          Boolean
   logo_url         String?
   name             String
-  website          String?
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
   item_id          String
   id               String    @id

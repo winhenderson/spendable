@@ -38,7 +38,6 @@ export default function App() {
       getUserFromSession(data.session);
     });
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log({ event });
       setSession(session);
       getUserFromSession(session);
     });

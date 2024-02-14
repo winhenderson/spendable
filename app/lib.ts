@@ -39,21 +39,6 @@ export async function getAllTransactions(
   }
 }
 
-export async function accountsGet(
-  user_id: string
-): APIResponse<Array<BankTitle>> {
-  // TODO: should this be more secure
-  try {
-    const res = await fetch(`${endpoint}/accounts-get/${user_id}`);
-
-    const json = await res.json();
-    return { ok: true, value: json };
-  } catch (error) {
-    console.error("Error in accountsGet", error);
-    return { ok: false, error };
-  }
-}
-
 export async function ignore(
   transaction_id: string,
   user_id: string
@@ -146,13 +131,13 @@ export type User = {
   defaultSpendable: number;
   transactions: SimpleTransaction[];
   months: Record<string, number>;
+  banks: BankTitle[];
 };
 
 export type ColorScheme = "light" | "dark";
 
 export type BankTitle = {
   name: string;
-  officialName: string | null;
   logo: string | null;
   primary_color: string | null;
 };

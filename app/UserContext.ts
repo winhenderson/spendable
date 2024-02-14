@@ -10,6 +10,7 @@ const UserContext = React.createContext<
     defaultSpendable: 0,
     transactions: [],
     months: {},
+    banks: [],
   },
   () => {},
 ]);

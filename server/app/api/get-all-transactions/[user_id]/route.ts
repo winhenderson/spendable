@@ -351,16 +351,12 @@ export function createDbTransaction(
     id: plaidTransaction.transaction_id,
     ignore: false,
     item_id: item_id,
-    account_id: plaidTransaction.account_id,
     transaction_date: plaidTransaction.date,
     amount: new Prisma.Decimal(plaidTransaction.amount * -1),
-    currency: plaidTransaction.iso_currency_code,
-    category: plaidTransaction.personal_finance_category?.detailed ?? null,
     merchant_name: plaidTransaction.merchant_name ?? null,
     pending: plaidTransaction.pending,
     logo_url: plaidTransaction.logo_url ?? null,
     name: plaidTransaction.name,
-    website: plaidTransaction.website ?? null,
   };
 }
 
