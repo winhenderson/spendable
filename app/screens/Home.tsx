@@ -22,7 +22,13 @@ import {
   isCurrentMonth,
   updateMonthAmount,
 } from "../lib";
-import { Check, ChevronDown, ChevronUp, Plus } from "lucide-react-native";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Minus,
+  Plus,
+} from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GestureRecognizer from "react-native-swipe-gestures";
@@ -46,10 +52,13 @@ const Home: React.FC = () => {
       user?.defaultSpendable ??
       0
   );
-  const [addingNewTransaction, setAddingNewTransaction] = useState(false);
+  const [addingNewTransaction, setAddingNewTransaction] = useState(true);
   const [newNameValue, setNewNameValue] = useState("");
   const [newDateValue, setNewDateValue] = useState(new Date());
   const [newAmountValue, setNewAmountValue] = useState("");
+  const [newAmountSign, setNewAmountSign] = useState<"positive" | "negative">(
+    "negative"
+  );
   const [banks, setBanks] = useState(user?.banks ?? []);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownValue, setDropdownValue] = useState("");
@@ -275,7 +284,7 @@ const Home: React.FC = () => {
                 </Input>
               </Pressable>
 
-              <View style={tw`flex flex-row justify-between -z-10`}>
+              <View style={tw`flex flex-row justify-between -z-10 gap-2`}>
                 <View style={tw`flex`}>
                   <Text
                     style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-xs tracking-wide`}
@@ -300,22 +309,58 @@ const Home: React.FC = () => {
                   />
                 </View>
 
-                <Pressable
-                  onPress={() => setDropdownOpen(false)}
-                  style={tw`-z-10 w-1/2`}
-                >
-                  <Input
-                    onFocus={() => setDropdownOpen(false)}
-                    type="number"
-                    ref={newTransactionAmountRef}
-                    onChange={setNewAmountValue}
-                    value={newAmountValue}
-                    placeholder=""
-                    small
+                <View style={tw`flex w-1/2`}>
+                  <Text
+                    style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-xs tracking-wide`}
                   >
-                    Amount ($)
-                  </Input>
-                </Pressable>
+                    Amount
+                  </Text>
+                  <View style={tw`flex flex-row gap-1`}>
+                    <Pressable
+                      hitSlop={{ right: 7, left: 9, top: 8, bottom: 10 }}
+                      style={tw`bg-zinc-50 dark:bg-zinc-800 border-zinc-200 border rounded-full flex items-center justify-center w-8 h-8 self-center dark:border-zinc-600`}
+                      onPress={() =>
+                        setNewAmountSign(
+                          newAmountSign === "negative" ? "positive" : "negative"
+                        )
+                      }
+                    >
+                      {newAmountSign === "negative" ? (
+                        <Plus
+                          size={15}
+                          style={tw`text-green-600 dark:text-green-500`}
+                          strokeWidth={4}
+                        />
+                      ) : (
+                        <Minus
+                          size={19}
+                          style={tw`text-red-600/75 dark:text-red-700/75`}
+                          strokeWidth={3}
+                        />
+                      )}
+                    </Pressable>
+
+                    <Pressable
+                      onPress={() => setDropdownOpen(false)}
+                      style={tw`-z-10 flex-1`}
+                    >
+                      <Input
+                        style={`${
+                          newAmountSign === "positive"
+                            ? "text-red-600 dark:text-red-600"
+                            : "text-green-600 dark:text-green-500"
+                        }`}
+                        onFocus={() => setDropdownOpen(false)}
+                        type="number"
+                        ref={newTransactionAmountRef}
+                        onChange={setNewAmountValue}
+                        value={newAmountValue}
+                        placeholder=""
+                        small
+                      ></Input>
+                    </Pressable>
+                  </View>
+                </View>
               </View>
 
               <View style={tw`flex flex-row gap-2 pt-2 -z-10`}>
@@ -351,7 +396,8 @@ const Home: React.FC = () => {
                       dropdownValue,
                       newNameValue,
                       formatDate(newDateValue),
-                      Number(newAmountValue)
+                      Number(newAmountValue) *
+                        (newAmountSign === "positive" ? 1 : -1)
                     );
                     onModalClose();
 

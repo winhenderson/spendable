@@ -5,7 +5,6 @@ import tw from "twrnc";
 import UserContext from "../UserContext";
 import { Eye, EyeOff } from "lucide-react-native";
 import LetterIcon from "./LetterIcon";
-import Loading from "./Loading";
 
 type Props = { transaction: SimpleTransaction };
 

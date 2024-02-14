@@ -15,9 +15,10 @@ type Props = {
   newPassword?: boolean;
   placeholder: string;
   ref?: Ref<TextInput>;
-  children: ReactNode;
+  children?: ReactNode;
   small?: boolean;
   onFocus?: () => unknown;
+  style?: string;
 };
 
 const Input: React.FC<Props> = forwardRef(function Input(
@@ -30,19 +31,22 @@ const Input: React.FC<Props> = forwardRef(function Input(
     children,
     small = false,
     onFocus,
+    style = "",
   },
   ref
 ) {
   const [focused, setFocused] = useState(false);
   return (
     <View style={tw`w-full`}>
-      <Text
-        style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold ${
-          small ? "text-xs" : "text-sm"
-        } tracking-wide`}
-      >
-        {children}
-      </Text>
+      {children && (
+        <Text
+          style={tw`ml-1 mb-1 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold ${
+            small ? "text-xs" : "text-sm"
+          } tracking-wide`}
+        >
+          {children}
+        </Text>
+      )}
       <TextInput
         ref={ref}
         autoCapitalize={
@@ -54,7 +58,7 @@ const Input: React.FC<Props> = forwardRef(function Input(
           small ? "px-3 py-2" : "p-4"
         } rounded-full text-teal-950 dark:text-zinc-200 ${
           focused ? `border-teal-500` : `border-zinc-300 dark:border-zinc-600`
-        }`}
+        } ${style}`}
         onChangeText={onChange}
         value={value}
         secureTextEntry={type === "password"}
