@@ -73,10 +73,11 @@ const Home: React.FC = () => {
     setNewAmountValue("");
   }
 
+  if (!user) {
+    throw new Error("no user in home screen");
+  }
+
   const getTransactions = useCallback(async () => {
-    if (!user) {
-      throw new Error("No user to sync transactions for");
-    }
     setRefreshing(true);
 
     getAllTransactions(user.id).then((res) => {
@@ -84,11 +85,13 @@ const Home: React.FC = () => {
         Alert.alert("Transaction Sync Failed");
         return;
       }
+      console.log("----", res.value.loggedOutBanks);
       setUser({
         ...user,
         transactions: res.value.transactions,
         loggedOutBanks: res.value.loggedOutBanks,
       });
+      console.log('______"', user.loggedOutBanks);
       setRefreshing(false);
     });
   }, [user, setUser]);
@@ -188,7 +191,7 @@ const Home: React.FC = () => {
       config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 30 }}
       onSwipeLeft={() => forwardMonth()}
       onSwipeRight={() => backwardMonth()}
-      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex flex-1 pt-[${
+      style={tw`bg-white dark:bg-zinc-900 items-center flex flex-1 pt-[${
         insets.top + 4
       }] pb-[${insets.bottom}]`}
     >
@@ -433,7 +436,8 @@ const Home: React.FC = () => {
 
       <FlatList
         data={user.loggedOutBanks}
-        contentContainerStyle={tw`mb-3`}
+        style={tw`flex-grow-0 flex-shrink-0`}
+        contentContainerStyle={tw`mb-2`}
         renderItem={({ item: bank_id }) => (
           <ReloginBanner
             bank={user.banks.find((bank) => bank.id === bank_id) ?? null}
@@ -507,7 +511,7 @@ const Home: React.FC = () => {
         ItemSeparatorComponent={() => (
           <View style={tw`h-[1px] bg-zinc-100 dark:bg-zinc-800 mx-2`} />
         )}
-        style={tw`flex w-full`}
+        style={tw`w-full`}
         contentContainerStyle={tw`flex items-center gap-1`}
         data={sorted}
         renderItem={(transaction) => (

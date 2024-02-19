@@ -62,6 +62,7 @@ export async function addNewTransactions(items: Array<Item>): Promise<{
       } catch (error) {
         const errorCode = (error as any)?.response?.data?.error_code;
         if (typeof errorCode === "string") {
+          console.log(errorCode);
           loggedOutBanks.push(item.id);
           has_more = false;
           continue;
@@ -115,6 +116,7 @@ export async function addNewTransactions(items: Array<Item>): Promise<{
     );
   }
 
+  console.log(loggedOutBanks);
   return { transactions: Object.values(allTransactions), loggedOutBanks };
 }
 

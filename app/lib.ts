@@ -36,6 +36,7 @@ export async function getAllTransactions(user_id: string): APIResponse<{
     const res = await fetch(`${endpoint}/get-all-transactions/${user_id}`);
 
     const json = await res.json();
+    console.log(json.loggedOutBanks);
     return { ok: true, value: json };
   } catch (error) {
     console.error("Error in getAllTransactions", error);

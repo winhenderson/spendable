@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { FlatList, Text, View, Image, Alert } from "react-native";
+import { FlatList, Text, View, Image } from "react-native";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
 import {
