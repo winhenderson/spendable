@@ -31,7 +31,7 @@ const LetterIcon: React.FC<Props> = ({
         blurred ? "/50" : ""
       } rounded-full flex justify-center items-center p-1 w-7 h-7`}
     >
-      <Text style={tw`text-${textColor} font-semibold`}>
+      <Text style={tw`text-${textColor}${blurred ? "/50" : ""} font-semibold`}>
         {title.split("")[0]}
       </Text>
     </View>
