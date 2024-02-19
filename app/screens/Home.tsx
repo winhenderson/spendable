@@ -37,6 +37,7 @@ import Input from "../components/Input";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Button from "../components/Button";
 import DropDownPicker from "react-native-dropdown-picker";
+import ReloginBanner from "../components/ReloginBanner";
 
 const Home: React.FC = () => {
   const [colorScheme] = useContext(ColorSchemeContext);
@@ -187,7 +188,7 @@ const Home: React.FC = () => {
       config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 30 }}
       onSwipeLeft={() => forwardMonth()}
       onSwipeRight={() => backwardMonth()}
-      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex grow gap-2 min-h-screen pt-[${
+      style={tw`bg-white dark:bg-zinc-900 items-center justify-center flex flex-1 pt-[${
         insets.top + 4
       }] pb-[${insets.bottom}]`}
     >
@@ -432,8 +433,11 @@ const Home: React.FC = () => {
 
       <FlatList
         data={user.loggedOutBanks}
+        contentContainerStyle={tw`mb-3`}
         renderItem={({ item: bank_id }) => (
-          <Text>{user.banks.find((bank) => bank.id === bank_id)?.name}</Text>
+          <ReloginBanner
+            bank={user.banks.find((bank) => bank.id === bank_id) ?? null}
+          />
         )}
       />
 
@@ -504,7 +508,7 @@ const Home: React.FC = () => {
           <View style={tw`h-[1px] bg-zinc-100 dark:bg-zinc-800 mx-2`} />
         )}
         style={tw`flex w-full`}
-        contentContainerStyle={tw`flex items-center pb-5 gap-1`}
+        contentContainerStyle={tw`flex items-center gap-1`}
         data={sorted}
         renderItem={(transaction) => (
           <Transaction transaction={transaction.item} />

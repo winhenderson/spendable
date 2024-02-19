@@ -23,3 +23,5 @@
 [*]  get all the custom months at the same time and store them in the user object
 [ ]  add splash/loading screen
 [ ]  make the account screen look better
+[*]  fix bottom padding thing
+[ ]  remove swiping

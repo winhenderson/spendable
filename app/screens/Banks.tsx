@@ -97,18 +97,18 @@ const Banks: React.FC = () => {
         }
         data={user.banks}
         contentContainerStyle={tw`gap-2 px-4`}
-        renderItem={(bank) => (
-          <View style={tw`flex flex-row gap-2 items-center`} key={bank.item.id}>
-            {bank.item.logo ? (
-              <Image source={{ uri: bank.item.logo }} />
+        renderItem={({ item: bank }) => (
+          <View style={tw`flex flex-row gap-2 items-center`} key={bank.id}>
+            {bank.logo ? (
+              <Image source={{ uri: bank.logo }} />
             ) : (
               <LetterIcon
-                colorOverride={bank.item.primary_color ?? undefined}
-                title={bank.item.name}
+                colorOverride={bank.primary_color ?? undefined}
+                title={bank.name}
               />
             )}
             <Text style={tw`text-teal-950 dark:text-teal-200 font-semibold`}>
-              {bank.item.name}
+              {bank.name}
             </Text>
           </View>
         )}

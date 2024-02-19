@@ -8,12 +8,14 @@ type Props = {
   title: string;
   colorOverride?: string;
   blurred?: boolean;
+  style?: string;
 };
 
 const LetterIcon: React.FC<Props> = ({
   title,
   colorOverride,
   blurred = false,
+  style = "",
 }) => {
   const [colorScheme] = React.useContext(ColorSchemeContext);
   const bgColor =
@@ -29,7 +31,7 @@ const LetterIcon: React.FC<Props> = ({
     <View
       style={tw`bg-[${bgColor}]${
         blurred ? "/50" : ""
-      } rounded-full flex justify-center items-center p-1 w-7 h-7`}
+      } rounded-full flex justify-center items-center p-1 w-7 h-7 ${style}`}
     >
       <Text style={tw`text-${textColor}${blurred ? "/50" : ""} font-semibold`}>
         {title.split("")[0]}
