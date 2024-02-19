@@ -52,7 +52,7 @@ const Home: React.FC = () => {
       user?.defaultSpendable ??
       0
   );
-  const [addingNewTransaction, setAddingNewTransaction] = useState(true);
+  const [addingNewTransaction, setAddingNewTransaction] = useState(false);
   const [newNameValue, setNewNameValue] = useState("");
   const [newDateValue, setNewDateValue] = useState(new Date());
   const [newAmountValue, setNewAmountValue] = useState("");
@@ -78,12 +78,16 @@ const Home: React.FC = () => {
     }
     setRefreshing(true);
 
-    getAllTransactions(user.id).then((transactions) => {
-      if (!transactions.ok) {
+    getAllTransactions(user.id).then((res) => {
+      if (!res.ok) {
         Alert.alert("Transaction Sync Failed");
         return;
       }
-      setUser({ ...user, transactions: transactions.value });
+      setUser({
+        ...user,
+        transactions: res.value.transactions,
+        loggedOutBanks: res.value.loggedOutBanks,
+      });
       setRefreshing(false);
     });
   }, [user, setUser]);
@@ -410,7 +414,8 @@ const Home: React.FC = () => {
 
                     setUser({
                       ...user,
-                      transactions: [...res.value],
+                      transactions: [...res.value.transactions],
+                      loggedOutBanks: res.value.loggedOutBanks,
                     });
                   }}
                   color="teal-600"
@@ -424,6 +429,13 @@ const Home: React.FC = () => {
           </Pressable>
         </View>
       </Modal>
+
+      <FlatList
+        data={user.loggedOutBanks}
+        renderItem={({ item: bank_id }) => (
+          <Text>{user.banks.find((bank) => bank.id === bank_id)?.name}</Text>
+        )}
+      />
 
       <FlatList
         refreshControl={

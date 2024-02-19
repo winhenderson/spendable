@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { FlatList, Text, View, Image, Alert } from "react-native";
 import PlaidLink, { LinkExit, LinkSuccess } from "react-native-plaid-link-sdk";
 import tw from "twrnc";
@@ -16,6 +16,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const Banks: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [linkToken, setLinkToken] = useState<string>();
+  const [loggedOutBankTokens, setLoggedOutBankTokens] = useState<
+    Record<string, string>
+  >({});
   const insets = useSafeAreaInsets();
 
   if (!user) {
@@ -27,11 +30,27 @@ const Banks: React.FC = () => {
     setLinkToken(token);
   }
 
+  const createLoggedOutBankToken = useCallback(
+    async (id: string) => {
+      const token = await createLinkToken(id);
+      setLoggedOutBankTokens({ ...loggedOutBankTokens, [id]: token });
+    },
+    [loggedOutBankTokens]
+  );
+
   useEffect(() => {
     if (linkToken === undefined) {
       createNewLinkToken();
     }
   }, [linkToken]);
+
+  useEffect(() => {
+    for (const bank of user.loggedOutBanks) {
+      if (loggedOutBankTokens[bank] === undefined) {
+        createLoggedOutBankToken(bank);
+      }
+    }
+  }, [loggedOutBankTokens, user.loggedOutBanks, createLoggedOutBankToken]);
 
   if (!linkToken) {
     return <Loading />;
@@ -56,6 +75,7 @@ const Banks: React.FC = () => {
                 noLoadingState: false,
               }}
               onSuccess={async (success: LinkSuccess) => {
+                // omit this publicTokenExhcange for the update mode to come
                 await publicTokenExchange(success.publicToken, user.id);
                 const userRes = await getUserById(user.id);
                 if (!userRes.ok) {
@@ -92,6 +112,40 @@ const Banks: React.FC = () => {
             </Text>
           </View>
         )}
+      />
+      <FlatList
+        data={user.loggedOutBanks}
+        renderItem={({ item: bankId }) => {
+          return (
+            <PlaidLink
+              tokenConfig={{
+                token: loggedOutBankTokens[bankId],
+                noLoadingState: false,
+              }}
+              onSuccess={async (success: LinkSuccess) => {
+                const res = await getAllTransactions(user.id);
+
+                if (!res.ok) {
+                  console.error("failed to get new transactions");
+                  return;
+                }
+
+                setUser({
+                  ...user,
+                  transactions: [...res.value.transactions],
+                  loggedOutBanks: res.value.loggedOutBanks,
+                });
+              }}
+              onExit={(exit: LinkExit) => console.log(exit)}
+            >
+              <Text
+                style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
+              >
+                Re-Login to bank
+              </Text>
+            </PlaidLink>
+          );
+        }}
       />
     </View>
   );

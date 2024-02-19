@@ -12,14 +12,14 @@
 [*]  add swipe gestures to change months (not sure if this is a good idea)
 [ ]  android
 [ ]  share types between server -> app
-[ ]  handle modified and deleted transactions from plaid
+[*]  handle modified and deleted transactions from plaid
 [*]  fix invisible status bar and spinner
 [*]  fix styling of monthly spendable
 [ ]  show when banks are logged out
 [ ]  show network activity indicator in status bar
 [*]  blur letter default icons
 [*]  make buttons bigger to press
-[ ]  insert some test modified/removed transactions inside the has_more loop to test my code
+[*]  insert some test modified/removed transactions inside the has_more loop to test my code
 [*]  get all the custom months at the same time and store them in the user object
 [ ]  add splash/loading screen
 [ ]  make the account screen look better

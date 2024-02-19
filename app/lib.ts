@@ -5,11 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const endpoint = process.env.EXPO_PUBLIC_API_ENDPOINT;
 
-export async function createLinkToken(): Promise<
-  LinkTokenCreateResponse["link_token"]
-> {
+export async function createLinkToken(
+  bank_id?: string
+): Promise<LinkTokenCreateResponse["link_token"]> {
   invariant(typeof process.env.EXPO_PUBLIC_API_ENDPOINT === "string");
-  const res = await fetch(`${endpoint}/create-link-token`, { method: "POST" });
+  const res = await fetch(`${endpoint}/create-link-token`, {
+    method: "POST",
+    body: JSON.stringify({ bank_id: bank_id }),
+  });
   const json = await res.json();
   return json.token.link_token;
 }
@@ -25,13 +28,14 @@ export async function publicTokenExchange(
   });
 }
 
-export async function getAllTransactions(
-  user_id: string
-): APIResponse<Array<SimpleTransaction>> {
+export async function getAllTransactions(user_id: string): APIResponse<{
+  transactions: Array<SimpleTransaction>;
+  loggedOutBanks: Array<string>;
+}> {
   try {
     const res = await fetch(`${endpoint}/get-all-transactions/${user_id}`);
 
-    const json: Array<SimpleTransaction> = await res.json();
+    const json = await res.json();
     return { ok: true, value: json };
   } catch (error) {
     console.error("Error in getAllTransactions", error);
@@ -143,6 +147,7 @@ export type User = {
   transactions: SimpleTransaction[];
   months: Record<string, number>;
   banks: BankTitle[];
+  loggedOutBanks: string[];
 };
 
 export type ColorScheme = "light" | "dark";

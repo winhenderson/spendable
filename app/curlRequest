@@ -1,0 +1,7 @@
+curl -X POST https://sandbox.plaid.com/sandbox/item/reset_login \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "client_id": "6557853b76f49a001b64faf1",
+    "secret": "e86e4bfd3ebdc7746f30fef8b88e2b",
+    "access_token": "access-sandbox-95b39d61-3d61-4586-9a42-8ad43f056117"
+  }'

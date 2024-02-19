@@ -8,31 +8,36 @@ export async function GET(
 ) {
   const user_id = params.user_id;
 
-  const dbResult = await prisma.public_users.findFirst({
-    select: {
-      id: true,
-      amount: true,
-      email: true,
-      items: {
-        select: {
-          id: true,
-          plaid_access_token: true,
-          transactions: {
-            select: {
-              id: true,
-              transaction_date: true,
-              amount: true,
-              name: true,
+  try {
+    var dbResult = await prisma.public_users.findFirst({
+      select: {
+        id: true,
+        amount: true,
+        email: true,
+        items: {
+          select: {
+            id: true,
+            plaid_access_token: true,
+            transactions: {
+              select: {
+                id: true,
+                transaction_date: true,
+                amount: true,
+                name: true,
+              },
             },
           },
         },
+        months: {
+          select: { date: true, amount: true },
+        },
       },
-      months: {
-        select: { date: true, amount: true },
-      },
-    },
-    where: { auth_id: user_id },
-  });
+      where: { auth_id: user_id },
+    });
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 
   if (!dbResult) {
     throw new Error(`bad request: ${user_id} `);

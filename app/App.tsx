@@ -51,9 +51,13 @@ export default function App() {
       }
 
       setUser(userRes.value);
-      const transactions = await getAllTransactions(userRes.value.id);
-      if (transactions.ok) {
-        setUser({ ...userRes.value, transactions: transactions.value });
+      const res = await getAllTransactions(userRes.value.id);
+      if (res.ok) {
+        setUser({
+          ...userRes.value,
+          transactions: res.value.transactions,
+          loggedOutBanks: res.value.loggedOutBanks,
+        });
       }
     }
   }

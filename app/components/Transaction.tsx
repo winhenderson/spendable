@@ -90,13 +90,13 @@ const Transaction: React.FC<Props> = ({ transaction }) => {
             Alert.alert("Update Failed");
           }
 
-          const transactions = await getAllTransactions(user.id);
-          if (!transactions.ok) {
+          const res = await getAllTransactions(user.id);
+          if (!res.ok) {
             Alert.alert("Transaction Sync Failed");
             return;
           }
 
-          setUser({ ...user, transactions: transactions.value });
+          setUser({ ...user, transactions: res.value.transactions });
           setSyncing(false);
         }}
       >

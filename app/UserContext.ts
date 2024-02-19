@@ -11,6 +11,7 @@ const UserContext = React.createContext<
     transactions: [],
     months: {},
     banks: [],
+    loggedOutBanks: [],
   },
   () => {},
 ]);
