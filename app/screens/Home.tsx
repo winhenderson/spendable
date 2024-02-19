@@ -31,7 +31,6 @@ import {
 } from "lucide-react-native";
 import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import GestureRecognizer from "react-native-swipe-gestures";
 import Modal from "react-native-modal";
 import Input from "../components/Input";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -85,13 +84,11 @@ const Home: React.FC = () => {
         Alert.alert("Transaction Sync Failed");
         return;
       }
-      console.log("----", res.value.loggedOutBanks);
       setUser({
         ...user,
         transactions: res.value.transactions,
         loggedOutBanks: res.value.loggedOutBanks,
       });
-      console.log('______"', user.loggedOutBanks);
       setRefreshing(false);
     });
   }, [user, setUser]);
@@ -187,10 +184,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <GestureRecognizer
-      config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 30 }}
-      onSwipeLeft={() => forwardMonth()}
-      onSwipeRight={() => backwardMonth()}
+    <View
       style={tw`bg-white dark:bg-zinc-900 items-center flex flex-1 pt-[${
         insets.top + 4
       }] pb-[${insets.bottom}]`}
@@ -519,7 +513,7 @@ const Home: React.FC = () => {
         )}
         keyExtractor={(item) => item.id}
       />
-    </GestureRecognizer>
+    </View>
   );
 };
 

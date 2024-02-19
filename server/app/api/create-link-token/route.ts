@@ -4,8 +4,6 @@ import invariant from "tiny-invariant";
 import { CountryCode, LinkTokenCreateRequest, Products } from "plaid";
 import { plaidClient, prisma } from "@/helpers";
 
-// update this function so it takes an optional bank_id. THen ask prisma for the corresponding access token for that bank_id and pass the access token to the linkTokenCreate request below, to get a link token that will hopefully trigger an update mode PlaidLink thing.
-
 export async function POST(request: Request) {
   invariant(typeof process.env.PLAID_CLIENT_ID === "string");
   const requestConfig: LinkTokenCreateRequest = {
@@ -30,6 +28,7 @@ export async function POST(request: Request) {
     }
 
     requestConfig.access_token = dbRes.plaid_access_token;
+    requestConfig.products = undefined;
   }
   const tokenResponse = await plaidClient.linkTokenCreate(requestConfig);
 

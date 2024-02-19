@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Pressable, Text, Image, View } from "react-native";
+import { Text, Image, View } from "react-native";
 import tw from "twrnc";
 import { BankTitle, createLinkToken, getAllTransactions } from "../lib";
 import LetterIcon from "./LetterIcon";
