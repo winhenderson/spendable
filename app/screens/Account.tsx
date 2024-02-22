@@ -42,7 +42,7 @@ const Settings: React.FC = () => {
         <View style={tw`w-1/2`}>
           <TextInput
             ref={defaultAmountRef}
-            style={tw`border-[1px] h-18 bg-zinc-50 dark:bg-zinc-800 text-3xl font-semibold p-6 rounded-2xl text-teal-900 dark:text-zinc-200 ${
+            style={tw`border-[1px] bg-zinc-50 dark:bg-zinc-800 text-3xl font-semibold px-6 py-2 rounded-2xl text-teal-900 dark:text-zinc-200 ${
               focused
                 ? `border-teal-500`
                 : `border-zinc-300 dark:border-zinc-600`
@@ -146,6 +146,11 @@ const Settings: React.FC = () => {
                 options: ["Delete Account", "Cancel"],
                 cancelButtonIndex: 1,
                 destructiveButtonIndex: 0,
+                userInterfaceStyle: colorScheme,
+                containerStyle: tw`dark:bg-zinc-800`,
+                showSeparators: true,
+                separatorStyle: tw`dark:bg-zinc-600`,
+                textStyle: tw`dark:text-zinc-300`,
               },
               (selectedIndex) => {
                 if (selectedIndex === 1) {
@@ -164,49 +169,6 @@ const Settings: React.FC = () => {
           Delete Account
         </Button>
       </View>
-      {/* <Switch
-        onValueChange={(value) => {
-          blurInput();
-          setColorScheme(value ? "dark" : "light");
-        }}
-        value={colorScheme === "dark"}
-        trackColor={{ false: "#042f2e", true: "#0d9488" }}
-      />
-      <View style={tw`z-20 w-full`}>
-        <Input
-          ref={defaultAmountRef}
-          type="number"
-          placeholder="2000"
-          onChange={setAmount}
-          value={amount}
-        >
-          Spendable Amount
-        </Input>
-      </View>
-
-      <Button
-        onPress={() => {
-          blurInput();
-          setUser(null);
-          supabase.auth.signOut();
-        }}
-        darkColor="red-800"
-        color="red-700"
-      >
-        Sign Out
-      </Button>
-      <Button
-        onPress={() => {
-          blurInput();
-          setUser(null);
-          supabase.auth.signOut();
-          deleteAccount(user.id);
-        }}
-        darkColor="fuchsia-700"
-        color="fuchsia-600"
-      >
-        Delete Account
-      </Button> */}
     </Pressable>
   );
 };

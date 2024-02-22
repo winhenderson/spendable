@@ -95,21 +95,24 @@ const MonthInfo: React.FC<Props> = ({
       </Pressable>
 
       <View style={tw`w-1/2 flex items-center`}>
-        <TextInput
-          style={tw`text-teal-950/80 text-2xl font-bold py-0 dark:text-zinc-300 text-center`}
-          editable={false}
-          value={`$${
-            monthIsCurrent
-              ? Math.round(
-                  spendableToday(
-                    Number(editingAmount ? editingAmount : spendable),
-                    spent
+        <View style={tw`flex-1 flex justify-center items-center`}>
+          <TextInput
+            textAlign="center"
+            style={tw`text-teal-950/80 text-2xl font-bold py-0 dark:text-zinc-300 text-center border-2 border-white android:p-0 bg-blue-700`}
+            editable={false}
+            value={`$${
+              monthIsCurrent
+                ? Math.round(
+                    spendableToday(
+                      Number(editingAmount ? editingAmount : spendable),
+                      spent
+                    )
                   )
-                )
-              : Math.round(spent)
-          }
+                : Math.round(spent)
+            }
           `}
-        />
+          />
+        </View>
 
         <Text
           style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500`}

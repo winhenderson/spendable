@@ -34,7 +34,7 @@ const LetterIcon: React.FC<Props> = ({
       } rounded-full flex justify-center items-center p-1 w-7 h-7 ${style}`}
     >
       <Text style={tw`text-${textColor}${blurred ? "/50" : ""} font-semibold`}>
-        {title.split("")[0]}
+        {title.split("")[0].toUpperCase()}
       </Text>
     </View>
   );

@@ -82,6 +82,9 @@ export default function App() {
     <ActionSheetProvider>
       <SafeAreaProvider>
         <StatusBar
+          backgroundColor={
+            colorScheme === "dark" ? tw.color("zinc-900") : "white"
+          }
           barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
         />
         <ColorSchemeContext.Provider
@@ -90,7 +93,7 @@ export default function App() {
           <UserContext.Provider value={[user, setUser]}>
             <NavigationContainer>
               <Tab.Navigator
-                initialRouteName="Account"
+                initialRouteName="Home"
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color }) => {
                     color = focused

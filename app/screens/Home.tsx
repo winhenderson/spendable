@@ -33,7 +33,9 @@ import ColorSchemeContext from "../ColorSchemeContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Modal from "react-native-modal";
 import Input from "../components/Input";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import RNDateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
 import Button from "../components/Button";
 import DropDownPicker from "react-native-dropdown-picker";
 import ReloginBanner from "../components/ReloginBanner";
@@ -294,7 +296,25 @@ const Home: React.FC = () => {
                     Date
                   </Text>
 
-                  <RNDateTimePicker
+                  <Pressable
+                    onPress={() => {
+                      DateTimePickerAndroid.open({
+                        value: newDateValue,
+                        onChange: (e, date) =>
+                          setNewDateValue(date ?? new Date()),
+                        mode: "date",
+                        is24Hour: true,
+                      });
+                    }}
+                    style={tw`bg-zinc-50 dark:bg-zinc-800 px-4 py-3 w-full rounded-lg border-[1px] border-zinc-300 dark:border-zinc-600`}
+                  >
+                    <Text
+                      style={tw`dark:text-zinc-300`}
+                    >{`${newDateValue.toLocaleString("default", {
+                      month: "short",
+                    })} ${newDateValue.getDate()} ${newDateValue.getFullYear()}`}</Text>
+                  </Pressable>
+                  {/* <RNDateTimePicker
                     key={tw.memoBuster}
                     style={tw`-ml-2 mt-auto mb-2 -z-10`}
                     value={newDateValue}
@@ -308,7 +328,7 @@ const Home: React.FC = () => {
                           : {}
                         : {};
                     }}
-                  />
+                  /> */}
                 </View>
 
                 <View style={tw`flex w-1/2`}>
