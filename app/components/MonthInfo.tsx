@@ -98,7 +98,7 @@ const MonthInfo: React.FC<Props> = ({
         <View style={tw`flex-1 flex justify-center items-center`}>
           <TextInput
             textAlign="center"
-            style={tw`text-teal-950/80 text-2xl font-bold py-0 dark:text-zinc-300 text-center border-2 border-white android:p-0 bg-blue-700`}
+            style={tw`text-teal-950/80 text-2xl font-bold py-0 dark:text-zinc-300 text-center android:p-0`}
             editable={false}
             value={`$${
               monthIsCurrent

@@ -296,39 +296,42 @@ const Home: React.FC = () => {
                     Date
                   </Text>
 
-                  <Pressable
-                    onPress={() => {
-                      DateTimePickerAndroid.open({
-                        value: newDateValue,
-                        onChange: (e, date) =>
-                          setNewDateValue(date ?? new Date()),
-                        mode: "date",
-                        is24Hour: true,
-                      });
-                    }}
-                    style={tw`bg-zinc-50 dark:bg-zinc-800 px-4 py-3 w-full rounded-lg border-[1px] border-zinc-300 dark:border-zinc-600`}
-                  >
-                    <Text
-                      style={tw`dark:text-zinc-300`}
-                    >{`${newDateValue.toLocaleString("default", {
-                      month: "short",
-                    })} ${newDateValue.getDate()} ${newDateValue.getFullYear()}`}</Text>
-                  </Pressable>
-                  {/* <RNDateTimePicker
-                    key={tw.memoBuster}
-                    style={tw`-ml-2 mt-auto mb-2 -z-10`}
-                    value={newDateValue}
-                    themeVariant={colorScheme}
-                    accentColor={"#1f938c"}
-                    onChange={(event, date) => {
-                      setDropdownOpen(false);
-                      event.type === "set"
-                        ? date
-                          ? setNewDateValue(date)
-                          : {}
-                        : {};
-                    }}
-                  /> */}
+                  {tw.prefixMatch("android") ? (
+                    <Pressable
+                      onPress={() => {
+                        DateTimePickerAndroid.open({
+                          value: newDateValue,
+                          onChange: (e, date) =>
+                            setNewDateValue(date ?? new Date()),
+                          mode: "date",
+                          is24Hour: true,
+                        });
+                      }}
+                      style={tw`bg-zinc-50 dark:bg-zinc-800 px-4 py-3 w-full rounded-lg border-[1px] border-zinc-300 dark:border-zinc-600`}
+                    >
+                      <Text
+                        style={tw`dark:text-zinc-300`}
+                      >{`${newDateValue.toLocaleString("default", {
+                        month: "short",
+                      })} ${newDateValue.getDate()}, ${newDateValue.getFullYear()}`}</Text>
+                    </Pressable>
+                  ) : (
+                    <RNDateTimePicker
+                      key={tw.memoBuster}
+                      style={tw`-ml-2 mt-auto mb-2 -z-10`}
+                      value={newDateValue}
+                      themeVariant={colorScheme}
+                      accentColor={"#1f938c"}
+                      onChange={(event, date) => {
+                        setDropdownOpen(false);
+                        event.type === "set"
+                          ? date
+                            ? setNewDateValue(date)
+                            : {}
+                          : {};
+                      }}
+                    />
+                  )}
                 </View>
 
                 <View style={tw`flex w-1/2`}>

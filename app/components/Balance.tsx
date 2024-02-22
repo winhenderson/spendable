@@ -11,7 +11,10 @@ type Props = {
 const TOTAL_HEIGHT = 50;
 
 const Balance: React.FC<Props> = ({ spent, spendable }) => {
-  const height = calculateHeight(TOTAL_HEIGHT, spendable, spent);
+  let height = calculateHeight(TOTAL_HEIGHT, spendable, spent);
+  if (spendable - spent < 0.5) {
+    height = 0;
+  }
 
   return (
     <View style={tw`flex items-center justify-center`}>

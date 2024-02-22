@@ -42,7 +42,7 @@ const Settings: React.FC = () => {
         <View style={tw`w-1/2`}>
           <TextInput
             ref={defaultAmountRef}
-            style={tw`border-[1px] bg-zinc-50 dark:bg-zinc-800 text-3xl font-semibold px-6 py-2 rounded-2xl text-teal-900 dark:text-zinc-200 ${
+            style={tw`border-[1px] bg-zinc-50 dark:bg-zinc-800 text-3xl font-semibold ios:h-18 ios:px-6 android:px-6 android:py-2 rounded-2xl text-teal-900 dark:text-zinc-200 ${
               focused
                 ? `border-teal-500`
                 : `border-zinc-300 dark:border-zinc-600`
