@@ -17,6 +17,10 @@ export async function createLinkToken(
   return json.token.link_token;
 }
 
+export async function deleteAccount(user_id: string) {
+  await fetch(`${endpoint}/delete-account/${user_id}`, { method: "POST" });
+}
+
 export async function publicTokenExchange(
   publicToken: string,
   user_id: string

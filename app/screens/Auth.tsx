@@ -94,11 +94,12 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
           Password
         </Input>
 
-        <View style={tw`flex items-center gap-1`}>
+        <View style={tw`flex items-center gap-1 w-3/4`}>
           <Button
             onPress={screenShown === "login" ? login : signup}
             color="sky-500"
             darkColor="sky-500"
+            disabled={password !== "" && email !== "" ? false : true}
           >
             {screenShown === "login" ? "Log In" : "Sign Up"}
           </Button>

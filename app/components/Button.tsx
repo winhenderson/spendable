@@ -30,7 +30,7 @@ const Button: React.FC<Props> = ({
         dark:bg-${darkColor} bg-${color} text-white font-bold uppercase p-4 ${
           small ? "text-sm" : "text-lg"
         } overflow-hidden rounded-2xl text-center
-${disabled ? "bg-opacity-50" : ""}
+${disabled ? "bg-opacity-50 dark:bg-opacity-15" : ""}
         `}
       >
         {children}

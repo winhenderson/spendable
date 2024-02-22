@@ -489,7 +489,7 @@ const Home: React.FC = () => {
               </Text>
               <Pressable
                 onPress={() => setAddingNewTransaction(true)}
-                hitSlop={{ top: 20, left: 18, right: 10, bottom: 10 }}
+                hitSlop={{ top: 26, left: 25, right: 10, bottom: 10 }}
               >
                 <Text>
                   <Plus
