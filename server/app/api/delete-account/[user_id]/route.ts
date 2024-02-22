@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"; // defaults to force-static
 
-import { prisma } from "@/helpers";
+import { prisma, plaidClient } from "@/helpers";
 
 export async function POST(
   req: Request,
@@ -8,17 +8,25 @@ export async function POST(
 ) {
   const user_id = params.user_id;
 
-  const authId = await prisma.public_users.findFirst({
+  const userInfo = await prisma.public_users.findFirst({
     where: { id: user_id },
-    select: { auth_id: true },
+    select: { auth_id: true, items: { select: { plaid_access_token: true } } },
   });
 
-  if (!authId || !authId.auth_id) {
+  if (!userInfo || !userInfo.auth_id) {
     throw new Error(
-      `Unable to find auth_id for user ${user_id} in deleteAccount()`
+      `Unable to find user info for user ${user_id} in deleteAccount()`
     );
   }
 
-  await prisma.auth_users.delete({ where: { id: authId.auth_id } });
+  for (const item of userInfo.items) {
+    try {
+      plaidClient.itemRemove({ access_token: item.plaid_access_token });
+    } catch (error) {
+      console.error("in deleteAccount()", error);
+    }
+  }
+
+  await prisma.auth_users.delete({ where: { id: userInfo.auth_id } });
   return Response.json(true);
 }

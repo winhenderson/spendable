@@ -33,10 +33,13 @@ export default function App() {
   useEffect(() => {
     // AsyncStorage.clear();
     // supabase.auth.signOut();
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      getUserFromSession(data.session);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        setSession(data.session);
+        getUserFromSession(data.session);
+      })
+      .catch(() => setUser(null));
     supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       getUserFromSession(session);
