@@ -1,15 +1,15 @@
 import React, { useContext, useRef, useState } from "react";
-import { Pressable, Switch, TextInput, View, Text } from "react-native";
+import { Pressable, TextInput, View, Text } from "react-native";
 import Button from "../components/Button";
 import tw from "twrnc";
 import { deleteAccount, supabase, updateDefaultAmount } from "../lib";
-import Input from "../components/Input";
 import UserContext from "../UserContext";
 import ColorSchemeContext from "../ColorSchemeContext";
 import Loading from "../components/Loading";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ColorSchemeButton from "../components/ColorSchemeButton";
 import { Moon, Smartphone, Sun } from "lucide-react-native";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
@@ -18,6 +18,7 @@ const Settings: React.FC = () => {
   const [amount, setAmount] = useState(String(user?.defaultSpendable));
   const [focused, setFocused] = useState(false);
   const defaultAmountRef = useRef<TextInput>(null);
+  const { showActionSheetWithOptions } = useActionSheet();
 
   if (!user) {
     return <Loading />;
@@ -140,9 +141,22 @@ const Settings: React.FC = () => {
           small
           onPress={() => {
             blurInput();
-            setUser(null);
-            supabase.auth.signOut();
-            deleteAccount(user.id);
+            showActionSheetWithOptions(
+              {
+                options: ["Delete Account", "Cancel"],
+                cancelButtonIndex: 1,
+                destructiveButtonIndex: 0,
+              },
+              (selectedIndex) => {
+                if (selectedIndex === 1) {
+                  return;
+                } else {
+                  setUser(null);
+                  supabase.auth.signOut();
+                  deleteAccount(user.id);
+                }
+              }
+            );
           }}
           darkColor="red-700"
           color="red-600"

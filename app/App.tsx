@@ -16,6 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Banks from "./screens/Banks";
 import ColorSchemeContext from "./ColorSchemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 const Tab = createBottomTabNavigator();
 
@@ -78,69 +79,71 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <StatusBar
-        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
-      />
-      <ColorSchemeContext.Provider
-        value={[colorScheme ?? "dark", setColorScheme]}
-      >
-        <UserContext.Provider value={[user, setUser]}>
-          <NavigationContainer>
-            <Tab.Navigator
-              initialRouteName="Account"
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color }) => {
-                  color = focused
-                    ? "text-teal-500"
-                    : "text-teal-900/50 dark:text-zinc-500/85";
-                  const stroke = focused ? 2.5 : 1.8;
-                  switch (route.name) {
-                    case "Banks":
-                      return (
-                        <LandmarkIcon
-                          style={tw`my-2 ${color}`}
-                          strokeWidth={stroke}
-                        />
-                      );
-                    case "Home":
-                      return (
-                        <HomeIcon
-                          style={tw`my-2 ${color}`}
-                          strokeWidth={stroke}
-                        />
-                      );
-                    case "Account":
-                      return (
-                        <UserIcon
-                          style={tw`my-2 ${color}`}
-                          strokeWidth={stroke}
-                        />
-                      );
-                  }
-                },
-                headerShown: false,
-                tabBarLabel: ({ focused, children }) => (
-                  <Text
-                    style={tw`${
-                      focused
-                        ? "text-teal-500"
-                        : "text-teal-900/50 dark:text-zinc-500/85"
-                    } font-bold uppercase text-[0.6rem] pb-1`}
-                  >
-                    {children}
-                  </Text>
-                ),
-                tabBarStyle: tw`bg-white pt-2 dark:bg-zinc-800 dark:border-t-zinc-600`,
-              })}
-            >
-              <Tab.Screen name="Banks" component={Banks} />
-              <Tab.Screen name="Home" component={Home} />
-              <Tab.Screen name="Account" component={Account} />
-            </Tab.Navigator>
-          </NavigationContainer>
-        </UserContext.Provider>
-      </ColorSchemeContext.Provider>
-    </SafeAreaProvider>
+    <ActionSheetProvider>
+      <SafeAreaProvider>
+        <StatusBar
+          barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+        />
+        <ColorSchemeContext.Provider
+          value={[colorScheme ?? "dark", setColorScheme]}
+        >
+          <UserContext.Provider value={[user, setUser]}>
+            <NavigationContainer>
+              <Tab.Navigator
+                initialRouteName="Account"
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color }) => {
+                    color = focused
+                      ? "text-teal-500"
+                      : "text-teal-900/50 dark:text-zinc-500/85";
+                    const stroke = focused ? 2.5 : 1.8;
+                    switch (route.name) {
+                      case "Banks":
+                        return (
+                          <LandmarkIcon
+                            style={tw`my-2 ${color}`}
+                            strokeWidth={stroke}
+                          />
+                        );
+                      case "Home":
+                        return (
+                          <HomeIcon
+                            style={tw`my-2 ${color}`}
+                            strokeWidth={stroke}
+                          />
+                        );
+                      case "Account":
+                        return (
+                          <UserIcon
+                            style={tw`my-2 ${color}`}
+                            strokeWidth={stroke}
+                          />
+                        );
+                    }
+                  },
+                  headerShown: false,
+                  tabBarLabel: ({ focused, children }) => (
+                    <Text
+                      style={tw`${
+                        focused
+                          ? "text-teal-500"
+                          : "text-teal-900/50 dark:text-zinc-500/85"
+                      } font-bold uppercase text-[0.6rem] pb-1`}
+                    >
+                      {children}
+                    </Text>
+                  ),
+                  tabBarStyle: tw`bg-white pt-2 dark:bg-zinc-800 dark:border-t-zinc-600`,
+                })}
+              >
+                <Tab.Screen name="Banks" component={Banks} />
+                <Tab.Screen name="Home" component={Home} />
+                <Tab.Screen name="Account" component={Account} />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </UserContext.Provider>
+        </ColorSchemeContext.Provider>
+      </SafeAreaProvider>
+    </ActionSheetProvider>
   );
 }
