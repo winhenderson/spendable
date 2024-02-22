@@ -4,9 +4,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./screens/Home";
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
-import { User, getAllTransactions, getUserById, supabase } from "./lib";
+import {
+  ColorScheme,
+  User,
+  getAllTransactions,
+  getUserById,
+  supabase,
+} from "./lib";
 import Auth from "./screens/Auth";
-import { HomeIcon, LandmarkIcon, UserIcon } from "lucide-react-native";
+import { HomeIcon, LandmarkIcon, Percent, UserIcon } from "lucide-react-native";
 import Account from "./screens/Account";
 import { StatusBar, Text } from "react-native";
 import UserContext from "./UserContext";
@@ -21,12 +27,18 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  useDeviceContext(tw, {
-    observeDeviceColorSchemeChanges: false,
-    initialColorScheme: "device",
-  });
+  const [selectedColorScheme, setSelectedColorScheme] =
+    useState<ColorScheme>("system");
 
-  const [colorScheme, , setColorScheme] = useAppColorScheme(tw);
+  const options =
+    selectedColorScheme === "system"
+      ? undefined
+      : ({
+          observeDeviceColorSchemeChanges: false,
+          initialColorScheme: "device",
+        } as const);
+  useDeviceContext(tw, options);
+  const [, , setAppColorScheme] = useAppColorScheme(tw);
 
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>();
@@ -78,17 +90,35 @@ export default function App() {
     return <Loading />;
   }
 
+  const percievedColorScheme =
+    selectedColorScheme === "system"
+      ? tw.prefixMatch("dark")
+        ? "dark"
+        : "light"
+      : selectedColorScheme;
+
   return (
     <ActionSheetProvider>
       <SafeAreaProvider>
         <StatusBar
           backgroundColor={
-            colorScheme === "dark" ? tw.color("zinc-900") : "white"
+            percievedColorScheme === "dark" ? tw.color("zinc-900") : "white"
           }
-          barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+          barStyle={
+            percievedColorScheme === "dark" ? "light-content" : "dark-content"
+          }
         />
         <ColorSchemeContext.Provider
-          value={[colorScheme ?? "dark", setColorScheme]}
+          value={[
+            selectedColorScheme,
+            percievedColorScheme,
+            (color: ColorScheme) => {
+              setSelectedColorScheme(color);
+              if (color !== "system") {
+                setAppColorScheme(color);
+              }
+            },
+          ]}
         >
           <UserContext.Provider value={[user, setUser]}>
             <NavigationContainer>

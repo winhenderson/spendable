@@ -154,7 +154,7 @@ export type User = {
   loggedOutBanks: string[];
 };
 
-export type ColorScheme = "light" | "dark";
+export type ColorScheme = "light" | "dark" | "system";
 
 export type BankTitle = {
   id: string;

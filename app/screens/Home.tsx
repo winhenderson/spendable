@@ -41,7 +41,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import ReloginBanner from "../components/ReloginBanner";
 
 const Home: React.FC = () => {
-  const [colorScheme] = useContext(ColorSchemeContext);
+  const [, colorScheme] = useContext(ColorSchemeContext);
   const [user, setUser] = useContext(UserContext);
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();

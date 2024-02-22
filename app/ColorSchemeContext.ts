@@ -2,7 +2,7 @@ import React from "react";
 import { ColorScheme } from "./lib";
 
 const ColorSchemeContext = React.createContext<
-  [ColorScheme, (colorScheme: ColorScheme) => unknown]
->(["light", (color) => color]);
+  [ColorScheme, "light" | "dark", (colorScheme: ColorScheme) => unknown]
+>(["light", "light", (color) => color]);
 
 export default ColorSchemeContext;

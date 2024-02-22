@@ -13,7 +13,8 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const Settings: React.FC = () => {
   const [user, setUser] = useContext(UserContext);
-  const [colorScheme, setColorScheme] = useContext(ColorSchemeContext);
+  const [settingColorScheme, colorScheme, setColorScheme] =
+    useContext(ColorSchemeContext);
   const insets = useSafeAreaInsets();
   const [amount, setAmount] = useState(String(user?.defaultSpendable));
   const [focused, setFocused] = useState(false);
@@ -82,11 +83,11 @@ const Settings: React.FC = () => {
               blurInput();
               setColorScheme("light");
             }}
-            selected={colorScheme === "light"}
+            selected={settingColorScheme === "light"}
           >
             <Sun
               style={tw`${
-                colorScheme === "light"
+                settingColorScheme === "light"
                   ? "text-teal-600"
                   : "text-zinc-800 dark:text-zinc-300"
               }`}
@@ -99,11 +100,13 @@ const Settings: React.FC = () => {
               blurInput();
               setColorScheme("dark");
             }}
-            selected={colorScheme === "dark"}
+            selected={settingColorScheme === "dark"}
           >
             <Moon
               style={tw`${
-                colorScheme === "dark" ? "text-teal-500" : "text-zinc-800"
+                settingColorScheme === "dark"
+                  ? "text-teal-500"
+                  : "text-zinc-800 dark:text-zinc-300"
               }`}
               size={30}
             />
@@ -112,12 +115,16 @@ const Settings: React.FC = () => {
           <ColorSchemeButton
             onPress={() => {
               blurInput();
-              // change this
-              setColorScheme("dark");
+              setColorScheme("system");
             }}
+            selected={settingColorScheme === "system"}
           >
             <Smartphone
-              style={tw`text-zinc-800 dark:text-zinc-300`}
+              style={tw`${
+                settingColorScheme === "system"
+                  ? "text-teal-500"
+                  : "text-zinc-800 dark:text-zinc-300"
+              }`}
               size={30}
             />
           </ColorSchemeButton>
