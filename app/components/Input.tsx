@@ -18,6 +18,7 @@ type Props = {
   children?: ReactNode;
   small?: boolean;
   onFocus?: () => unknown;
+  onSubmit?: () => unknown;
   style?: string;
 };
 
@@ -31,6 +32,7 @@ const Input: React.FC<Props> = forwardRef(function Input(
     children,
     small = false,
     onFocus,
+    onSubmit,
     style = "",
   },
   ref
@@ -60,6 +62,8 @@ const Input: React.FC<Props> = forwardRef(function Input(
           focused ? `border-teal-500` : `border-zinc-300 dark:border-zinc-600`
         } ${style}`}
         onChangeText={onChange}
+        returnKeyType="done"
+        onSubmitEditing={onSubmit}
         value={value}
         secureTextEntry={type === "password"}
         keyboardType={

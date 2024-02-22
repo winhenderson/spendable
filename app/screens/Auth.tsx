@@ -80,6 +80,7 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
           value={email}
           onChange={setEmail}
           placeholder="Email"
+          onSubmit={screenShown === "signup" ? signup : login}
         >
           Email
         </Input>
@@ -90,6 +91,7 @@ const Auth: React.FC<Props> = ({ onSignupSuccess }) => {
           value={password}
           onChange={setPassword}
           newPassword={screenShown === "signup"}
+          onSubmit={screenShown === "signup" ? signup : login}
         >
           Password
         </Input>

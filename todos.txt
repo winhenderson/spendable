@@ -25,5 +25,5 @@
 [*]  make the account screen look better
 [*]  fix bottom padding thing
 [*]  remove swiping
-[ ]  dark/theme/system thing w/ dad
-[ ]  fix login button bug
+[*]  dark/theme/system thing w/ dad
+[*]  fix login button bug
