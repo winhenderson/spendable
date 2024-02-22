@@ -32,5 +32,8 @@ yarn-error.*
 .env*.local
 .env
 
+curlRequest
+
 # typescript
 *.tsbuildinfo
+

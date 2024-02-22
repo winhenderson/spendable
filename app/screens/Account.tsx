@@ -32,7 +32,7 @@ const Settings: React.FC = () => {
   return (
     <Pressable
       onPress={blurInput}
-      style={tw`bg-white dark:bg-zinc-900 items-center flex grow gap-2 pb-[${insets.bottom}] pt-[${insets.top}] px-5`}
+      style={tw`bg-white dark:bg-zinc-900 items-center flex grow gap-2 pt-[${insets.top}] px-5`}
     >
       <Text
         style={tw`w-full ml-1 mt-8 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}

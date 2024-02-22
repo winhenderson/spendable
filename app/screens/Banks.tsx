@@ -58,95 +58,101 @@ const Banks: React.FC = () => {
 
   return (
     <View
-      style={tw`bg-white dark:bg-zinc-900 grow pt-[${insets.top}] pb-[${insets.bottom}]`}
+      style={tw`bg-white dark:bg-zinc-900 px-6 grow pt-[${insets.top + 8}]`}
     >
-      <FlatList
-        ListHeaderComponent={
-          <View style={tw`flex items-center gap-4 mb-4`}>
-            <View style={tw`flex flex-row justify-center items-center`}>
-              <Text style={tw`text-3xl text-teal-900 font-bold`}>
-                Connected Banks
+      <View style={tw`grow`}>
+        <FlatList
+          ListHeaderComponent={
+            <View style={tw`flex items-center gap-4 mb-4`}>
+              <View style={tw`flex flex-row justify-center items-center`}>
+                <Text
+                  style={tw`text-3xl text-teal-900 dark:text-teal-600 font-bold`}
+                >
+                  Connected Banks
+                </Text>
+              </View>
+            </View>
+          }
+          data={user.banks}
+          contentContainerStyle={tw`gap-2`}
+          renderItem={({ item: bank }) => (
+            <View style={tw`flex flex-row gap-2 items-center`} key={bank.id}>
+              {bank.logo ? (
+                <Image source={{ uri: bank.logo }} />
+              ) : (
+                <LetterIcon
+                  colorOverride={bank.primary_color ?? undefined}
+                  title={bank.name}
+                />
+              )}
+              <Text style={tw`text-teal-950 dark:text-teal-200 font-semibold`}>
+                {bank.name}
               </Text>
             </View>
+          )}
+        />
+        <FlatList
+          data={user.loggedOutBanks}
+          renderItem={({ item: bankId }) => {
+            return (
+              <PlaidLink
+                tokenConfig={{
+                  token: loggedOutBankTokens[bankId],
+                  noLoadingState: false,
+                }}
+                onSuccess={async (success: LinkSuccess) => {
+                  const res = await getAllTransactions(user.id);
 
-            <PlaidLink
-              tokenConfig={{
-                token: linkToken,
-                noLoadingState: false,
-              }}
-              onSuccess={async (success: LinkSuccess) => {
-                // omit this publicTokenExhcange for the update mode to come
-                await publicTokenExchange(success.publicToken, user.id);
-                const userRes = await getUserById(user.id);
-                if (!userRes.ok) {
-                  console.error("failed to get a user after adding an account");
-                  return;
-                }
+                  if (!res.ok) {
+                    console.error("failed to get new transactions");
+                    return;
+                  }
 
-                setUser(userRes.value);
-              }}
-              onExit={(exit: LinkExit) => console.log(exit)}
-            >
-              <Text
-                style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
+                  setUser({
+                    ...user,
+                    transactions: [...res.value.transactions],
+                    loggedOutBanks: res.value.loggedOutBanks,
+                  });
+                }}
+                onExit={(exit: LinkExit) => console.log(exit)}
               >
-                Add Account
-              </Text>
-            </PlaidLink>
-          </View>
-        }
-        data={user.banks}
-        contentContainerStyle={tw`gap-2 px-4`}
-        renderItem={({ item: bank }) => (
-          <View style={tw`flex flex-row gap-2 items-center`} key={bank.id}>
-            {bank.logo ? (
-              <Image source={{ uri: bank.logo }} />
-            ) : (
-              <LetterIcon
-                colorOverride={bank.primary_color ?? undefined}
-                title={bank.name}
-              />
-            )}
-            <Text style={tw`text-teal-950 dark:text-teal-200 font-semibold`}>
-              {bank.name}
-            </Text>
-          </View>
-        )}
-      />
-      <FlatList
-        data={user.loggedOutBanks}
-        renderItem={({ item: bankId }) => {
-          return (
-            <PlaidLink
-              tokenConfig={{
-                token: loggedOutBankTokens[bankId],
-                noLoadingState: false,
-              }}
-              onSuccess={async (success: LinkSuccess) => {
-                const res = await getAllTransactions(user.id);
+                <Text
+                  style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
+                >
+                  Re-Login to bank
+                </Text>
+              </PlaidLink>
+            );
+          }}
+        />
+      </View>
 
-                if (!res.ok) {
-                  console.error("failed to get new transactions");
-                  return;
-                }
+      <View style={tw`flex items-center justify-center pb-4`}>
+        <PlaidLink
+          tokenConfig={{
+            token: linkToken,
+            noLoadingState: false,
+          }}
+          onSuccess={async (success: LinkSuccess) => {
+            // omit this publicTokenExhcange for the update mode to come
+            await publicTokenExchange(success.publicToken, user.id);
+            const userRes = await getUserById(user.id);
+            if (!userRes.ok) {
+              console.error("failed to get a user after adding an account");
+              return;
+            }
 
-                setUser({
-                  ...user,
-                  transactions: [...res.value.transactions],
-                  loggedOutBanks: res.value.loggedOutBanks,
-                });
-              }}
-              onExit={(exit: LinkExit) => console.log(exit)}
-            >
-              <Text
-                style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
-              >
-                Re-Login to bank
-              </Text>
-            </PlaidLink>
-          );
-        }}
-      />
+            setUser(userRes.value);
+          }}
+          onExit={(exit: LinkExit) => console.log(exit)}
+        >
+          <Text
+            style={tw`bg-orange-600 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
+          >
+            Add Account
+          </Text>
+        </PlaidLink>
+      </View>
     </View>
   );
 };

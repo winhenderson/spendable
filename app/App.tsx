@@ -12,7 +12,7 @@ import {
   supabase,
 } from "./lib";
 import Auth from "./screens/Auth";
-import { HomeIcon, LandmarkIcon, Percent, UserIcon } from "lucide-react-native";
+import { HomeIcon, LandmarkIcon, UserIcon } from "lucide-react-native";
 import Account from "./screens/Account";
 import { StatusBar, Text } from "react-native";
 import UserContext from "./UserContext";
@@ -27,9 +27,16 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  function getPercievedColorScheme(color: ColorScheme): "light" | "dark" {
+    return color === "system"
+      ? tw.prefixMatch("dark")
+        ? "dark"
+        : "light"
+      : color;
+  }
+
   const [selectedColorScheme, setSelectedColorScheme] =
     useState<ColorScheme>("system");
-
   const options =
     selectedColorScheme === "system"
       ? undefined
@@ -39,6 +46,18 @@ export default function App() {
         } as const);
   useDeviceContext(tw, options);
   const [, , setAppColorScheme] = useAppColorScheme(tw);
+
+  useEffect(() => {
+    AsyncStorage.getItem("colorScheme").then((value) => {
+      switch (value) {
+        case "system":
+        case "dark":
+        case "light":
+          setSelectedColorScheme(value);
+          setAppColorScheme(getPercievedColorScheme(selectedColorScheme));
+      }
+    });
+  }, [selectedColorScheme, setAppColorScheme]);
 
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>();
@@ -90,30 +109,28 @@ export default function App() {
     return <Loading />;
   }
 
-  const percievedColorScheme =
-    selectedColorScheme === "system"
-      ? tw.prefixMatch("dark")
-        ? "dark"
-        : "light"
-      : selectedColorScheme;
-
   return (
     <ActionSheetProvider>
       <SafeAreaProvider>
         <StatusBar
           backgroundColor={
-            percievedColorScheme === "dark" ? tw.color("zinc-900") : "white"
+            getPercievedColorScheme(selectedColorScheme) === "dark"
+              ? tw.color("zinc-900")
+              : "white"
           }
           barStyle={
-            percievedColorScheme === "dark" ? "light-content" : "dark-content"
+            getPercievedColorScheme(selectedColorScheme) === "dark"
+              ? "light-content"
+              : "dark-content"
           }
         />
         <ColorSchemeContext.Provider
           value={[
             selectedColorScheme,
-            percievedColorScheme,
+            getPercievedColorScheme(selectedColorScheme),
             (color: ColorScheme) => {
               setSelectedColorScheme(color);
+              AsyncStorage.setItem("colorScheme", color);
               if (color !== "system") {
                 setAppColorScheme(color);
               }

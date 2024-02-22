@@ -27,4 +27,4 @@
 [*]  remove swiping
 [*]  dark/theme/system thing w/ dad
 [*]  fix login button bug
-[ ]  locally persist colorscheme
+[*]  locally persist colorscheme

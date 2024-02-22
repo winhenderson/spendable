@@ -42,6 +42,8 @@ const MonthInfo: React.FC<Props> = ({
     ? Math.round(
         spendableToday(Number(editingAmount ? editingAmount : spendable), spent)
       )
+    : Math.round(spent) < 0
+    ? 0
     : Math.round(spent);
 
   return (
