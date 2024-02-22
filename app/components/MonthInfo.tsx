@@ -38,6 +38,12 @@ const MonthInfo: React.FC<Props> = ({
     return <Loading />;
   }
 
+  const valueForInput = monthIsCurrent
+    ? Math.round(
+        spendableToday(Number(editingAmount ? editingAmount : spendable), spent)
+      )
+    : Math.round(spent);
+
   return (
     <View style={tw`pb-3 pt-2 w-2/3 flex flex-row justify-between`}>
       <Pressable
@@ -95,24 +101,12 @@ const MonthInfo: React.FC<Props> = ({
       </Pressable>
 
       <View style={tw`w-1/2 flex items-center`}>
-        <View style={tw`flex-1 flex justify-center items-center`}>
-          <TextInput
-            textAlign="center"
-            style={tw`text-teal-950/80 text-2xl font-bold py-0 dark:text-zinc-300 text-center android:p-0`}
-            editable={false}
-            value={`$${
-              monthIsCurrent
-                ? Math.round(
-                    spendableToday(
-                      Number(editingAmount ? editingAmount : spendable),
-                      spent
-                    )
-                  )
-                : Math.round(spent)
-            }
-          `}
-          />
-        </View>
+        <TextInput
+          textAlign="center"
+          style={tw`text-teal-950/80 text-2xl font-bold py-0 dark:text-zinc-300 text-center `}
+          editable={false}
+          value={`$${valueForInput}`}
+        />
 
         <Text
           style={tw`uppercase font-semibold text-xs text-zinc-500 dark:text-zinc-500`}

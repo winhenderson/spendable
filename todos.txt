@@ -10,7 +10,7 @@
 [ ]  Tests for the lib file?
 [ ]  make banks screen look better/have some functionality
 [*]  add swipe gestures to change months (not sure if this is a good idea)
-[ ]  android
+[*]  android
 [ ]  share types between server -> app
 [*]  handle modified and deleted transactions from plaid
 [*]  fix invisible status bar and spinner
@@ -27,3 +27,4 @@
 [*]  remove swiping
 [*]  dark/theme/system thing w/ dad
 [*]  fix login button bug
+[ ]  locally persist colorscheme
