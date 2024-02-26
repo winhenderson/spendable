@@ -41,7 +41,7 @@ const Bank: React.FC<Props> = ({
           <LetterIcon colorOverride={primaryColor ?? undefined} title={name} />
         )}
         <Text
-          style={tw`text-teal-950 dark:text-teal-200 font-semibold text-lg`}
+          style={tw`text-teal-950 dark:text-teal-50/85 font-semibold text-lg`}
         >
           {name}
         </Text>

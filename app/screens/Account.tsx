@@ -32,10 +32,15 @@ const Settings: React.FC = () => {
   return (
     <Pressable
       onPress={blurInput}
-      style={tw`bg-white dark:bg-zinc-900 items-center flex grow gap-2 pt-[${insets.top}] px-5`}
+      style={tw`bg-white dark:bg-zinc-900 items-center flex grow gap-2 pt-[${
+        insets.top + 8
+      }] px-5`}
     >
+      <Text style={tw`text-3xl text-teal-900 dark:text-teal-600 font-bold`}>
+        Account
+      </Text>
       <Text
-        style={tw`w-full ml-1 mt-8 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
+        style={tw`w-full ml-1 mt-2 text-teal-900/80 dark:text-zinc-500 uppercase font-semibold text-sm tracking-wide`}
       >
         Default Monthly Spendable
       </Text>

@@ -8,7 +8,7 @@
 [*]  pull to refresh
 [ ]  maybe make the api requests require some sort of token?
 [ ]  Tests for the lib file?
-[ ]  make banks screen look better/have some functionality
+[*]  make banks screen look better/have some functionality
 [*]  add swipe gestures to change months (not sure if this is a good idea)
 [*]  android
 [ ]  share types between server -> app
