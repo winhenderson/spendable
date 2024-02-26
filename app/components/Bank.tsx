@@ -40,7 +40,9 @@ const Bank: React.FC<Props> = ({
         ) : (
           <LetterIcon colorOverride={primaryColor ?? undefined} title={name} />
         )}
-        <Text style={tw`text-teal-950 dark:text-teal-200 font-semibold`}>
+        <Text
+          style={tw`text-teal-950 dark:text-teal-200 font-semibold text-lg`}
+        >
           {name}
         </Text>
       </View>
@@ -97,7 +99,7 @@ const Bank: React.FC<Props> = ({
                 if (selectedIndex === 1) {
                   return;
                 } else {
-                  deleteBankAccount(user.id, id);
+                  await deleteBankAccount(user.id, id);
 
                   const userRes = await getUserById(user.id);
                   if (!userRes.ok) {

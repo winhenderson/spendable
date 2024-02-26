@@ -62,6 +62,51 @@ const Banks: React.FC = () => {
     >
       <View style={tw`grow`}>
         <FlatList
+          ListEmptyComponent={
+            <View style={tw`flex items-center gap-2`}>
+              <Text
+                style={tw`text-lg text-zinc-800 dark:text-zinc-100 font-bold`}
+              >
+                No banks connected yet.
+              </Text>
+
+              <PlaidLink
+                tokenConfig={{
+                  token: linkToken,
+                  noLoadingState: false,
+                }}
+                onSuccess={async (success: LinkSuccess) => {
+                  await publicTokenExchange(success.publicToken, user.id);
+                  const userRes = await getUserById(user.id);
+                  if (!userRes.ok) {
+                    console.error(
+                      "failed to get a user after adding an account"
+                    );
+                    return;
+                  }
+
+                  const transactionsRes = await getAllTransactions(user.id);
+                  if (!transactionsRes.ok) {
+                    console.error("failed to get user transactions");
+                    return;
+                  }
+
+                  setUser({
+                    ...userRes.value,
+                    transactions: transactionsRes.value.transactions,
+                    loggedOutBanks: transactionsRes.value.loggedOutBanks,
+                  });
+                }}
+                onExit={(exit: LinkExit) => console.log(exit)}
+              >
+                <Text
+                  style={tw`bg-teal-700 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl text-center w-50`}
+                >
+                  Connect One!
+                </Text>
+              </PlaidLink>
+            </View>
+          }
           ListHeaderComponent={
             <View style={tw`flex items-center gap-4 mb-4`}>
               <View style={tw`flex flex-row justify-center items-center`}>
@@ -74,7 +119,7 @@ const Banks: React.FC = () => {
             </View>
           }
           data={user.banks}
-          contentContainerStyle={tw`gap-2`}
+          contentContainerStyle={tw`gap-4`}
           renderItem={({ item: bank }) => (
             <Bank
               logo={bank.logo ?? undefined}
@@ -91,41 +136,43 @@ const Banks: React.FC = () => {
         />
       </View>
 
-      <View style={tw`flex items-center justify-center pb-4`}>
-        <PlaidLink
-          tokenConfig={{
-            token: linkToken,
-            noLoadingState: false,
-          }}
-          onSuccess={async (success: LinkSuccess) => {
-            await publicTokenExchange(success.publicToken, user.id);
-            const userRes = await getUserById(user.id);
-            if (!userRes.ok) {
-              console.error("failed to get a user after adding an account");
-              return;
-            }
+      {user.banks.length > 0 && (
+        <View style={tw`flex items-center justify-center pb-4`}>
+          <PlaidLink
+            tokenConfig={{
+              token: linkToken,
+              noLoadingState: false,
+            }}
+            onSuccess={async (success: LinkSuccess) => {
+              await publicTokenExchange(success.publicToken, user.id);
+              const userRes = await getUserById(user.id);
+              if (!userRes.ok) {
+                console.error("failed to get a user after adding an account");
+                return;
+              }
 
-            const transactionsRes = await getAllTransactions(user.id);
-            if (!transactionsRes.ok) {
-              console.error("failed to get user transactions");
-              return;
-            }
+              const transactionsRes = await getAllTransactions(user.id);
+              if (!transactionsRes.ok) {
+                console.error("failed to get user transactions");
+                return;
+              }
 
-            setUser({
-              ...userRes.value,
-              transactions: transactionsRes.value.transactions,
-              loggedOutBanks: transactionsRes.value.loggedOutBanks,
-            });
-          }}
-          onExit={(exit: LinkExit) => console.log(exit)}
-        >
-          <Text
-            style={tw`bg-teal-700 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
+              setUser({
+                ...userRes.value,
+                transactions: transactionsRes.value.transactions,
+                loggedOutBanks: transactionsRes.value.loggedOutBanks,
+              });
+            }}
+            onExit={(exit: LinkExit) => console.log(exit)}
           >
-            Add Account
-          </Text>
-        </PlaidLink>
-      </View>
+            <Text
+              style={tw`bg-teal-700 p-4 text-white font-bold uppercase overflow-hidden rounded-2xl w-50 text-center`}
+            >
+              Add Account
+            </Text>
+          </PlaidLink>
+        </View>
+      )}
     </View>
   );
 };
