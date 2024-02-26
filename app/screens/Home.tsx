@@ -469,6 +469,9 @@ const Home: React.FC = () => {
             onRefresh={getTransactions}
             colors={colorScheme === "dark" ? ["white"] : ["gray"]}
             tintColor={colorScheme === "dark" ? "white" : "gray"}
+            progressBackgroundColor={
+              colorScheme === "dark" ? tw.color("zinc-900") : "white"
+            }
           />
         }
         stickyHeaderIndices={[0]}
