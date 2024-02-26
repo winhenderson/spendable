@@ -81,7 +81,7 @@ const ReloginBanner: React.FC<Props> = ({ bank }) => {
         <Text style={tw`text-xs text-orange-50 font-semibold`}>
           Relogin Required
         </Text>
-        <ArrowUpRight size={24} style={tw`text-orange-50`} />
+        <ArrowUpRight size={24} style={tw`text-amber-50`} />
       </View>
     </PlaidLink>
   );

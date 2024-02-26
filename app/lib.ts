@@ -97,6 +97,28 @@ export async function updateMonthAmount(
   });
 }
 
+export async function getUserByAuthId(
+  user_id: string,
+  attemptNumber = 0
+): APIResponse<User> {
+  try {
+    const res = await fetch(`${endpoint}/get-user-by-auth-id/${user_id}`);
+
+    const json = await res.json();
+    return { ok: true, value: json };
+  } catch (error) {
+    // Fixes race condition on sign in when database hasn't updated before the get_user_by_id asks for that user
+    if (attemptNumber < 4) {
+      const nextAttempt = attemptNumber + 1;
+      await new Promise((resolve) => setTimeout(resolve, 200 * nextAttempt));
+      console.warn("retrying");
+      return getUserByAuthId(user_id, nextAttempt);
+    }
+    console.error("Error in getUserByAuthId", error);
+    return { ok: false, error };
+  }
+}
+
 export async function getUserById(
   user_id: string,
   attemptNumber = 0
@@ -128,6 +150,12 @@ export async function createTransaction(
   await fetch(`${endpoint}/create-transaction`, {
     method: "POST",
     body: JSON.stringify({ item_id, title, date, amount }),
+  });
+}
+
+export async function deleteBankAccount(user_id: string, bank_id: string) {
+  await fetch(`${endpoint}/delete-bank-account/${user_id}/${bank_id}`, {
+    method: "POST",
   });
 }
 

@@ -32,7 +32,7 @@ export async function GET(
           select: { date: true, amount: true },
         },
       },
-      where: { id: user_id },
+      where: { auth_id: user_id },
     });
   } catch (error) {
     console.log(error);

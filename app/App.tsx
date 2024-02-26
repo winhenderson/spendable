@@ -8,7 +8,7 @@ import {
   ColorScheme,
   User,
   getAllTransactions,
-  getUserById,
+  getUserByAuthId,
   supabase,
 } from "./lib";
 import Auth from "./screens/Auth";
@@ -80,7 +80,7 @@ export default function App() {
 
   async function getUserFromSession(session: Session | null) {
     if (session) {
-      const userRes = await getUserById(session.user.id);
+      const userRes = await getUserByAuthId(session.user.id);
       if (!userRes.ok) {
         return;
       }
