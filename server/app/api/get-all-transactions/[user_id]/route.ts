@@ -37,7 +37,7 @@ export async function GET(
   return res;
 }
 
-export async function addNewTransactions(items: Array<Item>): Promise<{
+async function addNewTransactions(items: Array<Item>): Promise<{
   transactions: Array<SimpleTransaction>;
   loggedOutBanks: Array<string>;
 }> {
