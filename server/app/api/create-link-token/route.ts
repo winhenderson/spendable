@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     language: "en",
     products: [Products.Transactions],
     country_codes: [CountryCode.Us],
-    redirect_uri: process.env.PLAID_SANDBOX_REDIRECT_URI,
+    redirect_uri: process.env.PLAID_REDIRECT_URI,
   };
 
   const body = await request.json();
