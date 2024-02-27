@@ -1,0 +1,30 @@
+[*]  Fix ts bug in calculateSpent() where it lets strings through
+[*]  Add some sort of default icon
+[*]  fix bug where the first time the transactions load everything is backward
+[*]  add the ability to create custom transactions
+[*]  Make the monthly spendable amount something that is different depending on the month
+[*]  be able to test the spendableToday() function by controlling time somehow
+[*]  Make the auth screen work with a pop up keyboard on a real phone
+[*]  pull to refresh
+[ ]  maybe make the api requests require some sort of token?
+[ ]  Tests for the lib file?
+[*]  make banks screen look better/have some functionality
+[*]  add swipe gestures to change months (not sure if this is a good idea)
+[*]  android
+[ ]  share types between server -> app
+[*]  handle modified and deleted transactions from plaid
+[*]  fix invisible status bar and spinner
+[*]  fix styling of monthly spendable
+[*]  show when banks are logged out
+[x]  show network activity indicator in status bar
+[*]  blur letter default icons
+[*]  make buttons bigger to press
+[*]  insert some test modified/removed transactions inside the has_more loop to test my code
+[*]  get all the custom months at the same time and store them in the user object
+[ ]  add splash/loading screen
+[*]  make the account screen look better
+[*]  fix bottom padding thing
+[*]  remove swiping
+[*]  dark/theme/system thing w/ dad
+[*]  fix login button bug
+[*]  locally persist colorscheme

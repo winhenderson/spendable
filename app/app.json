@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "spendable",
+    "slug": "spendable",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/1024.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/Cat.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "17.0"
+          }
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.expo.plaid"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/1024.png",
+        "backgroundColor": "#042f2e"
+      },
+      "package": "com.spendable"
+    },
+    "web": {
+      "favicon": "./assets/icon-512.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "94fa956a-820f-4486-b5f7-ff71a7dd97a6"
+      }
+    }
+  }
+}
