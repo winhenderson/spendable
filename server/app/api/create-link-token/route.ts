@@ -30,9 +30,14 @@ export async function POST(request: Request) {
     requestConfig.access_token = dbRes.plaid_access_token;
     requestConfig.products = undefined;
   }
-  const tokenResponse = await plaidClient.linkTokenCreate(requestConfig);
+  try {
+    const tokenResponse = await plaidClient.linkTokenCreate(requestConfig);
 
-  return Response.json({
-    token: tokenResponse.data,
-  });
+    return Response.json({
+      token: tokenResponse.data,
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
