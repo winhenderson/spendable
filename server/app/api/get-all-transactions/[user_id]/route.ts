@@ -37,7 +37,7 @@ export async function GET(
   return res;
 }
 
-export async function addNewTransactions(items: Array<Item>): Promise<{
+async function addNewTransactions(items: Array<Item>): Promise<{
   transactions: Array<SimpleTransaction>;
   loggedOutBanks: Array<string>;
 }> {
@@ -124,7 +124,7 @@ type Item = {
   id: string;
 };
 
-export function createDbTransaction(
+function createDbTransaction(
   plaidTransaction: Transaction,
   item_id: string
 ): Omit<Prisma.$transactionsPayload["scalars"], "created_at"> {
@@ -141,7 +141,7 @@ export function createDbTransaction(
   };
 }
 
-export function convertDbTransaction(
+function convertDbTransaction(
   dbTransaction: Prisma.$transactionsPayload["scalars"]
 ): SimpleTransaction {
   return {
@@ -154,7 +154,7 @@ export function convertDbTransaction(
   };
 }
 
-export function convertPlaidTransaction(
+function convertPlaidTransaction(
   plaidTransaction: Transaction
 ): SimpleTransaction {
   return {

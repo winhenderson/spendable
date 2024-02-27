@@ -130,7 +130,7 @@ export async function getUserById(
     return { ok: true, value: json };
   } catch (error) {
     // Fixes race condition on sign in when database hasn't updated before the get_user_by_id asks for that user
-    if (attemptNumber < 4) {
+    if (attemptNumber < 8) {
       const nextAttempt = attemptNumber + 1;
       await new Promise((resolve) => setTimeout(resolve, 200 * nextAttempt));
       console.warn("retrying");

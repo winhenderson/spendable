@@ -16,7 +16,8 @@ if (process.env.NODE_ENV !== "production") globalThis.prisma = prisma;
 
 export const plaidClient = new PlaidApi(
   new Configuration({
-    basePath: PlaidEnvironments["sandbox"],
+    // TODO put this in env
+    basePath: PlaidEnvironments["development"],
     baseOptions: {
       headers: {
         "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
