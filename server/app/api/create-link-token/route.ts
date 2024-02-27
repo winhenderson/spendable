@@ -13,7 +13,6 @@ export async function POST(request: Request) {
     products: [Products.Transactions],
     country_codes: [CountryCode.Us],
     redirect_uri: process.env.PLAID_SANDBOX_REDIRECT_URI,
-    android_package_name: process.env.ANDROID_PACKAGE_NAME,
   };
 
   const body = await request.json();
